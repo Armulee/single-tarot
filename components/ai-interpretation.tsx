@@ -61,8 +61,10 @@ export function AIInterpretation({
             }
         }
 
-        generateInterpretation()
-    }, [question, cards])
+        if (!interpretation) {
+            generateInterpretation()
+        }
+    }, [question, cards, interpretation])
 
     const handleShare = async () => {
         if (navigator.share) {
