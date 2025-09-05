@@ -21,40 +21,11 @@ export async function POST(req: Request) {
 
         const result = streamText({
             model: "openai/gpt-5-nano",
-            system: `You are a mystical tarot reader with deep knowledge of tarot symbolism, astrology, and spiritual guidance. You provide insightful, personalized interpretations that blend traditional tarot meanings with modern wisdom. 
+            system: `You are a tarot reader. Provide direct, concise interpretations that answer the user's question using the card meanings. Keep responses under 1000 tokens. Be mystical but focused.`,
+            prompt: `Question: "${question}"
+Cards: ${formattedCards.join(", ")}
 
-Your interpretations should be:
-- Mystical and engaging, using cosmic language
-- Personalized to the user's specific question
-- Respectful of tarot traditions while being accessible
-- Encouraging and empowering
-- ${
-                isPremium
-                    ? "Detailed and comprehensive with advanced insights"
-                    : "Clear and concise with basic guidance"
-            }
-
-Format your response with emojis, clear sections, and mystical language that creates an immersive experience.`,
-            prompt: `Provide a ${interpretationDepth} tarot reading interpretation.
-
-**Question:** "${question}"
-**Cards Drawn:** ${formattedCards.join(", ")}
-**Number of Cards:** ${cardCount}
-
-Please provide a comprehensive interpretation that:
-1. Addresses the specific question asked
-2. Explains the meaning of each card drawn (including reversed meanings if applicable)
-3. Shows how the cards work together to answer the question
-4. Provides practical guidance and next steps
-5. Uses mystical, cosmic language that feels authentic to tarot reading
-
-${
-    isPremium
-        ? "As a premium reading, include deeper symbolic analysis, numerological insights, and personalized action steps."
-        : "Keep the interpretation clear and accessible while maintaining the mystical atmosphere."
-}
-
-Format with clear sections, emojis, and engaging mystical language.`,
+Answer the question directly using the card meanings. Explain each card briefly and how they answer the question. Keep it under 1000 tokens.`,
         })
 
         return result.toUIMessageStreamResponse()
