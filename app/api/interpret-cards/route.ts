@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 
 export async function POST(request: NextRequest) {
     try {
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
         const interpretationDepth = isPremium ? "premium" : "basic"
 
         const result = await generateText({
-            model: "openai/gpt-5",
+            model: openai("gpt-4o"),
             system: `You are a mystical tarot reader with deep knowledge of tarot symbolism, astrology, and spiritual guidance. You provide insightful, personalized interpretations that blend traditional tarot meanings with modern wisdom. 
 
 Your interpretations should be:
@@ -57,7 +58,7 @@ ${
 Format with clear sections, emojis, and engaging mystical language.`,
         })
 
-        return NextResponse.json(result, { status: 200 })
+        return NextResponse.json({ text: result.text }, { status: 200 })
     } catch (error) {
         console.error("Error generating interpretation:", error)
         return NextResponse.json(
