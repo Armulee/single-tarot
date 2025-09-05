@@ -48,7 +48,7 @@ export function TarotProvider({ children }: { children: ReactNode }) {
   const [selectedCards, setSelectedCards] = useState<TarotCard[]>([])
   const [currentStep, setCurrentStep] = useState<
     "question" | "reading-type" | "card-selection" | "ad-viewing" | "interpretation"
-  >("question")
+  >("reading-type")
   const [interpretation, setInterpretation] = useState<string | null>(null)
   const [isPremium, setIsPremium] = useState(false)
 
@@ -56,7 +56,7 @@ export function TarotProvider({ children }: { children: ReactNode }) {
     setQuestion("")
     setReadingType(null)
     setSelectedCards([])
-    setCurrentStep("question")
+    setCurrentStep("reading-type")
     setInterpretation(null)
   }
 

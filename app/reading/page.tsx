@@ -85,15 +85,13 @@ export default function ReadingPage() {
 
         setSelectedCards(tarotCards)
 
-        // Check daily reading limit before proceeding
+        // Skip ad and go directly to interpretation
         if (dailyReadings >= maxDailyReadings) {
             alert(
                 "You've reached your daily reading limit. Upgrade to Premium for unlimited readings!"
             )
             return
         }
-        
-        // Proceed to interpretation
         generateInterpretation()
     }
 
