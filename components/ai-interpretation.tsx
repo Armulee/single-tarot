@@ -18,7 +18,7 @@ export function AIInterpretation({
     cards,
     onNewReading,
 }: AIInterpretationProps) {
-    const { completion, isLoading, error, handleSubmit } = useCompletion({
+    const { completion, isLoading, error, complete } = useCompletion({
         api: "/api/interpret-cards",
         body: {
             question,
@@ -53,15 +53,14 @@ export function AIInterpretation({
         
         // Auto-submit when we have question and cards
         if (question && cards.length > 0 && !completion && !isLoading) {
-            console.log("🚀 Triggering submit event...")
-            const submitEvent = new Event('submit', { bubbles: true, cancelable: true })
-            console.log("📤 Calling handleSubmit with event:", submitEvent)
-            handleSubmit(submitEvent)
-            console.log("✅ handleSubmit called successfully")
+            console.log("🚀 Triggering complete()...")
+            console.log("📤 Calling complete() function")
+            complete("")
+            console.log("✅ complete() called successfully")
         } else {
-            console.log("⏸️ Not triggering submit - conditions not met")
+            console.log("⏸️ Not triggering complete - conditions not met")
         }
-    }, [question, cards, completion, isLoading, handleSubmit])
+    }, [question, cards, completion, isLoading, complete])
 
     const handleShare = async () => {
         if (navigator.share) {
