@@ -11,6 +11,14 @@ export async function POST(req: Request) {
             })
         }
 
+        // Check if OpenAI API key is configured
+        if (!process.env.OPENAI_API_KEY) {
+            console.error("OpenAI API key not configured")
+            return new Response("AI service not configured", {
+                status: 500,
+            })
+        }
+
         // Format cards with reversed information
         const formattedCards = cards.map(
             (card: { name: string; isReversed: boolean }) =>
@@ -60,6 +68,17 @@ Format with clear sections, emojis, and engaging mystical language.`,
         return result.toUIMessageStreamResponse()
     } catch (error) {
         console.error("Error generating interpretation:", error)
-        return new Response("Failed to generate interpretation", { status: 500 })
+        
+        // Provide more specific error messages
+        if (error instanceof Error) {
+            if (error.message.includes("API key")) {
+                return new Response("AI service authentication failed", { status: 500 })
+            }
+            if (error.message.includes("model")) {
+                return new Response("AI model not available", { status: 500 })
+            }
+        }
+        
+        return new Response("Failed to generate interpretation. Please try again.", { status: 500 })
     }
 }

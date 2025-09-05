@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Sparkles, RotateCcw, Share } from "lucide-react"
 import { useEffect } from "react"
 import { useCompletion } from "@ai-sdk/react"
+import { useTarot } from "@/contexts/tarot-context"
 
 interface AIInterpretationProps {
     question: string
@@ -18,23 +19,24 @@ export function AIInterpretation({
     cards,
     onNewReading,
 }: AIInterpretationProps) {
-    const { completion, isLoading, error, handleSubmit } = useCompletion({
+    const { isPremium } = useTarot()
+    
+    const { completion, isLoading, error, complete } = useCompletion({
         api: "/api/interpret-cards",
         body: {
             question,
             cards,
             cardCount: cards.length,
-            isPremium: false, // TODO: Get from context
+            isPremium,
         },
     })
 
     useEffect(() => {
         // Auto-submit when we have question and cards
         if (question && cards.length > 0 && !completion && !isLoading) {
-            const submitEvent = new Event('submit', { bubbles: true, cancelable: true })
-            handleSubmit(submitEvent)
+            complete("")
         }
-    }, [question, cards, completion, isLoading, handleSubmit])
+    }, [question, cards, completion, isLoading, complete])
 
     const handleShare = async () => {
         if (navigator.share) {
