@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         const interpretationDepth = isPremium ? "premium" : "basic"
 
         const result = streamText({
-            model: openai("gpt-5-nano"),
+            model: "openai/gpt-5-nano",
             system: `You are a mystical tarot reader with deep knowledge of tarot symbolism, astrology, and spiritual guidance. You provide insightful, personalized interpretations that blend traditional tarot meanings with modern wisdom. 
 
 Your interpretations should be:
