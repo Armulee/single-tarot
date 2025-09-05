@@ -1,10 +1,9 @@
-import { NextResponse, type NextRequest } from "next/server"
 import { streamText } from "ai"
 import { openai } from "@ai-sdk/openai"
 
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
     try {
-        const { question, cards, cardCount, isPremium } = await request.json()
+        const { question, cards, cardCount, isPremium } = await req.json()
 
         if (!question || !cards || cards.length === 0) {
             return new Response("Question and cards are required", {
@@ -61,9 +60,6 @@ Format with clear sections, emojis, and engaging mystical language.`,
         return result.toUIMessageStreamResponse()
     } catch (error) {
         console.error("Error generating interpretation:", error)
-        return NextResponse.json(
-            { error: "Failed to generate interpretation. Please try again." },
-            { status: 500 }
-        )
+        return new Response("Failed to generate interpretation", { status: 500 })
     }
 }

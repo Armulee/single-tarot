@@ -18,7 +18,7 @@ export function AIInterpretation({
     cards,
     onNewReading,
 }: AIInterpretationProps) {
-    const { complete, completion, isLoading, error } = useCompletion({
+    const { completion, isLoading, error, complete } = useCompletion({
         api: "/api/interpret-cards",
         body: {
             question,
