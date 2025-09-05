@@ -3,9 +3,18 @@ import { openai } from "@ai-sdk/openai"
 
 export async function POST(req: Request) {
     try {
+        console.log("🚀 API Route: POST request received")
         const { question, cards, cardCount, isPremium } = await req.json()
+        
+        console.log("📥 API Route: Request data:", {
+            question: question ? "✅ Has question" : "❌ No question",
+            cardsCount: cards?.length || 0,
+            cardCount,
+            isPremium
+        })
 
         if (!question || !cards || cards.length === 0) {
+            console.log("❌ API Route: Missing required data")
             return new Response("Question and cards are required", {
                 status: 400,
             })
@@ -19,6 +28,8 @@ export async function POST(req: Request) {
 
         const interpretationDepth = isPremium ? "premium" : "basic"
 
+        console.log("🤖 API Route: Starting streamText with model openai/gpt-5-nano")
+        
         const result = streamText({
             model: "openai/gpt-5-nano",
             system: `You are a mystical tarot reader with deep knowledge of tarot symbolism, astrology, and spiritual guidance. You provide insightful, personalized interpretations that blend traditional tarot meanings with modern wisdom. 
@@ -57,9 +68,10 @@ ${
 Format with clear sections, emojis, and engaging mystical language.`,
         })
 
+        console.log("📤 API Route: Returning stream response")
         return result.toUIMessageStreamResponse()
     } catch (error) {
-        console.error("Error generating interpretation:", error)
+        console.error("❌ API Route: Error generating interpretation:", error)
         return new Response("Failed to generate interpretation", { status: 500 })
     }
 }

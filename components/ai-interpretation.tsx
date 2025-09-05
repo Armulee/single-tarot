@@ -26,6 +26,20 @@ export function AIInterpretation({
             cardCount: cards.length,
             isPremium: false, // TODO: Get from context
         },
+        onError: (error) => {
+            console.error("❌ useCompletion error:", error)
+        },
+        onFinish: (prompt, completion) => {
+            console.log("✅ useCompletion finished:", { prompt, completion })
+        },
+    })
+
+    console.log("🔄 AI Interpretation render state:", {
+        completion: completion ? `✅ Has completion (${completion.length} chars)` : "❌ No completion",
+        isLoading,
+        error: error ? `❌ Error: ${error.message}` : "✅ No error",
+        question: question ? "✅ Has question" : "❌ No question",
+        cardsCount: cards.length
     })
 
     useEffect(() => {
