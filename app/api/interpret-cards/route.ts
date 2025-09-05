@@ -4,6 +4,8 @@ import { openai } from "@ai-sdk/openai"
 export async function POST(req: Request) {
     try {
         console.log("🚀 API Route: POST request received")
+        console.log("🌐 Vercel Function: Starting tarot interpretation")
+        
         const { question, cards, cardCount, isPremium } = await req.json()
         
         console.log("📥 API Route: Request data:", {
@@ -12,6 +14,8 @@ export async function POST(req: Request) {
             cardCount,
             isPremium
         })
+        
+        console.log("🔍 Vercel Log: Full request body:", JSON.stringify({ question, cards, cardCount, isPremium }, null, 2))
 
         if (!question || !cards || cards.length === 0) {
             console.log("❌ API Route: Missing required data")
@@ -29,6 +33,7 @@ export async function POST(req: Request) {
         const interpretationDepth = isPremium ? "premium" : "basic"
 
         console.log("🤖 API Route: Starting streamText with model openai/gpt-5-nano")
+        console.log("🔑 Vercel Log: OpenAI API Key configured:", !!process.env.OPENAI_API_KEY)
         
         const result = streamText({
             model: "openai/gpt-5-nano",
@@ -69,9 +74,15 @@ Format with clear sections, emojis, and engaging mystical language.`,
         })
 
         console.log("📤 API Route: Returning stream response")
+        console.log("✅ Vercel Log: Successfully created streamText result")
         return result.toUIMessageStreamResponse()
     } catch (error) {
         console.error("❌ API Route: Error generating interpretation:", error)
+        console.error("🚨 Vercel Log: Full error details:", {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined,
+            name: error instanceof Error ? error.name : undefined
+        })
         return new Response("Failed to generate interpretation", { status: 500 })
     }
 }
