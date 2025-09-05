@@ -26,39 +26,12 @@ export function AIInterpretation({
             cardCount: cards.length,
             isPremium: false, // TODO: Get from context
         },
-        onError: (error) => {
-            console.error("❌ useCompletion error:", error)
-        },
-        onFinish: (prompt, completion) => {
-            console.log("✅ useCompletion finished:", { prompt, completion })
-        },
-    })
-
-    console.log("🔄 AI Interpretation render state:", {
-        completion: completion ? `✅ Has completion (${completion.length} chars)` : "❌ No completion",
-        isLoading,
-        error: error ? `❌ Error: ${error.message}` : "✅ No error",
-        question: question ? "✅ Has question" : "❌ No question",
-        cardsCount: cards.length
     })
 
     useEffect(() => {
-        console.log("🔍 AI Interpretation useEffect triggered:", {
-            question: question ? "✅ Has question" : "❌ No question",
-            cardsLength: cards.length,
-            hasCompletion: !!completion,
-            isLoading,
-            shouldTrigger: question && cards.length > 0 && !completion && !isLoading
-        })
-        
         // Auto-submit when we have question and cards
         if (question && cards.length > 0 && !completion && !isLoading) {
-            console.log("🚀 Triggering complete()...")
-            console.log("📤 Calling complete() function")
             complete("")
-            console.log("✅ complete() called successfully")
-        } else {
-            console.log("⏸️ Not triggering complete - conditions not met")
         }
     }, [question, cards, completion, isLoading, complete])
 
