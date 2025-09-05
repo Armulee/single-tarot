@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Sparkles, RotateCcw, Share } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useCompletion } from "@ai/sdk/react"
+import { useCompletion } from "@ai-sdk/react"
 
 interface AIInterpretationProps {
     question: string
@@ -31,14 +31,9 @@ export function AIInterpretation({
     useEffect(() => {
         // Auto-submit when we have question and cards
         if (question && cards.length > 0 && !completion && !isLoading) {
-            const form = document.createElement('form')
-            form.style.display = 'none'
-            document.body.appendChild(form)
-            const submitEvent = new Event('submit', { bubbles: true, cancelable: true })
-            form.dispatchEvent(submitEvent)
-            document.body.removeChild(form)
+            handleSubmit(new Event('submit') as any)
         }
-    }, [question, cards, completion, isLoading])
+    }, [question, cards, completion, isLoading, handleSubmit])
 
     const handleShare = async () => {
         if (navigator.share) {
