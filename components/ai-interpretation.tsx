@@ -29,10 +29,23 @@ export function AIInterpretation({
     })
 
     useEffect(() => {
+        console.log("🔍 AI Interpretation useEffect triggered:", {
+            question: question ? "✅ Has question" : "❌ No question",
+            cardsLength: cards.length,
+            hasCompletion: !!completion,
+            isLoading,
+            shouldTrigger: question && cards.length > 0 && !completion && !isLoading
+        })
+        
         // Auto-submit when we have question and cards
         if (question && cards.length > 0 && !completion && !isLoading) {
+            console.log("🚀 Triggering submit event...")
             const submitEvent = new Event('submit', { bubbles: true, cancelable: true })
+            console.log("📤 Calling handleSubmit with event:", submitEvent)
             handleSubmit(submitEvent)
+            console.log("✅ handleSubmit called successfully")
+        } else {
+            console.log("⏸️ Not triggering submit - conditions not met")
         }
     }, [question, cards, completion, isLoading, handleSubmit])
 
