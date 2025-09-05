@@ -23,8 +23,6 @@ export default function ReadingPage() {
         resetReading,
     } = useTarot()
 
-    const [dailyReadings, setDailyReadings] = useState(2) // TODO: Get from user data
-    const maxDailyReadings = 3
 
     useEffect(() => {
         if (!question && currentStep !== "question") {
@@ -84,14 +82,6 @@ export default function ReadingPage() {
         }))
 
         setSelectedCards(tarotCards)
-
-        // Skip ad and go directly to interpretation
-        if (dailyReadings >= maxDailyReadings) {
-            alert(
-                "You've reached your daily reading limit. Upgrade to Premium for unlimited readings!"
-            )
-            return
-        }
         generateInterpretation()
     }
 
@@ -99,7 +89,6 @@ export default function ReadingPage() {
         // Just set the cards and move to interpretation step
         // The AI component will handle the streaming
         setCurrentStep("interpretation")
-        setDailyReadings((prev) => prev + 1)
     }
 
     return (

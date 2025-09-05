@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Sparkles, RotateCcw, Share } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { useCompletion } from "@ai-sdk/react"
 
 interface AIInterpretationProps {
     question: string
@@ -17,54 +18,22 @@ export function AIInterpretation({
     cards,
     onNewReading,
 }: AIInterpretationProps) {
-    const [interpretation, setInterpretation] = useState<string>("")
-    const [isGenerating, setIsGenerating] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    const { completion, isLoading, error, complete } = useCompletion({
+        api: "/api/interpret-cards",
+        body: {
+            question,
+            cards,
+            cardCount: cards.length,
+            isPremium: false, // TODO: Get from context
+        },
+    })
 
     useEffect(() => {
-        const generateInterpretation = async () => {
-            try {
-                setError(null)
-                setInterpretation("")
-                setIsGenerating(true)
-
-                const response = await fetch("/api/interpret-cards", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        question,
-                        cards,
-                        cardCount: cards.length,
-                        isPremium: false, // TODO: Get from context
-                    }),
-                })
-
-                if (!response.ok) {
-                    throw new Error("Failed to generate interpretation")
-                }
-
-                const result = await response.json()
-
-                if (result.text) {
-                    setInterpretation(result.text)
-                } else {
-                    throw new Error("No interpretation text received")
-                }
-
-                setIsGenerating(false)
-            } catch (error) {
-                console.error("Error generating interpretation:", error)
-                setError("Failed to generate interpretation. Please try again.")
-                setIsGenerating(false)
-            }
+        // Auto-submit when we have question and cards
+        if (question && cards.length > 0 && !completion && !isLoading) {
+            complete("")
         }
-
-        if (!interpretation) {
-            generateInterpretation()
-        }
-    }, [question, cards, interpretation])
+    }, [question, cards, completion, isLoading, complete])
 
     const handleShare = async () => {
         if (navigator.share) {
@@ -77,7 +46,7 @@ export function AIInterpretation({
                         )
                         .join(
                             ", "
-                        )}\n\nInterpretation: ${interpretation.substring(
+                        )}\n\nInterpretation: ${completion.substring(
                         0,
                         200
                     )}...`,
@@ -90,7 +59,7 @@ export function AIInterpretation({
             // Fallback: copy to clipboard
             const shareText = `My Cosmic Tarot Reading\n\nQuestion: ${question}\nCards: ${cards
                 .map((c) => (c.isReversed ? `${c.name} Reversed` : c.name))
-                .join(", ")}\n\nInterpretation: ${interpretation}`
+                .join(", ")}\n\nInterpretation: ${completion}`
             navigator.clipboard.writeText(shareText)
             alert("Reading copied to clipboard!")
         }
@@ -145,7 +114,7 @@ export function AIInterpretation({
                     </div>
 
                     <div className='prose prose-invert max-w-none'>
-                        {isGenerating && !interpretation ? (
+                        {isLoading && !completion ? (
                             <div className='text-center space-y-4'>
                                 <div className='w-16 h-16 mx-auto rounded-full bg-primary/20 flex items-center justify-center animate-pulse'>
                                     <Sparkles className='w-8 h-8 text-primary' />
@@ -169,7 +138,7 @@ export function AIInterpretation({
                             </div>
                         ) : (
                             <div className='text-foreground leading-relaxed whitespace-pre-wrap'>
-                                {interpretation}
+                                {completion}
                             </div>
                         )}
                     </div>
