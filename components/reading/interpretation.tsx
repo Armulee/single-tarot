@@ -3,36 +3,94 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Sparkles, RotateCcw, Share, Loader2 } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { Input } from "@/components/ui/input"
+import { Sparkles, RotateCcw, Share, Loader2, Send } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 import { useCompletion } from "@ai-sdk/react"
 import { useTarot } from "@/contexts/tarot-context"
 
 export default function Interpretation() {
-    const { currentStep, question, selectedCards, resetReading } = useTarot()
+    const { 
+        currentStep, 
+        question, 
+        setQuestion,
+        selectedCards, 
+        resetReading,
+        followupQuestion,
+        setFollowupQuestion,
+        setCurrentStep,
+        setInterpretation,
+        followupCard,
+        interpretation
+    } = useTarot()
+    
+    // Determine if this is a follow-up interpretation
+    const isFollowup = followupQuestion && followupCard
+    
     const { completion, isLoading, error, complete } = useCompletion({
         api: "/api/interpret-cards/question",
-        body: {
+        body: isFollowup ? {
+            question: followupQuestion,
+            cards: [followupCard],
+            isFollowup: true,
+            lastQuestion: question,
+            lastCards: selectedCards,
+            lastInterpretation: interpretation,
+            followupQuestion: followupQuestion,
+            followupCard: followupCard,
+        } : {
             question,
             cards: selectedCards,
         },
     })
 
+    const [followupInput, setFollowupInput] = useState("")
     const hasInitiated = useRef(false)
+    
     useEffect(() => {
         // Auto-submit when we have question and cards, but only once
-        if (
-            question &&
-            selectedCards.length > 0 &&
-            !completion &&
-            !isLoading &&
-            !hasInitiated.current
-        ) {
-            hasInitiated.current = true
-            complete("")
+        if (isFollowup) {
+            // For follow-up interpretations
+            if (
+                followupQuestion &&
+                followupCard &&
+                !completion &&
+                !isLoading &&
+                !hasInitiated.current
+            ) {
+                hasInitiated.current = true
+                complete("")
+            }
+        } else {
+            // For regular interpretations
+            if (
+                question &&
+                selectedCards.length > 0 &&
+                !completion &&
+                !isLoading &&
+                !hasInitiated.current
+            ) {
+                hasInitiated.current = true
+                complete("")
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [question, selectedCards, completion, isLoading])
+    }, [question, selectedCards, followupQuestion, followupCard, completion, isLoading, isFollowup])
+
+    // Store the completion result in context when it's ready
+    useEffect(() => {
+        if (completion && !isLoading) {
+            setInterpretation(completion)
+        }
+    }, [completion, isLoading, setInterpretation])
+
+    const handleFollowupQuestion = () => {
+        if (followupInput.trim()) {
+            setFollowupQuestion(followupInput.trim())
+            setQuestion(followupInput.trim()) // Set the follow-up question as the current question
+            setCurrentStep("card-selection") // Go to card selection
+        }
+    }
 
     const handleShare = async () => {
         if (navigator.share) {
@@ -70,23 +128,34 @@ export default function Interpretation() {
                             <div className='flex items-center justify-center space-x-2'>
                                 <Sparkles className='w-6 h-6 text-primary' />
                                 <h1 className='font-serif font-bold text-2xl'>
-                                    Your Cosmic Interpretation
+                                    {isFollowup ? "Follow-up Cosmic Interpretation" : "Your Cosmic Interpretation"}
                                 </h1>
                                 <Sparkles className='w-6 h-6 text-primary' />
                             </div>
                             <p className='text-muted-foreground italic'>
-                                &ldquo;{question}&rdquo;
+                                &ldquo;{isFollowup ? followupQuestion : question}&rdquo;
                             </p>
                             <div className='flex flex-wrap gap-2 justify-center'>
-                                {selectedCards.map((card, index) => (
-                                    <Badge
-                                        key={index}
-                                        variant='secondary'
-                                        className='bg-secondary/20 text-secondary border-secondary/30'
-                                    >
-                                        {card.meaning}
-                                    </Badge>
-                                ))}
+                                {isFollowup ? (
+                                    followupCard && (
+                                        <Badge
+                                            variant='secondary'
+                                            className='bg-secondary/20 text-secondary border-secondary/30'
+                                        >
+                                            {followupCard.meaning}
+                                        </Badge>
+                                    )
+                                ) : (
+                                    selectedCards.map((card, index) => (
+                                        <Badge
+                                            key={index}
+                                            variant='secondary'
+                                            className='bg-secondary/20 text-secondary border-secondary/30'
+                                        >
+                                            {card.meaning}
+                                        </Badge>
+                                    ))
+                                )}
                             </div>
                         </div>
                     </Card>
@@ -168,24 +237,63 @@ export default function Interpretation() {
 
                             {!isLoading && (
                                 <div className='border-t border-border/20 pt-6'>
-                                    <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-                                        <Button
-                                            onClick={resetReading}
-                                            size='lg'
-                                            className='bg-primary hover:bg-primary/90 text-primary-foreground px-8 card-glow'
-                                        >
-                                            <RotateCcw className='w-4 h-4 mr-2' />
-                                            New Reading
-                                        </Button>
-                                        <Button
-                                            onClick={handleShare}
-                                            variant='outline'
-                                            size='lg'
-                                            className='border-border/30 hover:bg-card/20 bg-transparent px-8'
-                                        >
-                                            <Share className='w-4 h-4 mr-2' />
-                                            Share Reading
-                                        </Button>
+                                    <div className='space-y-6'>
+                                        {/* Follow-up Question Input - only show for regular interpretations */}
+                                        {!isFollowup && (
+                                            <div className='space-y-4'>
+                                                <div className='text-center space-y-2'>
+                                                    <h3 className='font-serif font-semibold text-lg'>
+                                                        Have a Follow-up Question?
+                                                    </h3>
+                                                    <p className='text-sm text-muted-foreground'>
+                                                        Ask for deeper insight or clarification
+                                                    </p>
+                                                </div>
+                                                <div className='flex gap-3 max-w-md mx-auto'>
+                                                    <Input
+                                                        value={followupInput}
+                                                        onChange={(e) => setFollowupInput(e.target.value)}
+                                                        placeholder='Ask your follow-up question...'
+                                                        className='flex-1'
+                                                        onKeyPress={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                handleFollowupQuestion()
+                                                            }
+                                                        }}
+                                                    />
+                                                    <Button
+                                                        onClick={handleFollowupQuestion}
+                                                        disabled={!followupInput.trim()}
+                                                        size='lg'
+                                                        className='bg-primary hover:bg-primary/90 text-primary-foreground px-6'
+                                                    >
+                                                        <Send className='w-4 h-4' />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Action Buttons */}
+                                        <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+                                            <Button
+                                                onClick={resetReading}
+                                                variant='outline'
+                                                size='lg'
+                                                className='border-border/30 hover:bg-card/20 bg-transparent px-8'
+                                            >
+                                                <RotateCcw className='w-4 h-4 mr-2' />
+                                                New Reading
+                                            </Button>
+                                            <Button
+                                                onClick={handleShare}
+                                                variant='outline'
+                                                size='lg'
+                                                className='border-border/30 hover:bg-card/20 bg-transparent px-8'
+                                            >
+                                                <Share className='w-4 h-4 mr-2' />
+                                                Share Reading
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
                             )}
