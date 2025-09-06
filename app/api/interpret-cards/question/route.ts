@@ -23,9 +23,7 @@ export async function POST(req: Request) {
             // maxOutputTokens: 200,
             system: `You are an expert tarot reader. Provide clear, concise, and mystical interpretations that directly address the user’s question. Use the card’s meaning as your guide, but do not explain the symbolism or card details. Focus only on delivering an insightful answer that feels intuitive and to the point.`,
             prompt: `Question: "${question}"
-Cards: ${formattedCards.join(", ")}
-
-Give a direct answer to the question using the meanings of the cards. Be concise and intuitive. Do not explain card details—only provide the interpretation as the answer.`,
+Cards: ${formattedCards.join(", ")}`,
         })
 
         console.log(result)
