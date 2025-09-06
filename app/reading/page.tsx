@@ -1,3 +1,5 @@
+"use client"
+
 import Interpretation from "@/components/reading/interpretation"
 import QuestionStep from "@/components/reading/question"
 import ReadingType from "@/components/reading/reading-type"
