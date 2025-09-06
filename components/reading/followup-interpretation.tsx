@@ -3,39 +3,44 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Sparkles, RotateCcw, Share, Loader2, Send } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { Sparkles, RotateCcw, Share, Loader2 } from "lucide-react"
+import { useEffect, useRef } from "react"
 import { useCompletion } from "@ai-sdk/react"
 import { useTarot } from "@/contexts/tarot-context"
 
-export default function Interpretation() {
+export default function FollowupInterpretation() {
     const { 
         currentStep, 
         question, 
         selectedCards, 
-        resetReading,
+        interpretation,
         followupQuestion,
-        setFollowupQuestion,
-        setCurrentStep,
-        setInterpretation
+        followupCard,
+        setFollowupInterpretation,
+        resetReading 
     } = useTarot()
+    
     const { completion, isLoading, error, complete } = useCompletion({
         api: "/api/interpret-cards/question",
         body: {
-            question,
-            cards: selectedCards,
+            question: followupQuestion,
+            cards: followupCard ? [followupCard] : [],
+            isFollowup: true,
+            lastQuestion: question,
+            lastCards: selectedCards,
+            lastInterpretation: interpretation,
+            followupQuestion: followupQuestion,
+            followupCard: followupCard,
         },
     })
 
-    const [followupInput, setFollowupInput] = useState("")
     const hasInitiated = useRef(false)
     
     useEffect(() => {
-        // Auto-submit when we have question and cards, but only once
+        // Auto-submit when we have follow-up question and card, but only once
         if (
-            question &&
-            selectedCards.length > 0 &&
+            followupQuestion &&
+            followupCard &&
             !completion &&
             !isLoading &&
             !hasInitiated.current
@@ -44,33 +49,23 @@ export default function Interpretation() {
             complete("")
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [question, selectedCards, completion, isLoading])
+    }, [followupQuestion, followupCard, completion, isLoading])
 
     // Store the completion result in context when it's ready
     useEffect(() => {
         if (completion && !isLoading) {
-            setInterpretation(completion)
+            setFollowupInterpretation(completion)
         }
-    }, [completion, isLoading, setInterpretation])
-
-    const handleFollowupQuestion = () => {
-        if (followupInput.trim()) {
-            setFollowupQuestion(followupInput.trim())
-            setCurrentStep("followup-card-selection")
-        }
-    }
+    }, [completion, isLoading, setFollowupInterpretation])
 
     const handleShare = async () => {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: "My ดูดวง.ai Reading",
-                    text: `Question: ${question}\nCards: ${selectedCards
+                    title: "My ดูดวง.ai Follow-up Reading",
+                    text: `Original Question: ${question}\nOriginal Cards: ${selectedCards
                         .map((c) => c.meaning)
-                        .join(", ")}\n\nInterpretation: ${completion.substring(
-                        0,
-                        200
-                    )}...`,
+                        .join(", ")}\nOriginal Interpretation: ${interpretation?.substring(0, 100)}...\n\nFollow-up Question: ${followupQuestion}\nFollow-up Card: ${followupCard?.meaning}\nFollow-up Interpretation: ${completion.substring(0, 200)}...`,
                     url: window.location.href,
                 })
             } catch (error) {
@@ -78,17 +73,17 @@ export default function Interpretation() {
             }
         } else {
             // Fallback: copy to clipboard
-            const shareText = `My ดูดวง.ai Reading\n\nQuestion: ${question}\nCards: ${selectedCards
+            const shareText = `My ดูดวง.ai Follow-up Reading\n\nOriginal Question: ${question}\nOriginal Cards: ${selectedCards
                 .map((c) => c.meaning)
-                .join(", ")}\n\nInterpretation: ${completion}`
+                .join(", ")}\nOriginal Interpretation: ${interpretation}\n\nFollow-up Question: ${followupQuestion}\nFollow-up Card: ${followupCard?.meaning}\nFollow-up Interpretation: ${completion}`
             navigator.clipboard.writeText(shareText)
-            alert("Reading copied to clipboard!")
+            alert("Follow-up reading copied to clipboard!")
         }
     }
 
     return (
         <>
-            {currentStep === "interpretation" && (
+            {currentStep === "followup-interpretation" && (
                 <div className='space-y-8'>
                     {/* Header */}
                     <Card className='p-6 bg-card/10 backdrop-blur-sm border-border/20'>
@@ -96,28 +91,57 @@ export default function Interpretation() {
                             <div className='flex items-center justify-center space-x-2'>
                                 <Sparkles className='w-6 h-6 text-primary' />
                                 <h1 className='font-serif font-bold text-2xl'>
-                                    Your Cosmic Interpretation
+                                    Follow-up Cosmic Interpretation
                                 </h1>
                                 <Sparkles className='w-6 h-6 text-primary' />
                             </div>
                             <p className='text-muted-foreground italic'>
-                                &ldquo;{question}&rdquo;
+                                &ldquo;{followupQuestion}&rdquo;
                             </p>
                             <div className='flex flex-wrap gap-2 justify-center'>
-                                {selectedCards.map((card, index) => (
+                                {followupCard && (
                                     <Badge
-                                        key={index}
                                         variant='secondary'
                                         className='bg-secondary/20 text-secondary border-secondary/30'
                                     >
-                                        {card.meaning}
+                                        {followupCard.meaning}
                                     </Badge>
-                                ))}
+                                )}
                             </div>
                         </div>
                     </Card>
 
-                    {/* AI Interpretation */}
+                    {/* Previous Reading Summary */}
+                    <Card className='p-6 bg-card/5 backdrop-blur-sm border-border/10'>
+                        <div className='space-y-3'>
+                            <h3 className='font-serif font-semibold text-lg text-center'>
+                                Previous Reading
+                            </h3>
+                            <div className='text-center space-y-2'>
+                                <p className='text-sm text-muted-foreground italic'>
+                                    &ldquo;{question}&rdquo;
+                                </p>
+                                <div className='flex flex-wrap gap-2 justify-center'>
+                                    {selectedCards.map((card, index) => (
+                                        <Badge
+                                            key={index}
+                                            variant='secondary'
+                                            className='bg-secondary/20 text-secondary border-secondary/30'
+                                        >
+                                            {card.meaning}
+                                        </Badge>
+                                    ))}
+                                </div>
+                                {interpretation && (
+                                    <p className='text-xs text-muted-foreground mt-2 line-clamp-3'>
+                                        {interpretation.substring(0, 150)}...
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    </Card>
+
+                    {/* AI Follow-up Interpretation */}
                     <Card className='p-8 bg-card/10 backdrop-blur-sm border-border/20 card-glow'>
                         <div className='space-y-6'>
                             <div className='flex items-center space-x-3'>
@@ -126,10 +150,10 @@ export default function Interpretation() {
                                 </div>
                                 <div>
                                     <h2 className='font-serif font-semibold text-xl'>
-                                        Cosmic Guidance
+                                        Deeper Cosmic Guidance
                                     </h2>
                                     <p className='text-sm text-muted-foreground'>
-                                        Generated by AI with ancient wisdom
+                                        Building upon your previous reading
                                     </p>
                                 </div>
                             </div>
@@ -138,7 +162,7 @@ export default function Interpretation() {
                                 {error ? (
                                     <div className='text-center space-y-4'>
                                         <p className='text-destructive'>
-                                            Failed to generate interpretation.
+                                            Failed to generate follow-up interpretation.
                                             Please try again.
                                         </p>
                                         <Button
@@ -155,7 +179,7 @@ export default function Interpretation() {
                                         <div className='flex items-center justify-center space-x-3'>
                                             <Loader2 className='w-6 h-6 text-primary animate-spin' />
                                             <span className='text-muted-foreground'>
-                                                Consulting the cosmic realm...
+                                                Consulting the cosmic realm for deeper insight...
                                             </span>
                                         </div>
                                         <div className='space-y-2'>
@@ -180,8 +204,7 @@ export default function Interpretation() {
                                                 ></div>
                                             </div>
                                             <p className='text-sm text-muted-foreground'>
-                                                The cards are revealing their
-                                                secrets...
+                                                The cards are revealing deeper secrets...
                                             </p>
                                         </div>
                                     </div>
@@ -194,61 +217,24 @@ export default function Interpretation() {
 
                             {!isLoading && (
                                 <div className='border-t border-border/20 pt-6'>
-                                    <div className='space-y-6'>
-                                        {/* Follow-up Question Input */}
-                                        <div className='space-y-4'>
-                                            <div className='text-center space-y-2'>
-                                                <h3 className='font-serif font-semibold text-lg'>
-                                                    Have a Follow-up Question?
-                                                </h3>
-                                                <p className='text-sm text-muted-foreground'>
-                                                    Ask for deeper insight or clarification
-                                                </p>
-                                            </div>
-                                            <div className='flex gap-3 max-w-md mx-auto'>
-                                                <Input
-                                                    value={followupInput}
-                                                    onChange={(e) => setFollowupInput(e.target.value)}
-                                                    placeholder='Ask your follow-up question...'
-                                                    className='flex-1'
-                                                    onKeyPress={(e) => {
-                                                        if (e.key === 'Enter') {
-                                                            handleFollowupQuestion()
-                                                        }
-                                                    }}
-                                                />
-                                                <Button
-                                                    onClick={handleFollowupQuestion}
-                                                    disabled={!followupInput.trim()}
-                                                    size='lg'
-                                                    className='bg-primary hover:bg-primary/90 text-primary-foreground px-6'
-                                                >
-                                                    <Send className='w-4 h-4' />
-                                                </Button>
-                                            </div>
-                                        </div>
-
-                                        {/* Action Buttons */}
-                                        <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-                                            <Button
-                                                onClick={resetReading}
-                                                variant='outline'
-                                                size='lg'
-                                                className='border-border/30 hover:bg-card/20 bg-transparent px-8'
-                                            >
-                                                <RotateCcw className='w-4 h-4 mr-2' />
-                                                New Reading
-                                            </Button>
-                                            <Button
-                                                onClick={handleShare}
-                                                variant='outline'
-                                                size='lg'
-                                                className='border-border/30 hover:bg-card/20 bg-transparent px-8'
-                                            >
-                                                <Share className='w-4 h-4 mr-2' />
-                                                Share Reading
-                                            </Button>
-                                        </div>
+                                    <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+                                        <Button
+                                            onClick={resetReading}
+                                            size='lg'
+                                            className='bg-primary hover:bg-primary/90 text-primary-foreground px-8 card-glow'
+                                        >
+                                            <RotateCcw className='w-4 h-4 mr-2' />
+                                            New Reading
+                                        </Button>
+                                        <Button
+                                            onClick={handleShare}
+                                            variant='outline'
+                                            size='lg'
+                                            className='border-border/30 hover:bg-card/20 bg-transparent px-8'
+                                        >
+                                            <Share className='w-4 h-4 mr-2' />
+                                            Share Reading
+                                        </Button>
                                     </div>
                                 </div>
                             )}
@@ -258,7 +244,7 @@ export default function Interpretation() {
                     {/* Disclaimer */}
                     <Card className='p-4 bg-card/5 backdrop-blur-sm border-border/10'>
                         <p className='text-xs text-muted-foreground text-center'>
-                            This interpretation is generated by AI for
+                            This follow-up interpretation is generated by AI for
                             entertainment and guidance purposes. Trust your
                             intuition and use this reading as one perspective on
                             your journey.

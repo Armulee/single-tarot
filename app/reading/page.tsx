@@ -4,6 +4,8 @@ import Interpretation from "@/components/reading/interpretation"
 import QuestionStep from "@/components/reading/question"
 import ReadingType from "@/components/reading/reading-type"
 import CardSelection from "@/components/reading/card-selection"
+import FollowupCardSelection from "@/components/reading/followup-card-selection"
+import FollowupInterpretation from "@/components/reading/followup-interpretation"
 
 export type ReadingConfig = {
     [type: string]: {
@@ -39,6 +41,8 @@ export default function ReadingPage() {
                 <ReadingType readingConfig={readingConfig} />
                 <CardSelection readingConfig={readingConfig} />
                 <Interpretation />
+                <FollowupCardSelection />
+                <FollowupInterpretation />
             </main>
         </div>
     )

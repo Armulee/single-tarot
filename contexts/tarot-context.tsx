@@ -31,6 +31,9 @@ export interface TarotContextType {
         | "card-selection"
         | "ad-viewing"
         | "interpretation"
+        | "followup-question"
+        | "followup-card-selection"
+        | "followup-interpretation"
     setCurrentStep: (
         step:
             | "question"
@@ -38,11 +41,26 @@ export interface TarotContextType {
             | "card-selection"
             | "ad-viewing"
             | "interpretation"
+            | "followup-question"
+            | "followup-card-selection"
+            | "followup-interpretation"
     ) => void
 
     // Interpretation result
     interpretation: string | null
     setInterpretation: (interpretation: string) => void
+
+    // Follow-up question state
+    followupQuestion: string
+    setFollowupQuestion: (question: string) => void
+
+    // Follow-up card state
+    followupCard: TarotCard | null
+    setFollowupCard: (card: TarotCard | null) => void
+
+    // Follow-up interpretation result
+    followupInterpretation: string | null
+    setFollowupInterpretation: (interpretation: string) => void
 
     // User state
     isPremium: boolean
@@ -64,8 +82,14 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         | "card-selection"
         | "ad-viewing"
         | "interpretation"
+        | "followup-question"
+        | "followup-card-selection"
+        | "followup-interpretation"
     >("reading-type")
     const [interpretation, setInterpretation] = useState<string | null>(null)
+    const [followupQuestion, setFollowupQuestion] = useState("")
+    const [followupCard, setFollowupCard] = useState<TarotCard | null>(null)
+    const [followupInterpretation, setFollowupInterpretation] = useState<string | null>(null)
     const [isPremium, setIsPremium] = useState(false)
 
     const resetReading = () => {
@@ -74,6 +98,9 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         setSelectedCards([])
         setCurrentStep("reading-type")
         setInterpretation(null)
+        setFollowupQuestion("")
+        setFollowupCard(null)
+        setFollowupInterpretation(null)
     }
 
     return (
@@ -89,6 +116,12 @@ export function TarotProvider({ children }: { children: ReactNode }) {
                 setCurrentStep,
                 interpretation,
                 setInterpretation,
+                followupQuestion,
+                setFollowupQuestion,
+                followupCard,
+                setFollowupCard,
+                followupInterpretation,
+                setFollowupInterpretation,
                 isPremium,
                 setIsPremium,
                 resetReading,
