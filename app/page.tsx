@@ -32,34 +32,32 @@ export default function HomePage() {
         el.style.height = `${el.scrollHeight}px`
 
         // Update border radius based on content
-        console.log(el.scrollHeight)
         const hasMultipleLines = el.scrollHeight > 80
         if (hasMultipleLines) {
-            el.classList.remove("rounded-full")
-            el.classList.add("rounded-2xl")
+            el.classList.add("!rounded-2xl")
         } else {
-            el.classList.remove("rounded-2xl")
-            el.classList.add("rounded-full")
+            el.classList.remove("!rounded-2xl")
         }
     }, [question])
 
     return (
-        <div className='min-h-screen relative overflow-hidden'>
+        <div className='min-[calc(100dvh-65px)] relative overflow-hidden'>
             {/* Hero Section */}
-            <main className='relative z-10 flex flex-col items-center justify-center h-[calc(100vh-180px)] px-6 text-center'>
+            <section className='relative z-10 flex flex-col items-center justify-center h-[calc(100vh-180px)] px-6 text-center'>
                 <div className='max-w-4xl mx-auto space-y-8'>
                     {/* Main Heading */}
                     <div className='space-y-4'>
-                        <h1 className='font-serif font-bold text-4xl md:text-6xl lg:text-7xl text-balance'>
+                        <h1 className='font-serif font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-balance h-20 sm:h-24 md:h-28 lg:h-32'>
                             <TypewriterText
                                 text='Ask me anything'
-                                speed={80}
+                                speed={60}
                                 className='text-white'
                             />
                             <br />
                             <TypewriterText
                                 text='about your destiny'
-                                speed={80}
+                                speed={60}
+                                delay={60 * "Ask me anything".length}
                                 className='text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text'
                             />
                         </h1>
@@ -74,7 +72,7 @@ export default function HomePage() {
                             >
                                 Your question
                             </Label>
-                            <div className='relative w-96'>
+                            <div className='relative sm:w-96 md:w-xl lg:w-2xl w-84'>
                                 <Textarea
                                     id='question'
                                     ref={textareaRef}
@@ -98,7 +96,7 @@ export default function HomePage() {
                                             }
                                         }
                                     }}
-                                    className='pr-14 px-4 py-4 text-lg bg-card/10 bg-primary/30 backdrop-blur-sm border-border/30 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/60 cosmic-input resize-none overflow-hidden min-h-14'
+                                    className='pr-14 px-4 py-4 text-lg bg-card/10 bg-primary/30 backdrop-blur-sm border-border/30 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/60 cosmic-input resize-none overflow-hidden min-h-14 rounded-full'
                                 />
                                 <Button
                                     onClick={handleStartReading}
@@ -132,45 +130,7 @@ export default function HomePage() {
                         </Button>
                     </div>
                 </div>
-            </main>
-
-            {/* Footer */}
-            <footer className='relative z-10 border-t border-border/20 bg-card/5 backdrop-blur-sm'>
-                <div className='max-w-6xl mx-auto px-6 py-8'>
-                    <div className='flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0'>
-                        <div className='flex items-center space-x-2'>
-                            <div className='w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center'>
-                                <span className='text-primary font-serif text-sm'>
-                                    ✦
-                                </span>
-                            </div>
-                            <span className='font-serif font-semibold'>
-                                Cosmic Tarot
-                            </span>
-                        </div>
-                        <div className='flex space-x-6 text-sm text-muted-foreground'>
-                            <Link
-                                href='/privacy'
-                                className='hover:text-foreground transition-colors'
-                            >
-                                Privacy
-                            </Link>
-                            <Link
-                                href='/terms'
-                                className='hover:text-foreground transition-colors'
-                            >
-                                Terms
-                            </Link>
-                            <Link
-                                href='/contact'
-                                className='hover:text-foreground transition-colors'
-                            >
-                                Contact
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            </section>
         </div>
     )
 }

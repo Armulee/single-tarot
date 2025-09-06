@@ -6,6 +6,7 @@ import { Suspense } from "react"
 import { TarotProvider } from "@/contexts/tarot-context"
 import { Navbar } from "@/components/navbar"
 import "./globals.css"
+import Footer from "@/components/footer"
 
 /* Updated fonts to match mystical design brief */
 const playfairDisplay = Playfair_Display({
@@ -23,7 +24,7 @@ const sourceSans = Source_Sans_3({
 })
 
 export const metadata: Metadata = {
-    title: "Cosmic Tarot - AI-Powered Mystical Guidance",
+    title: "ดูดวง.ai - AI-Powered Mystical Guidance",
     description:
         "Discover your destiny with AI-powered tarot card interpretations in a stunning cosmic experience",
     generator: "v0.app",
@@ -64,10 +65,13 @@ export default function RootLayout({
                     ></div>
                 </div>
                 <TarotProvider>
-                    <Navbar />
-                    <main className='pt-16 relative z-10'>
-                        <Suspense fallback={null}>{children}</Suspense>
-                    </main>
+                    <div className='min-h-screen flex flex-col'>
+                        <Navbar />
+                        <main className='pt-16 relative z-10 flex-1'>
+                            <Suspense fallback={null}>{children}</Suspense>
+                        </main>
+                        <Footer />
+                    </div>
                 </TarotProvider>
                 <Analytics />
             </body>

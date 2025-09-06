@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -22,7 +22,6 @@ export default function ReadingPage() {
         setCurrentStep,
         resetReading,
     } = useTarot()
-
 
     useEffect(() => {
         if (!question && currentStep !== "question") {
@@ -82,12 +81,6 @@ export default function ReadingPage() {
         }))
 
         setSelectedCards(tarotCards)
-        generateInterpretation()
-    }
-
-    const generateInterpretation = async () => {
-        // Just set the cards and move to interpretation step
-        // The AI component will handle the streaming
         setCurrentStep("interpretation")
     }
 

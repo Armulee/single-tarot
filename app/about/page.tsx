@@ -86,13 +86,13 @@ export default function AboutPage() {
                                     Our Spiritual Journey
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    Cosmic Tarot was born from a deep reverence
-                                    for the mystical arts and a vision to make
+                                    ดูดวง.ai was born from a deep reverence for
+                                    the mystical arts and a vision to make
                                     ancient wisdom accessible to everyone. We
                                     believe that the universe speaks to us
                                     through symbols, and tarot cards have been
-                                    humanity&apos;s way of interpreting these cosmic
-                                    messages for centuries.
+                                    humanity&apos;s way of interpreting these
+                                    cosmic messages for centuries.
                                 </p>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     Our journey began with a simple question:
@@ -171,10 +171,10 @@ export default function AboutPage() {
                                     Our AI system has been trained on thousands
                                     of traditional tarot interpretations,
                                     symbolic meanings, and archetypal patterns.
-                                    It doesn&apos;t just provide generic readings—it
-                                    analyzes your specific question, considers
-                                    the unique combination of cards drawn, and
-                                    generates personalized insights.
+                                    It doesn&apos;t just provide generic
+                                    readings—it analyzes your specific question,
+                                    considers the unique combination of cards
+                                    drawn, and generates personalized insights.
                                 </p>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     The AI understands the nuanced relationships

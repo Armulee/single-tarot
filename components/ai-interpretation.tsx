@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Sparkles, RotateCcw, Share } from "lucide-react"
-import { useEffect } from "react"
+import { Sparkles, RotateCcw, Share, Loader2 } from "lucide-react"
+import { useEffect, useRef } from "react"
 import { useCompletion } from "@ai-sdk/react"
 
 interface AIInterpretationProps {
@@ -19,34 +19,42 @@ export function AIInterpretation({
     onNewReading,
 }: AIInterpretationProps) {
     const { completion, isLoading, error, complete } = useCompletion({
-        api: "/api/interpret-cards",
+        api: "/api/interpret-cards/question",
         body: {
             question,
             cards,
-            cardCount: cards.length,
-            isPremium: false, // TODO: Get from context
         },
     })
 
+    const hasInitiated = useRef(false)
+
     useEffect(() => {
-        // Auto-submit when we have question and cards
-        if (question && cards.length > 0 && !completion && !isLoading) {
+        // Auto-submit when we have question and cards, but only once
+        if (
+            question &&
+            cards.length > 0 &&
+            !completion &&
+            !isLoading &&
+            !hasInitiated.current
+        ) {
+            hasInitiated.current = true
             complete("")
         }
-    }, [question, cards, completion, isLoading, complete])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [question, cards, completion, isLoading])
+
+    console.log(completion)
 
     const handleShare = async () => {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: "My Cosmic Tarot Reading",
+                    title: "My ดูดวง.ai Reading",
                     text: `Question: ${question}\nCards: ${cards
                         .map((c) =>
                             c.isReversed ? `${c.name} Reversed` : c.name
                         )
-                        .join(
-                            ", "
-                        )}\n\nInterpretation: ${completion.substring(
+                        .join(", ")}\n\nInterpretation: ${completion.substring(
                         0,
                         200
                     )}...`,
@@ -57,7 +65,7 @@ export function AIInterpretation({
             }
         } else {
             // Fallback: copy to clipboard
-            const shareText = `My Cosmic Tarot Reading\n\nQuestion: ${question}\nCards: ${cards
+            const shareText = `My ดูดวง.ai Reading\n\nQuestion: ${question}\nCards: ${cards
                 .map((c) => (c.isReversed ? `${c.name} Reversed` : c.name))
                 .join(", ")}\n\nInterpretation: ${completion}`
             navigator.clipboard.writeText(shareText)
@@ -114,16 +122,7 @@ export function AIInterpretation({
                     </div>
 
                     <div className='prose prose-invert max-w-none'>
-                        {isLoading && !completion ? (
-                            <div className='text-center space-y-4'>
-                                <div className='w-16 h-16 mx-auto rounded-full bg-primary/20 flex items-center justify-center animate-pulse'>
-                                    <Sparkles className='w-8 h-8 text-primary' />
-                                </div>
-                                <p className='text-lg font-medium'>
-                                    Channeling Cosmic Wisdom...
-                                </p>
-                            </div>
-                        ) : error ? (
+                        {error ? (
                             <div className='text-center space-y-4'>
                                 <p className='text-destructive'>
                                     Failed to generate interpretation. Please
@@ -136,6 +135,34 @@ export function AIInterpretation({
                                     Retry
                                 </Button>
                             </div>
+                        ) : isLoading ? (
+                            <div className='text-center space-y-6 py-8'>
+                                <div className='flex items-center justify-center space-x-3'>
+                                    <Loader2 className='w-6 h-6 text-primary animate-spin' />
+                                    <span className='text-muted-foreground'>
+                                        Consulting the cosmic realm...
+                                    </span>
+                                </div>
+                                <div className='space-y-2'>
+                                    <div className='flex justify-center space-x-1'>
+                                        <div
+                                            className='w-2 h-2 bg-primary rounded-full animate-bounce'
+                                            style={{ animationDelay: "0ms" }}
+                                        ></div>
+                                        <div
+                                            className='w-2 h-2 bg-primary rounded-full animate-bounce'
+                                            style={{ animationDelay: "150ms" }}
+                                        ></div>
+                                        <div
+                                            className='w-2 h-2 bg-primary rounded-full animate-bounce'
+                                            style={{ animationDelay: "300ms" }}
+                                        ></div>
+                                    </div>
+                                    <p className='text-sm text-muted-foreground'>
+                                        The cards are revealing their secrets...
+                                    </p>
+                                </div>
+                            </div>
                         ) : (
                             <div className='text-foreground leading-relaxed whitespace-pre-wrap'>
                                 {completion}
@@ -143,27 +170,29 @@ export function AIInterpretation({
                         )}
                     </div>
 
-                    <div className='border-t border-border/20 pt-6'>
-                        <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-                            <Button
-                                onClick={onNewReading}
-                                size='lg'
-                                className='bg-primary hover:bg-primary/90 text-primary-foreground px-8 card-glow'
-                            >
-                                <RotateCcw className='w-4 h-4 mr-2' />
-                                New Reading
-                            </Button>
-                            <Button
-                                onClick={handleShare}
-                                variant='outline'
-                                size='lg'
-                                className='border-border/30 hover:bg-card/20 bg-transparent px-8'
-                            >
-                                <Share className='w-4 h-4 mr-2' />
-                                Share Reading
-                            </Button>
+                    {!isLoading && (
+                        <div className='border-t border-border/20 pt-6'>
+                            <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+                                <Button
+                                    onClick={onNewReading}
+                                    size='lg'
+                                    className='bg-primary hover:bg-primary/90 text-primary-foreground px-8 card-glow'
+                                >
+                                    <RotateCcw className='w-4 h-4 mr-2' />
+                                    New Reading
+                                </Button>
+                                <Button
+                                    onClick={handleShare}
+                                    variant='outline'
+                                    size='lg'
+                                    className='border-border/30 hover:bg-card/20 bg-transparent px-8'
+                                >
+                                    <Share className='w-4 h-4 mr-2' />
+                                    Share Reading
+                                </Button>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </Card>
 
