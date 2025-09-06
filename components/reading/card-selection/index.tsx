@@ -16,6 +16,8 @@ export default function CardSelection({
         question,
         readingType,
         setSelectedCards,
+        followupQuestion,
+        setFollowupCard,
     } = useTarot()
 
     const handleEditQuestion = () => {
@@ -38,7 +40,13 @@ export default function CardSelection({
             meaning: card.isReversed ? `${card.name} (Reversed)` : card.name,
         }))
 
-        setSelectedCards(tarotCards)
+        if (followupQuestion) {
+            // For follow-up questions, only select one card and store it as follow-up card
+            setFollowupCard(tarotCards[0])
+        } else {
+            // For regular readings, set all selected cards
+            setSelectedCards(tarotCards)
+        }
         setCurrentStep("interpretation")
     }
     return (
@@ -73,11 +81,13 @@ export default function CardSelection({
                     <div className='space-y-6'>
                         <div className='text-center space-y-2'>
                             <h2 className='font-serif font-bold text-2xl'>
-                                Choose Your Cards
+                                {followupQuestion ? "Choose Your Follow-up Card" : "Choose Your Cards"}
                             </h2>
                             <p className='text-muted-foreground'>
-                                Trust your intuition and select from the cosmic
-                                spread
+                                {followupQuestion 
+                                    ? "Select one card for deeper insight into your follow-up question"
+                                    : "Trust your intuition and select from the cosmic spread"
+                                }
                             </p>
                         </div>
 
@@ -93,7 +103,7 @@ export default function CardSelection({
 
                         {readingType && (
                             <CircularCardSpread
-                                cardsToSelect={readingConfig[readingType].cards}
+                                cardsToSelect={followupQuestion ? 1 : readingConfig[readingType].cards}
                                 onCardsSelected={handleCardsSelected}
                             />
                         )}

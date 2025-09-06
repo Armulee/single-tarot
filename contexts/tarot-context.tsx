@@ -31,9 +31,6 @@ export interface TarotContextType {
         | "card-selection"
         | "ad-viewing"
         | "interpretation"
-        | "followup-question"
-        | "followup-card-selection"
-        | "followup-interpretation"
     setCurrentStep: (
         step:
             | "question"
@@ -41,9 +38,6 @@ export interface TarotContextType {
             | "card-selection"
             | "ad-viewing"
             | "interpretation"
-            | "followup-question"
-            | "followup-card-selection"
-            | "followup-interpretation"
     ) => void
 
     // Interpretation result
@@ -82,9 +76,6 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         | "card-selection"
         | "ad-viewing"
         | "interpretation"
-        | "followup-question"
-        | "followup-card-selection"
-        | "followup-interpretation"
     >("reading-type")
     const [interpretation, setInterpretation] = useState<string | null>(null)
     const [followupQuestion, setFollowupQuestion] = useState("")
