@@ -1,3 +1,4 @@
+"use client"
 import { Pencil } from "lucide-react"
 import { Button } from "../ui/button"
 import { Card } from "../ui/card"
@@ -24,7 +25,7 @@ export default function ReadingType({
         <>
             {currentStep === "reading-type" && (
                 <div className='space-y-8 animate-fade-in'>
-                    <Card className='p-6 bg-card/10 backdrop-blur-sm border-border/20'>
+                    <Card className='px-6 pt-10 pb-6 border-0'>
                         <div className='text-center space-y-2'>
                             <div className='flex items-center justify-center gap-2'>
                                 <h2 className='font-serif font-semibold text-xl'>

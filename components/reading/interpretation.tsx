@@ -3,20 +3,160 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Sparkles, RotateCcw, Share, Loader2 } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { Sparkles, RotateCcw, Loader2 } from "lucide-react"
+import { FaShareNodes, FaCopy, FaDownload, FaCheck } from "react-icons/fa6"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { useCompletion } from "@ai-sdk/react"
-import { useTarot } from "@/contexts/tarot-context"
+import { TarotCard, useTarot } from "@/contexts/tarot-context"
+import { useRouter } from "next/navigation"
+import QuestionInput from "../question-input"
 
 export default function Interpretation() {
-    const { currentStep, question, selectedCards, resetReading } = useTarot()
+    const router = useRouter()
+    const [finish, setFinish] = useState(false)
+    const [copied, setCopied] = useState(false)
+    const {
+        currentStep,
+        question,
+        selectedCards,
+        interpretation,
+        setInterpretation,
+    } = useTarot()
     const { completion, isLoading, error, complete } = useCompletion({
+        // api: "/api/interpret-cards/mockup",
         api: "/api/interpret-cards/question",
-        body: {
-            question,
-            cards: selectedCards,
+        onFinish: (_, completion) => {
+            setFinish(true)
+            setInterpretation(completion)
         },
     })
+
+    const getInterpretation = useCallback(
+        async (question: string, selectedCards: TarotCard[]) => {
+            const prompt = `Question: "${question}"
+Cards: ${selectedCards.map((c) => c.meaning).join(", ")}
+
+From this information, provide a concise interpretation of the cards that directly addresses the user’s question. If the interpretation is harm user's feeling, tone it down to be more positive and uplifting. Answer it as paragraph. No more than 100 words.
+
+If the interpretation is too negative, tone it down to be more positive and uplifting.
+
+If the interpretation is too positive, tone it down to be more realistic and down to earth.
+
+If the interpretation is too vague, add more details to make it more specific.
+
+If the interpretation is too long, shorten it to be more concise.
+
+If the interpretation is too short, add more details to make it more specific.
+
+If the interpretation is too generic, add more details to make it more specific.
+`
+            await complete(prompt)
+        },
+        [complete]
+    )
+
+    const shareImage = async () => {
+        try {
+            const res = await fetch("/api/share-image", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    question,
+                    cards: selectedCards.map((c) => c.meaning),
+                    interpretation: interpretation ?? completion,
+                    width: 1080,
+                    height: 1350,
+                }),
+            })
+            const blob = await res.blob()
+            const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
+            const filename = `reading-${timestamp}.png`
+            const file = new File([blob], filename, { type: "image/png" })
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: "ดูดวง.ai Reading",
+                })
+                return
+            }
+            // Fallback to download if files can't be shared
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement("a")
+            a.href = url
+            a.download = filename
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            URL.revokeObjectURL(url)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const handleCopy = async () => {
+        const textOnly = (interpretation ?? completion) || ""
+        await navigator.clipboard.writeText(textOnly)
+        setCopied(true)
+        window.setTimeout(() => setCopied(false), 1500)
+    }
+
+    const handleDownload = async () => {
+        try {
+            const res = await fetch("/api/share-image", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    question,
+                    cards: selectedCards.map((c) => c.meaning),
+                    interpretation: interpretation ?? completion,
+                    width: 1080,
+                    height: 1350,
+                }),
+            })
+            const blob = await res.blob()
+            const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
+            const filename = `reading-${timestamp}.png`
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement("a")
+            a.href = url
+            a.download = filename
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            URL.revokeObjectURL(url)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const shareButtons = [
+        {
+            id: "share",
+            Icon: FaShareNodes,
+            label: "Share",
+            className:
+                "border-white/20 text-white bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-cyan-500/20 hover:from-indigo-500/30 hover:via-purple-500/30 hover:to-cyan-500/30",
+            onClick: shareImage,
+        },
+        {
+            id: "copy",
+            Icon: copied ? FaCheck : FaCopy,
+            label: copied ? "Copied" : "Copy",
+            className:
+                "border-white/20 text-white bg-white/10 hover:bg-white/20",
+            onClick: handleCopy,
+        },
+        {
+            id: "download",
+            Icon: FaDownload,
+            label: "Download",
+            className:
+                "border-cyan-400/30 text-white bg-cyan-400/15 hover:bg-cyan-400/25",
+            onClick: handleDownload,
+        },
+    ]
 
     const hasInitiated = useRef(false)
     useEffect(() => {
@@ -24,48 +164,20 @@ export default function Interpretation() {
         if (
             question &&
             selectedCards.length > 0 &&
-            !completion &&
-            !isLoading &&
+            !interpretation &&
             !hasInitiated.current
         ) {
+            getInterpretation(question, selectedCards)
             hasInitiated.current = true
-            complete("")
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [question, selectedCards, completion, isLoading])
-
-    const handleShare = async () => {
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: "My ดูดวง.ai Reading",
-                    text: `Question: ${question}\nCards: ${selectedCards
-                        .map((c) => c.meaning)
-                        .join(", ")}\n\nInterpretation: ${completion.substring(
-                        0,
-                        200
-                    )}...`,
-                    url: window.location.href,
-                })
-            } catch (error) {
-                console.log("Error sharing:", error)
-            }
-        } else {
-            // Fallback: copy to clipboard
-            const shareText = `My ดูดวง.ai Reading\n\nQuestion: ${question}\nCards: ${selectedCards
-                .map((c) => c.meaning)
-                .join(", ")}\n\nInterpretation: ${completion}`
-            navigator.clipboard.writeText(shareText)
-            alert("Reading copied to clipboard!")
-        }
-    }
+    }, [question, selectedCards, interpretation, getInterpretation])
 
     return (
         <>
             {currentStep === "interpretation" && (
                 <div className='space-y-8'>
                     {/* Header */}
-                    <Card className='p-6 bg-card/10 backdrop-blur-sm border-border/20'>
+                    <Card className='px-6 pt-10 pb-6 border-0'>
                         <div className='text-center space-y-4'>
                             <div className='flex items-center justify-center space-x-2'>
                                 <Sparkles className='w-6 h-6 text-primary' />
@@ -107,7 +219,6 @@ export default function Interpretation() {
                                     </p>
                                 </div>
                             </div>
-
                             <div className='prose prose-invert max-w-none'>
                                 {error ? (
                                     <div className='text-center space-y-4'>
@@ -160,37 +271,68 @@ export default function Interpretation() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className='text-foreground leading-relaxed whitespace-pre-wrap'>
-                                        {completion}
-                                    </div>
+                                    <>
+                                        {/* Interpretation */}
+                                        <div className='text-foreground leading-relaxed whitespace-pre-wrap mb-4'>
+                                            {interpretation ?? completion}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </Card>
+
+                    {(interpretation || finish) && (
+                        <>
+                            {/* Sharing */}
+                            <div className='flex flex-wrap items-center justify-center gap-3'>
+                                {shareButtons.map(
+                                    ({
+                                        id,
+                                        Icon,
+                                        className,
+                                        onClick,
+                                        label,
+                                    }) => (
+                                        <Button
+                                            key={id}
+                                            type='button'
+                                            onClick={onClick}
+                                            className={`relative group h-11 px-4 rounded-full border backdrop-blur-md shadow-[0_10px_20px_-10px_rgba(56,189,248,0.35)] transition-all ${className}`}
+                                        >
+                                            <span className='pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-white/10 blur-[1.5px] transition-opacity'></span>
+                                            <span className='relative z-10 flex items-center gap-2'>
+                                                <Icon className='w-4 h-4' />
+                                                <span className='text-sm font-medium'>
+                                                    {label}
+                                                </span>
+                                            </span>
+                                        </Button>
+                                    )
                                 )}
                             </div>
 
-                            {!isLoading && (
-                                <div className='border-t border-border/20 pt-6'>
+                            <div className='border-t border-border/20 pt-6'>
+                                <QuestionInput
+                                    // followUp
+                                    label='Ask a follow up question'
+                                    placeholder='Type your follow up question here...'
+                                />
+                                <div className='max-w-2xl m-auto flex flex-col gap-4'>
                                     <div className='flex flex-col sm:flex-row gap-4 justify-center'>
                                         <Button
-                                            onClick={resetReading}
+                                            onClick={() => router.push("/")}
                                             size='lg'
                                             className='bg-primary hover:bg-primary/90 text-primary-foreground px-8 card-glow'
                                         >
                                             <RotateCcw className='w-4 h-4 mr-2' />
                                             New Reading
                                         </Button>
-                                        <Button
-                                            onClick={handleShare}
-                                            variant='outline'
-                                            size='lg'
-                                            className='border-border/30 hover:bg-card/20 bg-transparent px-8'
-                                        >
-                                            <Share className='w-4 h-4 mr-2' />
-                                            Share Reading
-                                        </Button>
                                     </div>
                                 </div>
-                            )}
-                        </div>
-                    </Card>
+                            </div>
+                        </>
+                    )}
 
                     {/* Disclaimer */}
                     <Card className='p-4 bg-card/5 backdrop-blur-sm border-border/10'>

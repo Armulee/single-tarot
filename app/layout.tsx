@@ -7,6 +7,7 @@ import { TarotProvider } from "@/contexts/tarot-context"
 import { Navbar } from "@/components/navbar"
 import "./globals.css"
 import Footer from "@/components/footer"
+import CosmicStars from "@/components/cosmic-stars"
 
 /* Updated fonts to match mystical design brief */
 const playfairDisplay = Playfair_Display({
@@ -28,6 +29,18 @@ export const metadata: Metadata = {
     description:
         "Discover your destiny with AI-powered tarot card interpretations in a stunning cosmic experience",
     generator: "v0.app",
+    other: {
+        "apple-mobile-web-app-capable": "yes",
+        "apple-mobile-web-app-status-bar-style": "black-translucent",
+        "apple-mobile-web-app-title": "ดูดวง.ai",
+    },
+}
+
+export const viewport = {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+    themeColor: "#0a0a1a",
 }
 
 export default function RootLayout({
@@ -40,7 +53,7 @@ export default function RootLayout({
             <body
                 className={`font-sans ${sourceSans.variable} ${playfairDisplay.variable}`}
             >
-                <div className='cosmic-stars'></div>
+                <CosmicStars />
                 {/* Floating Tarot Cards - Global */}
                 <div className='fixed inset-0 pointer-events-none z-0'>
                     <div
@@ -67,7 +80,7 @@ export default function RootLayout({
                 <TarotProvider>
                     <div className='min-h-screen flex flex-col'>
                         <Navbar />
-                        <main className='pt-16 relative z-10 flex-1'>
+                        <main className='pt-16 min-[calc(100dvh-65px)] relative overflow-hidden home-gradient'>
                             <Suspense fallback={null}>{children}</Suspense>
                         </main>
                         <Footer />

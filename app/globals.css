@@ -123,14 +123,13 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    background-color: oklch(0.35 0.15 264);
+    min-height: 100vh;
+  }
   body {
-    @apply bg-background text-foreground;
-    background: radial-gradient(
-      ellipse at top,
-      oklch(0.2 0.1 264) 0%,
-      oklch(0.145 0.02 264) 50%,
-      oklch(0.08 0.02 280) 100%
-    );
+    background-color: oklch(0.145 0.02 264);
+    color: oklch(0.985 0 0);
     min-height: 100vh;
   }
 }
@@ -180,6 +179,65 @@
   50% {
     opacity: 1;
   }
+}
+
+@keyframes twinkle-1 {
+  0%, 100% { opacity: 0.1; }
+  25% { opacity: 0.4; }
+  50% { opacity: 0.2; }
+  75% { opacity: 0.5; }
+}
+
+@keyframes twinkle-2 {
+  0%, 100% { opacity: 0.05; }
+  30% { opacity: 0.3; }
+  60% { opacity: 0.15; }
+  90% { opacity: 0.4; }
+}
+
+@keyframes twinkle-3 {
+  0%, 100% { opacity: 0.2; }
+  20% { opacity: 0.3; }
+  40% { opacity: 0.5; }
+  80% { opacity: 0.1; }
+}
+
+@keyframes twinkle-4 {
+  0%, 100% { opacity: 0.3; }
+  15% { opacity: 0.5; }
+  35% { opacity: 0.8; }
+  55% { opacity: 0.1; }
+  75% { opacity: 0.9; }
+}
+
+@keyframes twinkle-5 {
+  0%, 100% { opacity: 0.2; }
+  10% { opacity: 0.7; }
+  45% { opacity: 0.3; }
+  70% { opacity: 1; }
+  85% { opacity: 0.4; }
+}
+
+@keyframes twinkle-6 {
+  0%, 100% { opacity: 0.5; }
+  25% { opacity: 0.2; }
+  50% { opacity: 0.9; }
+  75% { opacity: 0.3; }
+}
+
+@keyframes twinkle-7 {
+  0%, 100% { opacity: 0.1; }
+  40% { opacity: 0.8; }
+  60% { opacity: 0.4; }
+  80% { opacity: 0.6; }
+}
+
+@keyframes twinkle-8 {
+  0%, 100% { opacity: 0.3; }
+  20% { opacity: 0.9; }
+  50% { opacity: 0.1; }
+  70% { opacity: 0.7; }
+  90% { opacity: 0.5; }
 }
 
 @keyframes float {
@@ -238,30 +296,78 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.cosmic-stars {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: -1;
+/* Cosmic stars are now handled by the CosmicStars component */
+
+/* Home section gradient */
+.home-gradient {
+  background: radial-gradient(ellipse at top,
+    oklch(0.2 0.1 264) 0%,
+    oklch(0.145 0.02 264) 50%,
+    oklch(0.08 0.02 280) 100%);
 }
 
-.cosmic-stars::before {
-  content: "";
+.cosmic-stars-layer-3 {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(2px 2px at 20px 30px, white, transparent),
-    radial-gradient(2px 2px at 40px 70px, white, transparent), radial-gradient(1px 1px at 90px 40px, white, transparent),
-    radial-gradient(1px 1px at 130px 80px, white, transparent),
-    radial-gradient(2px 2px at 160px 30px, white, transparent);
+  background-image: radial-gradient(1px 1px at 25px 15px, white, transparent),
+    radial-gradient(2px 2px at 55px 85px, white, transparent), 
+    radial-gradient(1px 1px at 95px 25px, white, transparent),
+    radial-gradient(2px 2px at 135px 75px, white, transparent),
+    radial-gradient(1px 1px at 175px 45px, white, transparent);
   background-repeat: repeat;
   background-size: 200px 100px;
-  animation: twinkle 4s ease-in-out infinite;
+  animation: twinkle-5 4.3s ease-in-out infinite;
+}
+
+.cosmic-stars-layer-4 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(2px 2px at 45px 65px, white, transparent),
+    radial-gradient(1px 1px at 85px 35px, white, transparent), 
+    radial-gradient(2px 2px at 125px 85px, white, transparent),
+    radial-gradient(1px 1px at 165px 15px, white, transparent),
+    radial-gradient(1px 1px at 195px 55px, white, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: twinkle-6 3.5s ease-in-out infinite;
+}
+
+.cosmic-stars-layer-5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(1px 1px at 15px 45px, white, transparent),
+    radial-gradient(2px 2px at 75px 75px, white, transparent), 
+    radial-gradient(1px 1px at 105px 5px, white, transparent),
+    radial-gradient(2px 2px at 145px 65px, white, transparent),
+    radial-gradient(1px 1px at 185px 35px, white, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: twinkle-7 4.9s ease-in-out infinite;
+}
+
+.cosmic-stars-layer-6 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(2px 2px at 35px 25px, white, transparent),
+    radial-gradient(1px 1px at 65px 95px, white, transparent), 
+    radial-gradient(2px 2px at 115px 45px, white, transparent),
+    radial-gradient(1px 1px at 155px 85px, white, transparent),
+    radial-gradient(2px 2px at 185px 15px, white, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: twinkle-8 3.7s ease-in-out infinite;
 }
 
 .card-glow {

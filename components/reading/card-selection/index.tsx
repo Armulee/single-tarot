@@ -1,3 +1,4 @@
+"use client"
 import { TarotCard, useTarot } from "@/contexts/tarot-context"
 import { Button } from "../../ui/button"
 import { Card } from "../../ui/card"
@@ -34,7 +35,9 @@ export default function CardSelection({
         const tarotCards: TarotCard[] = cards.map((card, index) => ({
             id: index + 1,
             name: card.name,
-            image: `/cards/${card.name.toLowerCase().replace(/\s+/g, "-")}.jpg`,
+            image: `assets/rider-waite-tarot/${card.name
+                .toLowerCase()
+                .replace(/\s+/g, "-")}.png`,
             meaning: card.isReversed ? `${card.name} (Reversed)` : card.name,
         }))
 

@@ -1,6 +1,13 @@
 "use client"
 
-import { createContext, useContext, useState, type ReactNode } from "react"
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    type ReactNode,
+} from "react"
+import { usePathname } from "next/navigation"
 
 export type ReadingType = "simple" | "intermediate" | "advanced"
 
@@ -64,9 +71,12 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         | "card-selection"
         | "ad-viewing"
         | "interpretation"
-    >("reading-type")
+    >("question")
     const [interpretation, setInterpretation] = useState<string | null>(null)
     const [isPremium, setIsPremium] = useState(false)
+    const pathname = usePathname()
+
+    const STORAGE_KEY = "reading-state-v1"
 
     const resetReading = () => {
         setQuestion("")
@@ -75,6 +85,70 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         setCurrentStep("reading-type")
         setInterpretation(null)
     }
+
+    // Restore reading state when entering /reading
+    useEffect(() => {
+        if (typeof window === "undefined") return
+        if (!pathname || !pathname.startsWith("/reading")) return
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY)
+            if (!raw) return
+            const data = JSON.parse(raw) as {
+                question?: string
+                readingType?: ReadingType | null
+                selectedCards?: TarotCard[]
+                currentStep?: TarotContextType["currentStep"]
+                interpretation?: string | null
+            }
+            if (data.question !== undefined) setQuestion(data.question)
+            if (data.readingType !== undefined)
+                setReadingType(data.readingType ?? null)
+            if (Array.isArray(data.selectedCards))
+                setSelectedCards(data.selectedCards)
+            if (data.currentStep) setCurrentStep(data.currentStep)
+            if (data.interpretation !== undefined)
+                setInterpretation(data.interpretation ?? null)
+        } catch {
+            // ignore corrupt storage
+        }
+    }, [pathname])
+
+    // Persist reading state while on /reading
+    useEffect(() => {
+        if (typeof window === "undefined") return
+        if (!pathname || !pathname.startsWith("/reading")) return
+        try {
+            const payload = JSON.stringify({
+                question,
+                readingType,
+                selectedCards,
+                currentStep,
+                interpretation,
+            })
+            localStorage.setItem(STORAGE_KEY, payload)
+        } catch {
+            // ignore quota errors
+        }
+    }, [
+        question,
+        readingType,
+        selectedCards,
+        currentStep,
+        interpretation,
+        pathname,
+    ])
+
+    // Clear reading state when leaving /reading
+    useEffect(() => {
+        if (typeof window === "undefined") return
+        if (!pathname) return
+        if (!pathname.startsWith("/reading")) {
+            try {
+                localStorage.removeItem(STORAGE_KEY)
+            } catch {}
+            resetReading()
+        }
+    }, [pathname])
 
     return (
         <TarotContext.Provider
