@@ -225,6 +225,8 @@ If the interpretation is too generic, add more details to make it more specific.
             } catch (e) {
                 console.error("Failed to load follow-up data:", e)
             }
+            // Reset the hasInitiated flag for follow-up questions
+            hasInitiated.current = false
         }
     }, [question])
 
