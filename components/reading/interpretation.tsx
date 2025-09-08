@@ -280,30 +280,27 @@ If the interpretation is too generic, add more details to make it more specific.
                                 &ldquo;{question}&rdquo;
                             </p>
                             
-                            {/* Card Images with Aura */}
+                            {/* Card Images with Badges on Top */}
                             <div className='flex flex-wrap gap-6 justify-center'>
                                 {selectedCards.map((card, index) => (
-                                    <CardImage
-                                        key={index}
-                                        card={card}
-                                        size="md"
-                                        showAura={true}
-                                        showLabel={true}
-                                        className="hover:scale-105 transition-transform duration-200"
-                                    />
-                                ))}
-                            </div>
-                            
-                            {/* Badges */}
-                            <div className='flex flex-wrap gap-2 justify-center'>
-                                {selectedCards.map((card, index) => (
-                                    <Badge
-                                        key={`badge-${index}`}
-                                        variant='secondary'
-                                        className='bg-secondary/20 text-secondary border-secondary/30'
-                                    >
-                                        {card.meaning}
-                                    </Badge>
+                                    <div key={index} className="flex flex-col items-center gap-3">
+                                        {/* Badge on top */}
+                                        <Badge
+                                            variant='secondary'
+                                            className='bg-secondary/20 text-secondary border-secondary/30'
+                                        >
+                                            {card.meaning}
+                                        </Badge>
+                                        
+                                        {/* Card Image */}
+                                        <CardImage
+                                            card={card}
+                                            size="md"
+                                            showAura={true}
+                                            showLabel={false}
+                                            className="hover:scale-105 transition-transform duration-200"
+                                        />
+                                    </div>
                                 ))}
                             </div>
                         </div>
