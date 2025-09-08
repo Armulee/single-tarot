@@ -7,9 +7,17 @@ interface CardImageProps {
   card: TarotCard
   className?: string
   size?: "sm" | "md" | "lg"
+  showAura?: boolean
+  showLabel?: boolean
 }
 
-export function CardImage({ card, className = "", size = "md" }: CardImageProps) {
+export function CardImage({ 
+  card, 
+  className = "", 
+  size = "md", 
+  showAura = false, 
+  showLabel = true 
+}: CardImageProps) {
   const sizeClasses = {
     sm: "w-16 h-24",
     md: "w-24 h-36", 
@@ -18,7 +26,14 @@ export function CardImage({ card, className = "", size = "md" }: CardImageProps)
 
   return (
     <div className={`relative ${sizeClasses[size]} ${className}`}>
-      <div className="relative w-full h-full rounded-lg overflow-hidden border-2 border-border/30 shadow-lg">
+      {/* Aura effect */}
+      {showAura && (
+        <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 blur-xl scale-110 opacity-60 animate-pulse"></div>
+      )}
+      
+      <div className={`relative w-full h-full rounded-lg overflow-hidden border-2 border-border/30 shadow-lg ${
+        showAura ? "shadow-primary/30 shadow-2xl" : ""
+      }`}>
         <Image
           src={`/${card.image}`}
           alt={card.name}
@@ -34,14 +49,17 @@ export function CardImage({ card, className = "", size = "md" }: CardImageProps)
           </div>
         )}
       </div>
-      <div className="mt-2 text-center">
-        <p className="text-xs font-medium text-foreground truncate">
-          {card.name}
-        </p>
-        {card.isReversed && (
-          <p className="text-xs text-red-400 font-medium">Reversed</p>
-        )}
-      </div>
+      
+      {showLabel && (
+        <div className="mt-2 text-center">
+          <p className="text-xs font-medium text-foreground truncate">
+            {card.name}
+          </p>
+          {card.isReversed && (
+            <p className="text-xs text-red-400 font-medium">Reversed</p>
+          )}
+        </div>
+      )}
     </div>
   )
 }
