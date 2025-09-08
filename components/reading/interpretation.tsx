@@ -236,39 +236,8 @@ If the interpretation is too generic, add more details to make it more specific.
             {currentStep === "interpretation" && (
                 <div className='space-y-8'>
                     {/* Header */}
-                    <Card className='px-6 pt-10 pb-6 border-0 relative overflow-hidden'>
-                        {/* Background card images with aura */}
-                        <div className='absolute inset-0 pointer-events-none'>
-                            {selectedCards.map((card, index) => {
-                                const positions = [
-                                    { top: '10%', left: '5%', transform: 'rotate(-15deg)' },
-                                    { top: '15%', right: '8%', transform: 'rotate(20deg)' },
-                                    { bottom: '20%', left: '10%', transform: 'rotate(-10deg)' },
-                                    { bottom: '15%', right: '12%', transform: 'rotate(25deg)' },
-                                    { top: '50%', left: '2%', transform: 'rotate(-5deg)' },
-                                    { top: '60%', right: '5%', transform: 'rotate(15deg)' }
-                                ]
-                                const position = positions[index % positions.length]
-                                
-                                return (
-                                    <div
-                                        key={`bg-${index}`}
-                                        className='absolute opacity-20'
-                                        style={position}
-                                    >
-                                        <CardImage
-                                            card={card}
-                                            size="sm"
-                                            showAura={true}
-                                            showLabel={false}
-                                            className="scale-75"
-                                        />
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        
-                        <div className='text-center space-y-4 relative z-10'>
+                    <Card className='px-6 pt-10 pb-6 border-0'>
+                        <div className='text-center space-y-6'>
                             <div className='flex items-center justify-center space-x-2'>
                                 <Sparkles className='w-6 h-6 text-primary' />
                                 <h1 className='font-serif font-bold text-2xl'>
@@ -279,10 +248,26 @@ If the interpretation is too generic, add more details to make it more specific.
                             <p className='text-muted-foreground italic'>
                                 &ldquo;{question}&rdquo;
                             </p>
+                            
+                            {/* Card Images with Aura */}
+                            <div className='flex flex-wrap gap-6 justify-center'>
+                                {selectedCards.map((card, index) => (
+                                    <CardImage
+                                        key={index}
+                                        card={card}
+                                        size="md"
+                                        showAura={true}
+                                        showLabel={true}
+                                        className="hover:scale-105 transition-transform duration-200"
+                                    />
+                                ))}
+                            </div>
+                            
+                            {/* Badges */}
                             <div className='flex flex-wrap gap-2 justify-center'>
                                 {selectedCards.map((card, index) => (
                                     <Badge
-                                        key={index}
+                                        key={`badge-${index}`}
                                         variant='secondary'
                                         className='bg-secondary/20 text-secondary border-secondary/30'
                                     >
