@@ -31,7 +31,8 @@ export default function QuestionInput({
         setInterpretation,
         question: lastQuestion,
         selectedCards: lastCards,
-        interpretation: lastInterpretation
+        interpretation: lastInterpretation,
+        clearReadingStorage
     } = useTarot()
 
     const handleStartReading = () => {
@@ -40,6 +41,9 @@ export default function QuestionInput({
             if (followUp) {
                 handleFollowUpQuestion(value)
             } else {
+                // This is a new reading (not follow-up), clear localStorage
+                clearReadingStorage()
+                
                 setContextQuestion(value)
                 setCurrentStep("reading-type")
                 if (pathname !== "/reading") {
@@ -50,7 +54,7 @@ export default function QuestionInput({
     }
 
     const handleFollowUpQuestion = (followUpQuestion: string) => {
-        // Backup current reading data before clearing
+        // Backup current reading data for follow-up context
         try {
             const backupData = {
                 question: lastQuestion,
@@ -63,12 +67,8 @@ export default function QuestionInput({
             console.error("Failed to backup reading data:", e)
         }
 
-        // Clear localStorage
-        try {
-            localStorage.removeItem("reading-state-v1")
-        } catch (e) {
-            console.error("Failed to clear localStorage:", e)
-        }
+        // DON'T clear localStorage - preserve the reading state
+        // The reading state will be updated with the new follow-up data
 
         // Set up for follow-up reading
         setContextQuestion(`[Follow up question]: ${followUpQuestion}`)

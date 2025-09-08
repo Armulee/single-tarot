@@ -57,6 +57,9 @@ export interface TarotContextType {
 
     // Reset function
     resetReading: () => void
+    
+    // Clear localStorage function (for new readings)
+    clearReadingStorage: () => void
 }
 
 const TarotContext = createContext<TarotContextType | undefined>(undefined)
@@ -84,6 +87,15 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         setSelectedCards([])
         setCurrentStep("reading-type")
         setInterpretation(null)
+    }
+
+    const clearReadingStorage = () => {
+        try {
+            localStorage.removeItem(STORAGE_KEY)
+            localStorage.removeItem(STORAGE_KEY + "-backup")
+        } catch (e) {
+            console.error("Failed to clear reading storage:", e)
+        }
     }
 
     // Restore reading state when entering /reading
@@ -138,14 +150,13 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         pathname,
     ])
 
-    // Clear reading state when leaving /reading
+    // Clear reading state when leaving /reading (but preserve localStorage for navigation)
     useEffect(() => {
         if (typeof window === "undefined") return
         if (!pathname) return
         if (!pathname.startsWith("/reading")) {
-            try {
-                localStorage.removeItem(STORAGE_KEY)
-            } catch {}
+            // Don't clear localStorage - preserve reading state for navigation
+            // Only reset the in-memory state
             resetReading()
         }
     }, [pathname])
@@ -166,6 +177,7 @@ export function TarotProvider({ children }: { children: ReactNode }) {
                 isPremium,
                 setIsPremium,
                 resetReading,
+                clearReadingStorage,
             }}
         >
             {children}
