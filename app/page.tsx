@@ -28,8 +28,8 @@ export default function HomePage() {
                 </div>
 
                 {/* Question Input */}
-                <div className='flex flex-col gap-6 justify-center items-center pt-8 max-w-md mx-auto'>
-                    <div className='w-90 sm:w-lg md:w-xl lg:w-2xl'>
+                <div className='flex flex-col gap-6 justify-center items-center pt-8 max-w-md mx-auto px-4'>
+                    <div className='w-full'>
                         <QuestionInput />
                     </div>
 

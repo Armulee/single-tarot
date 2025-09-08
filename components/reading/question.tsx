@@ -18,7 +18,7 @@ export default function QuestionStep() {
                         </p>
                     </div>
 
-                    <div className='max-w-md mx-auto'>
+                    <div className='max-w-md mx-auto px-4'>
                         <QuestionInput defaultValue={question} />
                     </div>
                 </div>

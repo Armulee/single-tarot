@@ -139,11 +139,11 @@ export default function QuestionInput({
     }
 
     return (
-        <div className='max-w-2xl m-auto mb-6 text-left'>
+        <div className='w-full mb-6 text-left'>
             <Label htmlFor='follow-up-question' className='block mb-2 text-lg'>
                 {label}
             </Label>
-            <div className='relative group'>
+            <div className='relative group w-full'>
                 <div className='pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(120%_120%_at_0%_0%,rgba(99,102,241,0.18),rgba(168,85,247,0.12)_35%,rgba(34,211,238,0.10)_70%,transparent_80%)] blur-xl opacity-90 group-focus-within:opacity-0 transition-opacity' />
                 <Textarea
                     id='follow-up-question'
