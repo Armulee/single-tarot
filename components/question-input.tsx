@@ -22,6 +22,7 @@ export default function QuestionInput({
     const [question, setQuestion] = useState("")
     const [hasMultipleLines, setHasMultipleLines] = useState(false)
     const [currentRows, setCurrentRows] = useState(1)
+    const [isSmallDevice, setIsSmallDevice] = useState(false)
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const router = useRouter()
     const { 
@@ -102,18 +103,37 @@ export default function QuestionInput({
         return () => clearTimeout(timeoutId)
     }, [currentRows])
 
+    // Detect small devices
+    useEffect(() => {
+        const checkDevice = () => {
+            setIsSmallDevice(window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+        }
+        
+        checkDevice()
+        window.addEventListener('resize', checkDevice)
+        
+        return () => window.removeEventListener('resize', checkDevice)
+    }, [])
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter") {
-            // Check for modifier keys (Meta/Ctrl/Shift + Enter)
-            if (e.metaKey || e.ctrlKey || e.shiftKey) {
+            if (isSmallDevice) {
+                // On small devices, Enter adds a row instead of submitting
                 e.preventDefault()
-                // Increase rows by 1, maximum 5 rows
                 setCurrentRows(prev => Math.min(prev + 1, 5))
                 return
             } else {
-                // Regular Enter - submit
-                e.preventDefault()
-                handleStartReading()
+                // On desktop, check for modifier keys (Meta/Ctrl/Shift + Enter)
+                if (e.metaKey || e.ctrlKey || e.shiftKey) {
+                    e.preventDefault()
+                    // Increase rows by 1, maximum 5 rows
+                    setCurrentRows(prev => Math.min(prev + 1, 5))
+                    return
+                } else {
+                    // Regular Enter - submit
+                    e.preventDefault()
+                    handleStartReading()
+                }
             }
         }
     }
@@ -131,7 +151,6 @@ export default function QuestionInput({
                     rows={currentRows}
                     ref={textareaRef}
                     placeholder={placeholder}
-                    enterKeyHint="return"
                     className='relative z-10 w-full pl-5 pr-15 py-5 text-white placeholder:text-white/70 bg-gradient-to-br from-indigo-500/15 via-purple-500/15 to-cyan-500/15 backdrop-blur-xl border border-border/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/40 rounded-2xl resize-y shadow-[0_10px_30px_-10px_rgba(56,189,248,0.35)] resize-none'
                     onChange={(e) => setQuestion(e.target.value)}
                     defaultValue={defaultValue}
