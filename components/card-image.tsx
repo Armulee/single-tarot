@@ -43,11 +43,6 @@ export function CardImage({
           }`}
           sizes="(max-width: 768px) 64px, (max-width: 1024px) 96px, 128px"
         />
-        {card.isReversed && (
-          <div className="absolute top-1 right-1 bg-red-500/80 text-white text-xs px-1 py-0.5 rounded text-center font-bold">
-            R
-          </div>
-        )}
       </div>
       
       {showLabel && (
