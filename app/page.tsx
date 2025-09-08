@@ -8,7 +8,7 @@ import QuestionInput from "@/components/question-input"
 export default function HomePage() {
     return (
         <section className='relative z-10 flex flex-col items-center justify-center h-[calc(100vh-180px)] px-6 text-center'>
-            <div className='max-w-4xl mx-auto space-y-8'>
+            <div className='max-w-4xl w-full mx-auto space-y-8'>
                 {/* Main Heading */}
                 <div className='space-y-4'>
                     <h1 className='font-serif font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-balance h-20 sm:h-24 md:h-28 lg:h-32'>
@@ -30,7 +30,7 @@ export default function HomePage() {
                 {/* Question Input */}
                 <div className='flex flex-col gap-6 justify-center items-center pt-8 max-w-md mx-auto px-4'>
                     <div className='w-full'>
-                        <QuestionInput />
+                        <QuestionInput id='question-input' />
                     </div>
 
                     <Button

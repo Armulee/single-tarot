@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Sparkles, RotateCcw, Loader2 } from "lucide-react"
+import { Sparkles, RefreshCcw, Loader2, Stars } from "lucide-react"
 import { FaShareNodes, FaCopy, FaDownload, FaCheck } from "react-icons/fa6"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { useCompletion } from "@ai-sdk/react"
@@ -44,8 +44,10 @@ export default function Interpretation() {
 
             // Check if this is a follow-up question
             if (question.startsWith("[Follow up question]:")) {
-                const pureQuestion = question.replace("[Follow up question]:", "").trim()
-                
+                const pureQuestion = question
+                    .replace("[Follow up question]:", "")
+                    .trim()
+
                 if (followUpData) {
                     prompt = `From last question: ${followUpData.lastQuestion}
 last cards: ${followUpData.lastCards.map((c) => c.meaning).join(", ")} 
@@ -82,7 +84,7 @@ If the interpretation is too short, add more details to make it more specific.
 If the interpretation is too generic, add more details to make it more specific.
 `
             }
-            
+
             await complete(prompt)
         },
         [complete, followUpData]
@@ -164,6 +166,14 @@ If the interpretation is too generic, add more details to make it more specific.
         }
     }
 
+    const handleRegenerate = () => {
+        if (isLoading) return
+        setFinish(false)
+        setInterpretation(null)
+        hasInitiated.current = false
+        getInterpretation(question, selectedCards)
+    }
+
     const shareButtons = [
         {
             id: "share",
@@ -218,7 +228,9 @@ If the interpretation is too generic, add more details to make it more specific.
                         lastQuestion: data.question || "",
                         lastCards: data.selectedCards || [],
                         lastInterpretation: data.interpretation || "",
-                        pureQuestion: question.replace("[Follow up question]:", "").trim()
+                        pureQuestion: question
+                            .replace("[Follow up question]:", "")
+                            .trim(),
                     })
                     // Clean up the backup data after using it
                     localStorage.removeItem(STORAGE_KEY + "-backup")
@@ -241,15 +253,40 @@ If the interpretation is too generic, add more details to make it more specific.
                         <div className='absolute inset-0 pointer-events-none'>
                             {selectedCards.map((card, index) => {
                                 const positions = [
-                                    { top: '10%', left: '5%', transform: 'rotate(-15deg)' },
-                                    { top: '15%', right: '8%', transform: 'rotate(20deg)' },
-                                    { bottom: '20%', left: '10%', transform: 'rotate(-10deg)' },
-                                    { bottom: '15%', right: '12%', transform: 'rotate(25deg)' },
-                                    { top: '50%', left: '2%', transform: 'rotate(-5deg)' },
-                                    { top: '60%', right: '5%', transform: 'rotate(15deg)' }
+                                    {
+                                        top: "10%",
+                                        left: "5%",
+                                        transform: "rotate(-15deg)",
+                                    },
+                                    {
+                                        top: "15%",
+                                        right: "8%",
+                                        transform: "rotate(20deg)",
+                                    },
+                                    {
+                                        bottom: "20%",
+                                        left: "10%",
+                                        transform: "rotate(-10deg)",
+                                    },
+                                    {
+                                        bottom: "15%",
+                                        right: "12%",
+                                        transform: "rotate(25deg)",
+                                    },
+                                    {
+                                        top: "50%",
+                                        left: "2%",
+                                        transform: "rotate(-5deg)",
+                                    },
+                                    {
+                                        top: "60%",
+                                        right: "5%",
+                                        transform: "rotate(15deg)",
+                                    },
                                 ]
-                                const position = positions[index % positions.length]
-                                
+                                const position =
+                                    positions[index % positions.length]
+
                                 return (
                                     <div
                                         key={`bg-${index}`}
@@ -258,16 +295,16 @@ If the interpretation is too generic, add more details to make it more specific.
                                     >
                                         <CardImage
                                             card={card}
-                                            size="sm"
+                                            size='sm'
                                             showAura={true}
                                             showLabel={false}
-                                            className="scale-75"
+                                            className='scale-75'
                                         />
                                     </div>
                                 )
                             })}
                         </div>
-                        
+
                         <div className='text-center space-y-6 relative z-10'>
                             <div className='flex items-center justify-center space-x-2'>
                                 <Sparkles className='w-6 h-6 text-primary' />
@@ -279,11 +316,14 @@ If the interpretation is too generic, add more details to make it more specific.
                             <p className='text-muted-foreground italic'>
                                 &ldquo;{question}&rdquo;
                             </p>
-                            
+
                             {/* Card Images with Badges on Top */}
                             <div className='flex flex-wrap gap-6 justify-center'>
                                 {selectedCards.map((card, index) => (
-                                    <div key={index} className="flex flex-col items-center gap-3">
+                                    <div
+                                        key={index}
+                                        className='flex flex-col items-center gap-3'
+                                    >
                                         {/* Badge on top */}
                                         <Badge
                                             variant='secondary'
@@ -291,14 +331,14 @@ If the interpretation is too generic, add more details to make it more specific.
                                         >
                                             {card.meaning}
                                         </Badge>
-                                        
+
                                         {/* Card Image */}
                                         <CardImage
                                             card={card}
-                                            size="md"
+                                            size='md'
                                             showAura={true}
                                             showLabel={false}
-                                            className="hover:scale-105 transition-transform duration-200"
+                                            className='hover:scale-105 transition-transform duration-200'
                                         />
                                     </div>
                                 ))}
@@ -413,26 +453,34 @@ If the interpretation is too generic, add more details to make it more specific.
                                         </Button>
                                     )
                                 )}
+                                <Button
+                                    type='button'
+                                    onClick={handleRegenerate}
+                                    disabled={isLoading}
+                                    size='lg'
+                                    className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
+                                >
+                                    <RefreshCcw className='w-4 h-4 mr-2' />
+                                    Regenerate Reading
+                                </Button>
+                                <Button
+                                    type='button'
+                                    onClick={() => router.push("/")}
+                                    size='lg'
+                                    className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
+                                >
+                                    <Stars className='w-4 h-4 mr-2' />
+                                    New Reading
+                                </Button>
                             </div>
 
-                            <div className='border-t border-border/20 pt-6'>
+                            <div className='border-t border-border/20 pt-4'>
                                 <QuestionInput
                                     followUp={true}
+                                    id='follow-up-question'
                                     label='Ask a follow up question'
                                     placeholder='Type your follow up question here...'
                                 />
-                                <div className='max-w-2xl m-auto flex flex-col gap-4'>
-                                    <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-                                        <Button
-                                            onClick={() => router.push("/")}
-                                            size='lg'
-                                            className='bg-primary hover:bg-primary/90 text-primary-foreground px-8 card-glow'
-                                        >
-                                            <RotateCcw className='w-4 h-4 mr-2' />
-                                            New Reading
-                                        </Button>
-                                    </div>
-                                </div>
                             </div>
                         </>
                     )}

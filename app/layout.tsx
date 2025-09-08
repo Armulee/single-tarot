@@ -54,29 +54,7 @@ export default function RootLayout({
                 className={`font-sans ${sourceSans.variable} ${playfairDisplay.variable}`}
             >
                 <CosmicStars />
-                {/* Floating Tarot Cards - Global */}
-                <div className='fixed inset-0 pointer-events-none z-0'>
-                    <div
-                        className='absolute top-20 left-20 w-16 h-24 bg-card/20 backdrop-blur-sm rounded-lg border border-border/30 float-animation'
-                        style={{ animationDelay: "0s" }}
-                    ></div>
-                    <div
-                        className='absolute top-32 right-16 w-16 h-24 bg-card/20 backdrop-blur-sm rounded-lg border border-border/30 float-animation'
-                        style={{ animationDelay: "2s" }}
-                    ></div>
-                    <div
-                        className='absolute bottom-32 left-12 w-16 h-24 bg-card/20 backdrop-blur-sm rounded-lg border border-border/30 float-animation'
-                        style={{ animationDelay: "4s" }}
-                    ></div>
-                    <div
-                        className='absolute top-1/2 right-32 w-12 h-18 bg-card/20 backdrop-blur-sm rounded-lg border border-border/30 float-animation'
-                        style={{ animationDelay: "1s" }}
-                    ></div>
-                    <div
-                        className='absolute bottom-20 right-1/4 w-12 h-18 bg-card/20 backdrop-blur-sm rounded-lg border border-border/30 float-animation'
-                        style={{ animationDelay: "3s" }}
-                    ></div>
-                </div>
+
                 <TarotProvider>
                     <div className='min-h-screen flex flex-col'>
                         <Navbar />

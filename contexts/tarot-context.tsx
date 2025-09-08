@@ -58,7 +58,7 @@ export interface TarotContextType {
 
     // Reset function
     resetReading: () => void
-    
+
     // Clear localStorage function (for new readings)
     clearReadingStorage: () => void
 }
@@ -151,16 +151,8 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         pathname,
     ])
 
-    // Clear reading state when leaving /reading (but preserve localStorage for navigation)
-    useEffect(() => {
-        if (typeof window === "undefined") return
-        if (!pathname) return
-        if (!pathname.startsWith("/reading")) {
-            // Don't clear localStorage - preserve reading state for navigation
-            // Only reset the in-memory state
-            resetReading()
-        }
-    }, [pathname])
+    // Preserve in-memory state across routes; do not reset on leaving /reading.
+    // State will be reset only when a new question is submitted via QuestionInput.
 
     return (
         <TarotContext.Provider

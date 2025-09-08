@@ -2,17 +2,19 @@
 import { Send } from "lucide-react"
 import { Button } from "./ui/button"
 import { Label } from "./ui/label"
-import { Textarea } from "./ui/textarea"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { useTarot } from "@/contexts/tarot-context"
+import AutoHeightTextarea from "./ui/auto-height-textarea"
 
 export default function QuestionInput({
+    id = "question-input",
     label = "Your question",
     placeholder,
     defaultValue,
     followUp = false,
 }: {
+    id?: string
     label?: string
     placeholder?: string
     defaultValue?: string
@@ -20,21 +22,18 @@ export default function QuestionInput({
 }) {
     const pathname = usePathname()
     const [question, setQuestion] = useState("")
-    const [hasMultipleLines, setHasMultipleLines] = useState(false)
-    const [currentRows, setCurrentRows] = useState(1)
     const [isSmallDevice, setIsSmallDevice] = useState(false)
-    const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const router = useRouter()
-    const { 
-        setQuestion: setContextQuestion, 
-        setCurrentStep, 
+    const {
+        setQuestion: setContextQuestion,
+        setCurrentStep,
         setReadingType,
         setSelectedCards,
         setInterpretation,
         question: lastQuestion,
         selectedCards: lastCards,
         interpretation: lastInterpretation,
-        clearReadingStorage
+        clearReadingStorage,
     } = useTarot()
 
     const handleStartReading = () => {
@@ -45,7 +44,7 @@ export default function QuestionInput({
             } else {
                 // This is a new reading (not follow-up), clear localStorage
                 clearReadingStorage()
-                
+
                 setContextQuestion(value)
                 setCurrentStep("reading-type")
                 if (pathname !== "/reading") {
@@ -62,9 +61,12 @@ export default function QuestionInput({
                 question: lastQuestion,
                 selectedCards: lastCards,
                 interpretation: lastInterpretation,
-                timestamp: Date.now()
+                timestamp: Date.now(),
             }
-            localStorage.setItem("reading-state-v1-backup", JSON.stringify(backupData))
+            localStorage.setItem(
+                "reading-state-v1-backup",
+                JSON.stringify(backupData)
+            )
         } catch (e) {
             console.error("Failed to backup reading data:", e)
         }
@@ -80,102 +82,68 @@ export default function QuestionInput({
         setCurrentStep("card-selection") // Go to card selection
     }
 
-    useEffect(() => {
-        const el = textareaRef.current
-        if (!el) return
-
-        // Update border radius based on content
-        const hasMultipleLines = el.scrollHeight > 79
-        setHasMultipleLines(hasMultipleLines)
-    }, [question])
-
-    // Force height update on mobile Safari
-    useEffect(() => {
-        const el = textareaRef.current
-        if (!el) return
-
-        // Force a re-render to ensure height changes on mobile Safari
-        const timeoutId = setTimeout(() => {
-            el.style.height = `${currentRows * 1.5}rem`
-            el.style.minHeight = `${currentRows * 1.5}rem`
-        }, 0)
-
-        return () => clearTimeout(timeoutId)
-    }, [currentRows])
-
     // Detect small devices
     useEffect(() => {
         const checkDevice = () => {
-            setIsSmallDevice(window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+            setIsSmallDevice(
+                window.innerWidth < 768 ||
+                    /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                        navigator.userAgent
+                    )
+            )
         }
-        
+
         checkDevice()
-        window.addEventListener('resize', checkDevice)
-        
-        return () => window.removeEventListener('resize', checkDevice)
+        window.addEventListener("resize", checkDevice)
+
+        return () => window.removeEventListener("resize", checkDevice)
     }, [])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter") {
-            if (isSmallDevice) {
-                // On small devices, Enter adds a row instead of submitting
+            if (!isSmallDevice && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+                // Plain Enter submits the form
                 e.preventDefault()
-                setCurrentRows(prev => Math.min(prev + 1, 5))
+                handleStartReading()
                 return
-            } else {
-                // On desktop, check for modifier keys (Meta/Ctrl/Shift + Enter)
-                if (e.metaKey || e.ctrlKey || e.shiftKey) {
-                    e.preventDefault()
-                    // Increase rows by 1, maximum 5 rows
-                    setCurrentRows(prev => Math.min(prev + 1, 5))
-                    return
-                } else {
-                    // Regular Enter - submit
-                    e.preventDefault()
-                    handleStartReading()
-                }
             }
+            // Shift+Enter, Ctrl+Enter, Cmd+Enter, or Enter on small devices adds a newline (default behavior)
         }
     }
 
     return (
         <div className='w-full mb-6 text-left'>
-            <Label htmlFor='follow-up-question' className='block mb-2 text-lg'>
+            <Label htmlFor={id} className='block mb-2 text-lg'>
                 {label}
             </Label>
             <div className='relative group w-full'>
                 <div className='pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(120%_120%_at_0%_0%,rgba(99,102,241,0.18),rgba(168,85,247,0.12)_35%,rgba(34,211,238,0.10)_70%,transparent_80%)] blur-xl opacity-90 group-focus-within:opacity-0 transition-opacity' />
-                <Textarea
-                    id='follow-up-question'
-                    name='follow-up-question'
-                    rows={currentRows}
-                    ref={textareaRef}
+                <AutoHeightTextarea
+                    id={id}
+                    name={id}
+                    // rows={currentRows}
                     placeholder={placeholder}
-                    className='relative z-10 w-full pl-5 pr-15 py-5 text-white placeholder:text-white/70 bg-gradient-to-br from-indigo-500/15 via-purple-500/15 to-cyan-500/15 backdrop-blur-xl border border-border/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/40 rounded-2xl resize-y shadow-[0_10px_30px_-10px_rgba(56,189,248,0.35)] resize-none'
+                    className='relative z-10 w-full pl-4 pr-15 py-2 text-white placeholder:text-white/70 bg-gradient-to-br from-indigo-500/15 via-purple-500/15 to-cyan-500/15 backdrop-blur-xl border border-border/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/40 rounded-2xl resize-y shadow-[0_10px_30px_-10px_rgba(56,189,248,0.35)] resize-none'
                     onChange={(e) => setQuestion(e.target.value)}
                     defaultValue={defaultValue}
                     onKeyDown={handleKeyDown}
-                    style={{
-                        minHeight: `${currentRows * 1.5}rem`,
-                        height: `${currentRows * 1.5}rem`,
-                        maxHeight: currentRows >= 5 ? '120px' : 'auto',
-                        overflowY: currentRows >= 5 ? 'auto' : 'hidden',
-                        lineHeight: '1.5rem'
-                    }}
+                    // style={{
+                    //     minHeight: `${currentRows * 1.5}rem`,
+                    //     height: `${currentRows * 1.5}rem`,
+                    //     maxHeight: currentRows >= 5 ? "120px" : "auto",
+                    //     overflowY: currentRows >= 5 ? "auto" : "hidden",
+                    //     lineHeight: "1.5rem",
+                    // }}
                 />
                 <Button
                     onClick={handleStartReading}
                     disabled={!question.trim() && !defaultValue}
                     size='lg'
                     variant='ghost'
-                    className={`absolute right-2 z-20 bg-transparent hover:bg-transparent border-0 text-lg disabled:opacity-30 disabled:cursor-not-allowed text-indigo-300 hover:text-white ${
-                        currentRows > 1
-                            ? "bottom-2 top-auto"
-                            : "top-1/2 -translate-y-1/2"
-                    }`}
+                    className='absolute bottom-0 right-0 z-20 bg-transparent hover:bg-transparent border-0 text-lg disabled:opacity-30 disabled:cursor-not-allowed text-indigo-300 hover:text-white'
                 >
                     {/* Gradient aura behind icon by default; hides on hover */}
-                    <span className='pointer-events-none absolute inset-0 rounded-full bg-gradient-to-r from-indigo-400/50 via-purple-400/50 to-cyan-400/50 opacity-80 hover:opacity-0' />
+                    <span className='pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-400/50 via-purple-400/50 to-cyan-400/50 opacity-80 hover:opacity-0' />
                     <Send className='relative z-10 w-5 h-5 drop-shadow-sm' />
                 </Button>
             </div>
