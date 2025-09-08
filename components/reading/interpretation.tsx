@@ -10,6 +10,7 @@ import { useCompletion } from "@ai-sdk/react"
 import { TarotCard, useTarot } from "@/contexts/tarot-context"
 import { useRouter } from "next/navigation"
 import QuestionInput from "../question-input"
+import { CardImage } from "../card-image"
 
 export default function Interpretation() {
     const router = useRouter()
@@ -247,15 +248,14 @@ If the interpretation is too generic, add more details to make it more specific.
                             <p className='text-muted-foreground italic'>
                                 &ldquo;{question}&rdquo;
                             </p>
-                            <div className='flex flex-wrap gap-2 justify-center'>
+                            <div className='flex flex-wrap gap-4 justify-center'>
                                 {selectedCards.map((card, index) => (
-                                    <Badge
+                                    <CardImage
                                         key={index}
-                                        variant='secondary'
-                                        className='bg-secondary/20 text-secondary border-secondary/30'
-                                    >
-                                        {card.meaning}
-                                    </Badge>
+                                        card={card}
+                                        size="md"
+                                        className="hover:scale-105 transition-transform duration-200"
+                                    />
                                 ))}
                             </div>
                         </div>

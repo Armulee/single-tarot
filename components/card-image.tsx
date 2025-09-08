@@ -1,0 +1,47 @@
+"use client"
+
+import Image from "next/image"
+import { TarotCard } from "@/contexts/tarot-context"
+
+interface CardImageProps {
+  card: TarotCard
+  className?: string
+  size?: "sm" | "md" | "lg"
+}
+
+export function CardImage({ card, className = "", size = "md" }: CardImageProps) {
+  const sizeClasses = {
+    sm: "w-16 h-24",
+    md: "w-24 h-36", 
+    lg: "w-32 h-48"
+  }
+
+  return (
+    <div className={`relative ${sizeClasses[size]} ${className}`}>
+      <div className="relative w-full h-full rounded-lg overflow-hidden border-2 border-border/30 shadow-lg">
+        <Image
+          src={`/${card.image}`}
+          alt={card.name}
+          fill
+          className={`object-cover transition-transform duration-300 ${
+            card.isReversed ? "rotate-180" : ""
+          }`}
+          sizes="(max-width: 768px) 64px, (max-width: 1024px) 96px, 128px"
+        />
+        {card.isReversed && (
+          <div className="absolute top-1 right-1 bg-red-500/80 text-white text-xs px-1 py-0.5 rounded text-center font-bold">
+            R
+          </div>
+        )}
+      </div>
+      <div className="mt-2 text-center">
+        <p className="text-xs font-medium text-foreground truncate">
+          {card.name}
+        </p>
+        {card.isReversed && (
+          <p className="text-xs text-red-400 font-medium">Reversed</p>
+        )}
+      </div>
+    </div>
+  )
+}
