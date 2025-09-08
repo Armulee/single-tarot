@@ -15,6 +15,12 @@ export default function Interpretation() {
     const router = useRouter()
     const [finish, setFinish] = useState(false)
     const [copied, setCopied] = useState(false)
+    const [followUpData, setFollowUpData] = useState<{
+        lastQuestion: string
+        lastCards: TarotCard[]
+        lastInterpretation: string
+        pureQuestion: string
+    } | null>(null)
     const {
         currentStep,
         question,
@@ -33,10 +39,34 @@ export default function Interpretation() {
 
     const getInterpretation = useCallback(
         async (question: string, selectedCards: TarotCard[]) => {
-            const prompt = `Question: "${question}"
+            let prompt: string
+
+            // Check if this is a follow-up question
+            if (question.startsWith("[Follow up question]:")) {
+                const pureQuestion = question.replace("[Follow up question]:", "").trim()
+                
+                if (followUpData) {
+                    prompt = `From last question: ${followUpData.lastQuestion}
+last cards: ${followUpData.lastCards.map((c) => c.meaning).join(", ")} 
+last interpretation: ${followUpData.lastInterpretation}
+
+Answer this follow up question: ${pureQuestion}
+The user picked up cards: ${selectedCards.map((c) => c.meaning).join(", ")}
+
+Provide a concise interpretation that addresses the follow-up question while considering the previous reading context. Keep it positive and uplifting. Answer as a paragraph. No more than 100 words.`
+                } else {
+                    // Fallback if followUpData is not available
+                    prompt = `Question: "${pureQuestion}"
 Cards: ${selectedCards.map((c) => c.meaning).join(", ")}
 
-From this information, provide a concise interpretation of the cards that directly addresses the user’s question. If the interpretation is harm user's feeling, tone it down to be more positive and uplifting. Answer it as paragraph. No more than 100 words.
+From this information, provide a concise interpretation of the cards that directly addresses the user's question. If the interpretation is harm user's feeling, tone it down to be more positive and uplifting. Answer it as paragraph. No more than 100 words.`
+                }
+            } else {
+                // Regular interpretation
+                prompt = `Question: "${question}"
+Cards: ${selectedCards.map((c) => c.meaning).join(", ")}
+
+From this information, provide a concise interpretation of the cards that directly addresses the user's question. If the interpretation is harm user's feeling, tone it down to be more positive and uplifting. Answer it as paragraph. No more than 100 words.
 
 If the interpretation is too negative, tone it down to be more positive and uplifting.
 
@@ -50,9 +80,11 @@ If the interpretation is too short, add more details to make it more specific.
 
 If the interpretation is too generic, add more details to make it more specific.
 `
+            }
+            
             await complete(prompt)
         },
-        [complete]
+        [complete, followUpData]
     )
 
     const shareImage = async () => {
@@ -171,6 +203,32 @@ If the interpretation is too generic, add more details to make it more specific.
             hasInitiated.current = true
         }
     }, [question, selectedCards, interpretation, getInterpretation])
+
+    // Effect to capture follow-up data when a follow-up question is detected
+    useEffect(() => {
+        if (question && question.startsWith("[Follow up question]:")) {
+            // This is a follow-up question, we need to capture the previous reading data
+            const STORAGE_KEY = "reading-state-v1"
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY + "-backup")
+                if (raw) {
+                    const data = JSON.parse(raw)
+                    setFollowUpData({
+                        lastQuestion: data.question || "",
+                        lastCards: data.selectedCards || [],
+                        lastInterpretation: data.interpretation || "",
+                        pureQuestion: question.replace("[Follow up question]:", "").trim()
+                    })
+                    // Clean up the backup data after using it
+                    localStorage.removeItem(STORAGE_KEY + "-backup")
+                }
+            } catch (e) {
+                console.error("Failed to load follow-up data:", e)
+            }
+            // Reset the hasInitiated flag for follow-up questions
+            hasInitiated.current = false
+        }
+    }, [question])
 
     return (
         <>
@@ -314,7 +372,7 @@ If the interpretation is too generic, add more details to make it more specific.
 
                             <div className='border-t border-border/20 pt-6'>
                                 <QuestionInput
-                                    // followUp
+                                    followUp={true}
                                     label='Ask a follow up question'
                                     placeholder='Type your follow up question here...'
                                 />

@@ -11,27 +11,71 @@ export default function QuestionInput({
     label = "Your question",
     placeholder,
     defaultValue,
+    followUp = false,
 }: {
     label?: string
     placeholder?: string
     defaultValue?: string
+    followUp?: boolean
 }) {
     const pathname = usePathname()
     const [question, setQuestion] = useState("")
     const [hasMultipleLines, setHasMultipleLines] = useState(false)
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const router = useRouter()
-    const { setQuestion: setContextQuestion, setCurrentStep } = useTarot()
+    const { 
+        setQuestion: setContextQuestion, 
+        setCurrentStep, 
+        setReadingType,
+        setSelectedCards,
+        setInterpretation,
+        question: lastQuestion,
+        selectedCards: lastCards,
+        interpretation: lastInterpretation,
+        clearReadingStorage
+    } = useTarot()
 
     const handleStartReading = () => {
         const value = (question || "").trim() || (defaultValue || "").trim()
         if (value) {
-            setContextQuestion(value)
-            setCurrentStep("reading-type")
-            if (pathname !== "/reading") {
-                router.push("/reading")
+            if (followUp) {
+                handleFollowUpQuestion(value)
+            } else {
+                // This is a new reading (not follow-up), clear localStorage
+                clearReadingStorage()
+                
+                setContextQuestion(value)
+                setCurrentStep("reading-type")
+                if (pathname !== "/reading") {
+                    router.push("/reading")
+                }
             }
         }
+    }
+
+    const handleFollowUpQuestion = (followUpQuestion: string) => {
+        // Backup current reading data for follow-up context
+        try {
+            const backupData = {
+                question: lastQuestion,
+                selectedCards: lastCards,
+                interpretation: lastInterpretation,
+                timestamp: Date.now()
+            }
+            localStorage.setItem("reading-state-v1-backup", JSON.stringify(backupData))
+        } catch (e) {
+            console.error("Failed to backup reading data:", e)
+        }
+
+        // DON'T clear localStorage - preserve the reading state
+        // The reading state will be updated with the new follow-up data
+
+        // Set up for follow-up reading
+        setContextQuestion(`[Follow up question]: ${followUpQuestion}`)
+        setReadingType("simple") // Set to simple (single card) reading
+        setSelectedCards([]) // Clear previous cards
+        setInterpretation(null) // Clear previous interpretation
+        setCurrentStep("card-selection") // Go to card selection
     }
 
     useEffect(() => {
