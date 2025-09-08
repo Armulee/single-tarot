@@ -16,6 +16,7 @@ export interface TarotCard {
     name: string
     image: string
     meaning: string
+    isReversed: boolean
 }
 
 export interface TarotContextType {

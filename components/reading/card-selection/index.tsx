@@ -39,6 +39,7 @@ export default function CardSelection({
                 .toLowerCase()
                 .replace(/\s+/g, "-")}.png`,
             meaning: card.isReversed ? `${card.name} (Reversed)` : card.name,
+            isReversed: card.isReversed,
         }))
 
         setSelectedCards(tarotCards)

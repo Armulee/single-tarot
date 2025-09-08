@@ -21,6 +21,8 @@ export default function QuestionInput({
     const pathname = usePathname()
     const [question, setQuestion] = useState("")
     const [hasMultipleLines, setHasMultipleLines] = useState(false)
+    const [currentRows, setCurrentRows] = useState(1)
+    const [isSmallDevice, setIsSmallDevice] = useState(false)
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const router = useRouter()
     const { 
@@ -87,27 +89,78 @@ export default function QuestionInput({
         setHasMultipleLines(hasMultipleLines)
     }, [question])
 
+    // Force height update on mobile Safari
+    useEffect(() => {
+        const el = textareaRef.current
+        if (!el) return
+
+        // Force a re-render to ensure height changes on mobile Safari
+        const timeoutId = setTimeout(() => {
+            el.style.height = `${currentRows * 1.5}rem`
+            el.style.minHeight = `${currentRows * 1.5}rem`
+        }, 0)
+
+        return () => clearTimeout(timeoutId)
+    }, [currentRows])
+
+    // Detect small devices
+    useEffect(() => {
+        const checkDevice = () => {
+            setIsSmallDevice(window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+        }
+        
+        checkDevice()
+        window.addEventListener('resize', checkDevice)
+        
+        return () => window.removeEventListener('resize', checkDevice)
+    }, [])
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter") {
+            if (isSmallDevice) {
+                // On small devices, Enter adds a row instead of submitting
+                e.preventDefault()
+                setCurrentRows(prev => Math.min(prev + 1, 5))
+                return
+            } else {
+                // On desktop, check for modifier keys (Meta/Ctrl/Shift + Enter)
+                if (e.metaKey || e.ctrlKey || e.shiftKey) {
+                    e.preventDefault()
+                    // Increase rows by 1, maximum 5 rows
+                    setCurrentRows(prev => Math.min(prev + 1, 5))
+                    return
+                } else {
+                    // Regular Enter - submit
+                    e.preventDefault()
+                    handleStartReading()
+                }
+            }
+        }
+    }
+
     return (
-        <div className='max-w-2xl m-auto mb-6 text-left'>
+        <div className='w-full mb-6 text-left'>
             <Label htmlFor='follow-up-question' className='block mb-2 text-lg'>
                 {label}
             </Label>
-            <div className='relative group'>
+            <div className='relative group w-full'>
                 <div className='pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(120%_120%_at_0%_0%,rgba(99,102,241,0.18),rgba(168,85,247,0.12)_35%,rgba(34,211,238,0.10)_70%,transparent_80%)] blur-xl opacity-90 group-focus-within:opacity-0 transition-opacity' />
                 <Textarea
                     id='follow-up-question'
                     name='follow-up-question'
-                    rows={3}
+                    rows={currentRows}
                     ref={textareaRef}
                     placeholder={placeholder}
                     className='relative z-10 w-full pl-5 pr-15 py-5 text-white placeholder:text-white/70 bg-gradient-to-br from-indigo-500/15 via-purple-500/15 to-cyan-500/15 backdrop-blur-xl border border-border/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/40 rounded-2xl resize-y shadow-[0_10px_30px_-10px_rgba(56,189,248,0.35)] resize-none'
                     onChange={(e) => setQuestion(e.target.value)}
                     defaultValue={defaultValue}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                            e.preventDefault()
-                            handleStartReading()
-                        }
+                    onKeyDown={handleKeyDown}
+                    style={{
+                        minHeight: `${currentRows * 1.5}rem`,
+                        height: `${currentRows * 1.5}rem`,
+                        maxHeight: currentRows >= 5 ? '120px' : 'auto',
+                        overflowY: currentRows >= 5 ? 'auto' : 'hidden',
+                        lineHeight: '1.5rem'
                     }}
                 />
                 <Button
@@ -116,7 +169,7 @@ export default function QuestionInput({
                     size='lg'
                     variant='ghost'
                     className={`absolute right-2 z-20 bg-transparent hover:bg-transparent border-0 text-lg disabled:opacity-30 disabled:cursor-not-allowed text-indigo-300 hover:text-white ${
-                        hasMultipleLines
+                        currentRows > 1
                             ? "bottom-2 top-auto"
                             : "top-1/2 -translate-y-1/2"
                     }`}
