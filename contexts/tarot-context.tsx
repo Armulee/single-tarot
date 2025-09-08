@@ -49,7 +49,7 @@ export interface TarotContextType {
 
     // Interpretation result
     interpretation: string | null
-    setInterpretation: (interpretation: string) => void
+    setInterpretation: (interpretation: string | null) => void
 
     // User state
     isPremium: boolean
