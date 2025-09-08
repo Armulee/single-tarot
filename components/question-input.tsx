@@ -88,6 +88,20 @@ export default function QuestionInput({
         setHasMultipleLines(hasMultipleLines)
     }, [question])
 
+    // Force height update on mobile Safari
+    useEffect(() => {
+        const el = textareaRef.current
+        if (!el) return
+
+        // Force a re-render to ensure height changes on mobile Safari
+        const timeoutId = setTimeout(() => {
+            el.style.height = `${currentRows * 1.5}rem`
+            el.style.minHeight = `${currentRows * 1.5}rem`
+        }, 0)
+
+        return () => clearTimeout(timeoutId)
+    }, [currentRows])
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter") {
             // Check for modifier keys (Meta/Ctrl/Shift + Enter)
@@ -117,13 +131,17 @@ export default function QuestionInput({
                     rows={currentRows}
                     ref={textareaRef}
                     placeholder={placeholder}
+                    enterKeyHint="return"
                     className='relative z-10 w-full pl-5 pr-15 py-5 text-white placeholder:text-white/70 bg-gradient-to-br from-indigo-500/15 via-purple-500/15 to-cyan-500/15 backdrop-blur-xl border border-border/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/40 rounded-2xl resize-y shadow-[0_10px_30px_-10px_rgba(56,189,248,0.35)] resize-none'
                     onChange={(e) => setQuestion(e.target.value)}
                     defaultValue={defaultValue}
                     onKeyDown={handleKeyDown}
                     style={{
+                        minHeight: `${currentRows * 1.5}rem`,
+                        height: `${currentRows * 1.5}rem`,
                         maxHeight: currentRows >= 5 ? '120px' : 'auto',
-                        overflowY: currentRows >= 5 ? 'auto' : 'hidden'
+                        overflowY: currentRows >= 5 ? 'auto' : 'hidden',
+                        lineHeight: '1.5rem'
                     }}
                 />
                 <Button
