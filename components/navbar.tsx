@@ -25,10 +25,13 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
+import { useAuth } from "@/hooks/use-auth"
+import { UserProfile } from "@/components/user-profile"
 
 export function Navbar() {
     const [open, setOpen] = useState(false)
     const [premiumOpen, setPremiumOpen] = useState(false)
+    const { user, loading } = useAuth()
     const sidebarLinks = [
         { href: "/", label: "Home", Icon: Home },
         { href: "/reading", label: "Reading", Icon: BookOpen },
@@ -92,6 +95,19 @@ export function Navbar() {
 
                     {/* Auth / CTA */}
                     <div className='flex items-center space-x-4'>
+                        {!loading && user ? (
+                            <UserProfile variant="desktop" />
+                        ) : (
+                            <Link href="/signin">
+                                <Button
+                                    variant="ghost"
+                                    className="text-white hover:bg-white/10"
+                                >
+                                    <LogIn className="w-4 h-4 mr-2" />
+                                    Sign In
+                                </Button>
+                            </Link>
+                        )}
                         <Button
                             onClick={() => setPremiumOpen(true)}
                             className='inline-flex bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:opacity-90 text-white rounded-full px-5 py-2 shadow-[0_10px_20px_-10px_rgba(56,189,248,0.55)] ring-1 ring-white/10 card-glow'
@@ -141,14 +157,21 @@ export function Navbar() {
                                 </li>
                             ))}
                             <li className='pt-2'>
-                                <Link
-                                    href='/signin'
-                                    className='flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-white/10 text-white/90 border border-white/10 hover:bg-white/15 transition'
-                                    onClick={() => setOpen(false)}
-                                >
-                                    <LogIn className='w-4 h-4' />
-                                    <span>Sign In</span>
-                                </Link>
+                                {!loading && user ? (
+                                    <UserProfile 
+                                        variant="mobile" 
+                                        onClose={() => setOpen(false)} 
+                                    />
+                                ) : (
+                                    <Link
+                                        href='/signin'
+                                        className='flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-white/10 text-white/90 border border-white/10 hover:bg-white/15 transition'
+                                        onClick={() => setOpen(false)}
+                                    >
+                                        <LogIn className='w-4 h-4' />
+                                        <span>Sign In</span>
+                                    </Link>
+                                )}
                             </li>
                         </ul>
                     </nav>
