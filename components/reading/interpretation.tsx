@@ -418,32 +418,38 @@ If the interpretation is too generic, add more details to make it more specific.
 
                     {(interpretation || finish || error) && (
                         <>
-                            {/* Sharing */}
-                            <div className='flex flex-wrap items-center justify-center gap-3'>
-                                {shareButtons.map(
-                                    ({
-                                        id,
-                                        Icon,
-                                        className,
-                                        onClick,
-                                        label,
-                                    }) => (
-                                        <Button
-                                            key={id}
-                                            type='button'
-                                            onClick={onClick}
-                                            className={`relative group h-11 px-4 rounded-full border backdrop-blur-md shadow-[0_10px_20px_-10px_rgba(56,189,248,0.35)] transition-all ${className}`}
-                                        >
-                                            <span className='pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-white/10 blur-[1.5px] transition-opacity'></span>
-                                            <span className='relative z-10 flex items-center gap-2'>
-                                                <Icon className='w-4 h-4' />
-                                                <span className='text-sm font-medium'>
-                                                    {label}
+                            {/* Sharing - only show when not error */}
+                            {!error && (
+                                <div className='flex flex-wrap items-center justify-center gap-3'>
+                                    {shareButtons.map(
+                                        ({
+                                            id,
+                                            Icon,
+                                            className,
+                                            onClick,
+                                            label,
+                                        }) => (
+                                            <Button
+                                                key={id}
+                                                type='button'
+                                                onClick={onClick}
+                                                className={`relative group h-11 px-4 rounded-full border backdrop-blur-md shadow-[0_10px_20px_-10px_rgba(56,189,248,0.35)] transition-all ${className}`}
+                                            >
+                                                <span className='pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-white/10 blur-[1.5px] transition-opacity'></span>
+                                                <span className='relative z-10 flex items-center gap-2'>
+                                                    <Icon className='w-4 h-4' />
+                                                    <span className='text-sm font-medium'>
+                                                        {label}
+                                                    </span>
                                                 </span>
-                                            </span>
-                                        </Button>
-                                    )
-                                )}
+                                            </Button>
+                                        )
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Action buttons - always show */}
+                            <div className='flex flex-wrap items-center justify-center gap-3'>
                                 <Button
                                     type='button'
                                     onClick={handleRegenerate}
@@ -465,14 +471,17 @@ If the interpretation is too generic, add more details to make it more specific.
                                 </Button>
                             </div>
 
-                            <div className='border-t border-border/20 pt-4'>
-                                <QuestionInput
-                                    followUp={true}
-                                    id='follow-up-question'
-                                    label='Ask a follow up question'
-                                    placeholder='Type your follow up question here...'
-                                />
-                            </div>
+                            {/* Follow-up question - only show when not error */}
+                            {!error && (
+                                <div className='border-t border-border/20 pt-4'>
+                                    <QuestionInput
+                                        followUp={true}
+                                        id='follow-up-question'
+                                        label='Ask a follow up question'
+                                        placeholder='Type your follow up question here...'
+                                    />
+                                </div>
+                            )}
                         </>
                     )}
 
