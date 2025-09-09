@@ -171,7 +171,6 @@ If the interpretation is too generic, add more details to make it more specific.
         setFinish(false)
         setInterpretation(null)
         hasInitiated.current = false
-        getInterpretation(question, selectedCards)
     }
 
     const shareButtons = [
@@ -369,14 +368,6 @@ If the interpretation is too generic, add more details to make it more specific.
                                             Failed to generate interpretation.
                                             Please try again.
                                         </p>
-                                        <Button
-                                            onClick={() =>
-                                                window.location.reload()
-                                            }
-                                            variant='outline'
-                                        >
-                                            Retry
-                                        </Button>
                                     </div>
                                 ) : isLoading ? (
                                     <div className='text-center space-y-6 py-8'>
@@ -425,63 +416,74 @@ If the interpretation is too generic, add more details to make it more specific.
                         </div>
                     </Card>
 
-                    {(interpretation || finish) && (
+                    {(interpretation || finish || error) && (
                         <>
-                            {/* Sharing */}
-                            <div className='flex flex-wrap items-center justify-center gap-3'>
-                                {shareButtons.map(
-                                    ({
-                                        id,
-                                        Icon,
-                                        className,
-                                        onClick,
-                                        label,
-                                    }) => (
-                                        <Button
-                                            key={id}
-                                            type='button'
-                                            onClick={onClick}
-                                            className={`relative group h-11 px-4 rounded-full border backdrop-blur-md shadow-[0_10px_20px_-10px_rgba(56,189,248,0.35)] transition-all ${className}`}
-                                        >
-                                            <span className='pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-white/10 blur-[1.5px] transition-opacity'></span>
-                                            <span className='relative z-10 flex items-center gap-2'>
-                                                <Icon className='w-4 h-4' />
-                                                <span className='text-sm font-medium'>
-                                                    {label}
+                            {/* Sharing - only show when not error */}
+                            {!error && (
+                                <div className='flex flex-wrap items-center justify-center gap-3'>
+                                    {shareButtons.map(
+                                        ({
+                                            id,
+                                            Icon,
+                                            className,
+                                            onClick,
+                                            label,
+                                        }) => (
+                                            <Button
+                                                key={id}
+                                                type='button'
+                                                onClick={onClick}
+                                                className={`relative group h-11 px-4 rounded-full border backdrop-blur-md shadow-[0_10px_20px_-10px_rgba(56,189,248,0.35)] transition-all ${className}`}
+                                            >
+                                                <span className='pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-white/10 blur-[1.5px] transition-opacity'></span>
+                                                <span className='relative z-10 flex items-center gap-2'>
+                                                    <Icon className='w-4 h-4' />
+                                                    <span className='text-sm font-medium'>
+                                                        {label}
+                                                    </span>
                                                 </span>
-                                            </span>
-                                        </Button>
-                                    )
-                                )}
-                                <Button
-                                    type='button'
-                                    onClick={handleRegenerate}
-                                    disabled={isLoading}
-                                    size='lg'
-                                    className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
-                                >
-                                    <RefreshCcw className='w-4 h-4 mr-2' />
-                                    Regenerate Reading
-                                </Button>
-                                <Button
-                                    type='button'
-                                    onClick={() => router.push("/")}
-                                    size='lg'
-                                    className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
-                                >
-                                    <Stars className='w-4 h-4 mr-2' />
-                                    New Reading
-                                </Button>
-                            </div>
+                                            </Button>
+                                        )
+                                    )}
+                                </div>
+                            )}
 
-                            <div className='border-t border-border/20 pt-4'>
-                                <QuestionInput
-                                    followUp={true}
-                                    id='follow-up-question'
-                                    label='Ask a follow up question'
-                                    placeholder='Type your follow up question here...'
-                                />
-                            </div>
+                            {/* Action buttons - show when error, finished, or has interpretation (not while loading) */}
+                            {(error || finish || interpretation) && (
+                                <div className='flex flex-wrap items-center justify-center gap-3'>
+                                    <Button
+                                        type='button'
+                                        onClick={handleRegenerate}
+                                        disabled={isLoading}
+                                        size='lg'
+                                        className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
+                                    >
+                                        <RefreshCcw className='w-4 h-4 mr-2' />
+                                        Regenerate Reading
+                                    </Button>
+                                    <Button
+                                        type='button'
+                                        onClick={() => router.push("/")}
+                                        size='lg'
+                                        className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
+                                    >
+                                        <Stars className='w-4 h-4 mr-2' />
+                                        New Reading
+                                    </Button>
+                                </div>
+                            )}
+
+                            {/* Follow-up question - only show when not error */}
+                            {!error && (
+                                <div className='border-t border-border/20 pt-4'>
+                                    <QuestionInput
+                                        followUp={true}
+                                        id='follow-up-question'
+                                        label='Ask a follow up question'
+                                        placeholder='Type your follow up question here...'
+                                    />
+                                </div>
+                            )}
                         </>
                     )}
 

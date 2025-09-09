@@ -42,9 +42,10 @@ export default function QuestionInput({
             if (followUp) {
                 handleFollowUpQuestion(value)
             } else {
-                // This is a new reading (not follow-up), clear localStorage
+                // This is a new reading (not follow-up), clear localStorage and reset state
                 clearReadingStorage()
-
+                
+                // Set new question and navigate
                 setContextQuestion(value)
                 setCurrentStep("reading-type")
                 if (pathname !== "/reading") {
