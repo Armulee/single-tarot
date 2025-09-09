@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,6 +11,9 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import Link from "next/link"
 import { AuthLayout } from "@/components/auth-layout"
+import { GoogleSignInButton } from "@/components/auth/google-signin-button"
+import { AuthDivider } from "@/components/auth/auth-divider"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -20,29 +24,47 @@ export default function SignUpPage() {
     agreeToTerms: false,
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
+  const router = useRouter()
+  const { signUp } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError("")
+    setSuccess(false)
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords don't match")
+      setError("Passwords don't match")
       return
     }
 
     if (!formData.agreeToTerms) {
-      alert("Please agree to the terms and conditions")
+      setError("Please agree to the terms and conditions")
       return
     }
 
     setIsLoading(true)
 
-    // Simulate account creation
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const { error } = await signUp(formData.email, formData.password, {
+        name: formData.name
+      })
 
-    // TODO: Implement actual sign up logic
-    console.log("Sign up attempt:", formData)
-
-    setIsLoading(false)
+      if (error) {
+        setError(error.message)
+      } else {
+        setSuccess(true)
+        // Redirect to sign-in page after successful registration
+        setTimeout(() => {
+          router.push("/signin")
+        }, 2000)
+      }
+    } catch {
+      setError("An error occurred. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const updateFormData = (field: string, value: string | boolean) => {
@@ -63,8 +85,23 @@ export default function SignUpPage() {
           </div>
         </div>
 
+        {/* Google Sign Up */}
+        <GoogleSignInButton>Sign up with Google</GoogleSignInButton>
+
+        <AuthDivider />
+
         {/* Sign Up Form */}
         <Card className="p-8 bg-card/10 backdrop-blur-sm border-border/20 card-glow">
+          {error && (
+            <div className="mb-4 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="mb-4 p-3 text-sm text-green-600 bg-green-50 border border-green-200 rounded-md">
+              Account created successfully! Please check your email to verify your account. Redirecting to sign-in...
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
