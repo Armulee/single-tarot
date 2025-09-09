@@ -363,19 +363,30 @@ If the interpretation is too generic, add more details to make it more specific.
                             </div>
                             <div className='prose prose-invert max-w-none'>
                                 {error ? (
-                                    <div className='text-center space-y-4'>
+                                    <div className='text-center space-y-6'>
                                         <p className='text-destructive'>
                                             Failed to generate interpretation.
                                             Please try again.
                                         </p>
-                                        <Button
-                                            onClick={() =>
-                                                window.location.reload()
-                                            }
-                                            variant='outline'
-                                        >
-                                            Retry
-                                        </Button>
+                                        <div className='flex flex-wrap items-center justify-center gap-3'>
+                                            <Button
+                                                onClick={handleRegenerate}
+                                                disabled={isLoading}
+                                                size='lg'
+                                                className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
+                                            >
+                                                <RefreshCcw className='w-4 h-4 mr-2' />
+                                                Regenerate Reading
+                                            </Button>
+                                            <Button
+                                                onClick={() => router.push("/")}
+                                                size='lg'
+                                                className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
+                                            >
+                                                <Stars className='w-4 h-4 mr-2' />
+                                                New Reading
+                                            </Button>
+                                        </div>
                                     </div>
                                 ) : isLoading ? (
                                     <div className='text-center space-y-6 py-8'>
