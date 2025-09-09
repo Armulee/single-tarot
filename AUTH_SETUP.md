@@ -1,6 +1,6 @@
-# Authentication Setup Guide
+# Supabase Authentication Setup Guide
 
-This guide will help you set up authentication for your Next.js application using Auth.js v5 with Google OAuth and email/password authentication, connected to Supabase.
+This guide will help you set up authentication for your Next.js application using Supabase Auth with Google OAuth and email/password authentication.
 
 ## Prerequisites
 
@@ -24,52 +24,35 @@ This guide will help you set up authentication for your Next.js application usin
 4. Go to Credentials > Create Credentials > OAuth 2.0 Client IDs
 5. Set the application type to "Web application"
 6. Add authorized redirect URIs:
-   - For development: `http://localhost:3000/api/auth/callback/google`
-   - For production: `https://yourdomain.com/api/auth/callback/google`
+   - For development: `http://localhost:3000/auth/callback`
+   - For production: `https://yourdomain.com/auth/callback`
 7. Copy the Client ID and Client Secret
+
+## Step 2.5: Configure Google OAuth in Supabase
+
+1. In your Supabase dashboard, go to Authentication > Providers
+2. Enable Google provider
+3. Add your Google Client ID and Client Secret
+4. Set the redirect URL to: `https://your-project-ref.supabase.co/auth/v1/callback`
 
 ## Step 3: Environment Variables
 
 Update your `.env.local` file with the following values:
 
 ```env
-# Auth.js Configuration
-AUTH_SECRET=your-auth-secret-key-here
-AUTH_URL=http://localhost:3000
-
 # Supabase Configuration
-SUPABASE_URL=your-supabase-url-here
-SUPABASE_ANON_KEY=your-supabase-anon-key-here
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url-here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key-here
 
-# Google OAuth Configuration
+# Google OAuth Configuration (for Supabase Auth)
 GOOGLE_CLIENT_ID=your-google-client-id-here
 GOOGLE_CLIENT_SECRET=your-google-client-secret-here
-
-# Database URL for Auth.js
-DATABASE_URL=your-supabase-database-url-here
 ```
 
-### Generating AUTH_SECRET
+**Note:** The `NEXT_PUBLIC_` prefix is required for client-side access to these environment variables.
 
-You can generate a secure AUTH_SECRET using:
-
-```bash
-openssl rand -base64 32
-```
-
-Or use an online generator like [generate-secret.vercel.app](https://generate-secret.vercel.app/32)
-
-## Step 4: Database URL
-
-The DATABASE_URL should be in the format:
-```
-postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres
-```
-
-You can find this in your Supabase dashboard under Settings > Database.
-
-## Step 5: Test the Setup
+## Step 4: Test the Setup
 
 1. Start your development server:
    ```bash
@@ -81,32 +64,33 @@ You can find this in your Supabase dashboard under Settings > Database.
 
 ## Features Implemented
 
-- ✅ Google OAuth authentication
-- ✅ Email/password authentication
-- ✅ User registration with password hashing
-- ✅ Session management with JWT
-- ✅ Supabase integration
+- ✅ Google OAuth authentication via Supabase Auth
+- ✅ Email/password authentication via Supabase Auth
+- ✅ User registration with email verification
+- ✅ Session management with Supabase Auth
+- ✅ Automatic profile creation
 - ✅ Row Level Security (RLS) policies
 - ✅ Responsive UI components
 - ✅ Error handling and validation
+- ✅ OAuth callback handling
 
 ## File Structure
 
 ```
 ├── app/
-│   ├── api/auth/
-│   │   ├── [...nextauth]/route.ts    # Auth.js API routes
-│   │   └── register/route.ts         # User registration endpoint
+│   ├── auth/
+│   │   └── callback/page.tsx         # OAuth callback handler
 │   ├── signin/page.tsx               # Sign-in page
 │   └── signup/page.tsx               # Sign-up page
 ├── components/
-│   ├── auth/
-│   │   ├── google-signin-button.tsx  # Google OAuth button
-│   │   └── auth-divider.tsx          # Form divider component
-│   └── providers/
-│       └── session-provider.tsx      # Auth.js SessionProvider
+│   └── auth/
+│       ├── google-signin-button.tsx  # Google OAuth button
+│       └── auth-divider.tsx          # Form divider component
+├── contexts/
+│   └── auth-context.tsx              # Supabase Auth context
+├── hooks/
+│   └── use-auth.ts                   # Auth hook
 ├── lib/
-│   ├── auth.ts                       # Auth.js configuration
 │   └── supabase.ts                   # Supabase client setup
 └── supabase-schema.sql               # Database schema
 ```
@@ -117,21 +101,17 @@ You can find this in your Supabase dashboard under Settings > Database.
 
 1. **"Invalid credentials" error**: Check that your Google OAuth credentials are correct and the redirect URI matches exactly.
 
-2. **Database connection errors**: Verify your Supabase URL and service role key are correct.
+2. **Database connection errors**: Verify your Supabase URL and anon key are correct.
 
 3. **"User already exists" error**: The user might already be registered. Try signing in instead.
 
 4. **CORS errors**: Make sure your domain is added to the authorized origins in Google Cloud Console.
 
+5. **OAuth callback errors**: Ensure the redirect URL in Google Console matches your Supabase callback URL.
+
 ### Debug Mode
 
-To enable debug mode for Auth.js, add this to your environment variables:
-
-```env
-NEXTAUTH_DEBUG=true
-```
-
-This will provide detailed logs in your console.
+To enable debug mode for Supabase, you can check the browser console for detailed error messages. Supabase Auth provides comprehensive error information.
 
 ## Security Notes
 
@@ -145,8 +125,10 @@ This will provide detailed logs in your console.
 
 After setting up authentication, you might want to:
 
-1. Add email verification
+1. ✅ Email verification (built into Supabase Auth)
 2. Implement password reset functionality
 3. Add user profile management
 4. Set up role-based access control
 5. Add social login providers (GitHub, Discord, etc.)
+6. Add user dashboard/profile pages
+7. Implement protected routes

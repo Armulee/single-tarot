@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { useState } from "react"
-import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -14,6 +13,7 @@ import Link from "next/link"
 import { AuthLayout } from "@/components/auth-layout"
 import { GoogleSignInButton } from "@/components/auth/google-signin-button"
 import { AuthDivider } from "@/components/auth/auth-divider"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -25,11 +25,14 @@ export default function SignUpPage() {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
   const router = useRouter()
+  const { signUp } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    setSuccess(false)
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords don't match")
@@ -44,38 +47,18 @@ export default function SignUpPage() {
     setIsLoading(true)
 
     try {
-      // Register user
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
+      const { error } = await signUp(formData.email, formData.password, {
+        name: formData.name
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        setError(data.error || "Failed to create account")
-        return
-      }
-
-      // Sign in the user after successful registration
-      const result = await signIn("credentials", {
-        email: formData.email,
-        password: formData.password,
-        redirect: false,
-      })
-
-      if (result?.error) {
-        setError("Account created but failed to sign in. Please try signing in manually.")
+      if (error) {
+        setError(error.message)
       } else {
-        router.push("/")
-        router.refresh()
+        setSuccess(true)
+        // Redirect to sign-in page after successful registration
+        setTimeout(() => {
+          router.push("/signin")
+        }, 2000)
       }
     } catch {
       setError("An error occurred. Please try again.")
@@ -112,6 +95,11 @@ export default function SignUpPage() {
           {error && (
             <div className="mb-4 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
               {error}
+            </div>
+          )}
+          {success && (
+            <div className="mb-4 p-3 text-sm text-green-600 bg-green-50 border border-green-200 rounded-md">
+              Account created successfully! Please check your email to verify your account. Redirecting to sign-in...
             </div>
           )}
           <form onSubmit={handleSubmit} className="space-y-6">

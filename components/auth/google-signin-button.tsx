@@ -1,6 +1,6 @@
 "use client"
 
-import { signIn } from "next-auth/react"
+import { useAuth } from "@/hooks/use-auth"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
@@ -11,11 +11,15 @@ interface GoogleSignInButtonProps {
 
 export function GoogleSignInButton({ className, children }: GoogleSignInButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const { signInWithGoogle } = useAuth()
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true)
     try {
-      await signIn("google", { callbackUrl: "/" })
+      const { error } = await signInWithGoogle()
+      if (error) {
+        console.error("Google sign in error:", error)
+      }
     } catch (error) {
       console.error("Google sign in error:", error)
     } finally {

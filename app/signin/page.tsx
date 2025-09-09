@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { useState } from "react"
-import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -13,6 +12,7 @@ import Link from "next/link"
 import { AuthLayout } from "@/components/auth-layout"
 import { GoogleSignInButton } from "@/components/auth/google-signin-button"
 import { AuthDivider } from "@/components/auth/auth-divider"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function SignInPage() {
     const [email, setEmail] = useState("")
@@ -20,6 +20,7 @@ export default function SignInPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState("")
     const router = useRouter()
+    const { signIn } = useAuth()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -27,14 +28,10 @@ export default function SignInPage() {
         setError("")
 
         try {
-            const result = await signIn("credentials", {
-                email,
-                password,
-                redirect: false,
-            })
+            const { error } = await signIn(email, password)
 
-            if (result?.error) {
-                setError("Invalid email or password")
+            if (error) {
+                setError(error.message)
             } else {
                 router.push("/")
                 router.refresh()
