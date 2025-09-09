@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
         const result = streamText({
             model: MODEL,
-            // maxOutputTokens: 200,
+            maxOutputTokens: 512,
             system: `You are an expert tarot reader. Provide clear, concise, and mystical interpretations that directly address the user's question. Use the card's meaning as your guide, but do not explain the symbolism or card details. Focus only on delivering an insightful answer that feels intuitive and to the point.`,
             prompt,
         })
@@ -45,6 +45,9 @@ function costPerUsage(
     output: number | undefined,
     model: string = MODEL
 ) {
+    if (model === "openai/gpt-5-nano" && input && output) {
+        return input * (0.05 / 1000000) + output * (0.4 / 1000000)
+    }
     if (model === "openai/gpt-4.1-mini" && input && output) {
         return input * (0.4 / 1000000) + output * (1.6 / 1000000)
     }
