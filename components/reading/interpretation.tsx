@@ -166,17 +166,11 @@ If the interpretation is too generic, add more details to make it more specific.
         }
     }
 
-    const handleRegenerate = async () => {
+    const handleRegenerate = () => {
         if (isLoading) return
         setFinish(false)
         setInterpretation(null)
         hasInitiated.current = false
-        // Directly call getInterpretation instead of relying on useEffect
-        try {
-            await getInterpretation(question, selectedCards)
-        } catch (error) {
-            console.error("Error regenerating interpretation:", error)
-        }
     }
 
     const shareButtons = [
