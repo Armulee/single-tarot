@@ -78,6 +78,7 @@ export function TarotProvider({ children }: { children: ReactNode }) {
     >("question")
     const [interpretation, setInterpretation] = useState<string | null>(null)
     const [isPremium, setIsPremium] = useState(false)
+    const [isClearing, setIsClearing] = useState(false)
     const pathname = usePathname()
 
     const STORAGE_KEY = "reading-state-v1"
@@ -92,10 +93,16 @@ export function TarotProvider({ children }: { children: ReactNode }) {
 
     const clearReadingStorage = () => {
         try {
+            setIsClearing(true)
             localStorage.removeItem(STORAGE_KEY)
             localStorage.removeItem(STORAGE_KEY + "-backup")
+            // Also reset the in-memory state to ensure clean slate
+            resetReading()
+            // Reset the clearing flag after a brief delay
+            setTimeout(() => setIsClearing(false), 100)
         } catch (e) {
             console.error("Failed to clear reading storage:", e)
+            setIsClearing(false)
         }
     }
 
@@ -130,6 +137,7 @@ export function TarotProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         if (typeof window === "undefined") return
         if (!pathname || !pathname.startsWith("/reading")) return
+        if (isClearing) return // Don't save during clearing process
         try {
             const payload = JSON.stringify({
                 question,
@@ -149,6 +157,7 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         currentStep,
         interpretation,
         pathname,
+        isClearing,
     ])
 
     // Preserve in-memory state across routes; do not reset on leaving /reading.
