@@ -167,10 +167,6 @@ export async function POST(req: Request) {
                                     fontWeight: 700,
                                     lineHeight: 1.3,
                                     textShadow: "0 8px 32px rgba(56,189,248,0.3)",
-                                    background: "linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)",
-                                    backgroundClip: "text",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent",
                                 }}
                             >
                                 {`"${safeQuestion}"`}
@@ -202,7 +198,6 @@ export async function POST(req: Request) {
                                 boxShadow:
                                     "0 20px 40px -10px rgba(56,189,248,0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
                                 border: "1px solid rgba(255,255,255,0.15)",
-                                backdropFilter: "blur(10px)",
                             }}
                         >
                             <div
