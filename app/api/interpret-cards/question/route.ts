@@ -1,6 +1,6 @@
 import { streamText } from "ai"
 
-const MODEL = "openai/gpt-4.1-mini"
+const MODEL = "openai/gpt-5-mini"
 
 export async function POST(req: Request) {
     try {
@@ -50,5 +50,8 @@ function costPerUsage(
     }
     if (model === "openai/gpt-4.1-mini" && input && output) {
         return input * (0.4 / 1000000) + output * (1.6 / 1000000)
+    }
+    if (model === "openai/gpt-5-mini" && input && output) {
+        return input * (0.25 / 1000000) + output * (2 / 1000000)
     }
 }
