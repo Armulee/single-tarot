@@ -26,7 +26,13 @@ export default function AuthCallback() {
       }
     }
 
-    handleAuthCallback()
+    // Only run callback if we're in the browser and have proper Supabase config
+    if (typeof window !== 'undefined') {
+      handleAuthCallback()
+    } else {
+      // Fallback for SSR
+      router.push('/signin')
+    }
   }, [router])
 
   return (

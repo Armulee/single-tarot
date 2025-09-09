@@ -62,6 +62,37 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret-here
 2. Navigate to `/signin` or `/signup`
 3. Test both Google OAuth and email/password authentication
 
+## Step 5: Deploy to Production
+
+### Vercel Deployment
+
+1. **Set Environment Variables in Vercel:**
+   - Go to your Vercel project dashboard
+   - Navigate to Settings > Environment Variables
+   - Add the following variables:
+     ```
+     NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+     SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+     GOOGLE_CLIENT_ID=your-google-client-id
+     GOOGLE_CLIENT_SECRET=your-google-client-secret
+     ```
+
+2. **Update Google OAuth Redirect URIs:**
+   - In Google Cloud Console, update the authorized redirect URI to:
+     ```
+     https://your-vercel-domain.vercel.app/auth/callback
+     ```
+
+3. **Deploy:**
+   ```bash
+   vercel --prod
+   ```
+
+### Other Platforms
+
+For other deployment platforms, ensure you set the same environment variables in your platform's configuration.
+
 ## Features Implemented
 
 - ✅ Google OAuth authentication via Supabase Auth
