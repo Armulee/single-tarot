@@ -448,28 +448,30 @@ If the interpretation is too generic, add more details to make it more specific.
                                 </div>
                             )}
 
-                            {/* Action buttons - always show */}
-                            <div className='flex flex-wrap items-center justify-center gap-3'>
-                                <Button
-                                    type='button'
-                                    onClick={handleRegenerate}
-                                    disabled={isLoading}
-                                    size='lg'
-                                    className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
-                                >
-                                    <RefreshCcw className='w-4 h-4 mr-2' />
-                                    Regenerate Reading
-                                </Button>
-                                <Button
-                                    type='button'
-                                    onClick={() => router.push("/")}
-                                    size='lg'
-                                    className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
-                                >
-                                    <Stars className='w-4 h-4 mr-2' />
-                                    New Reading
-                                </Button>
-                            </div>
+                            {/* Action buttons - show when error or finished (not while loading) */}
+                            {(error || finish) && (
+                                <div className='flex flex-wrap items-center justify-center gap-3'>
+                                    <Button
+                                        type='button'
+                                        onClick={handleRegenerate}
+                                        disabled={isLoading}
+                                        size='lg'
+                                        className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
+                                    >
+                                        <RefreshCcw className='w-4 h-4 mr-2' />
+                                        Regenerate Reading
+                                    </Button>
+                                    <Button
+                                        type='button'
+                                        onClick={() => router.push("/")}
+                                        size='lg'
+                                        className='bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/30 text-white px-8 rounded-full shadow-sm'
+                                    >
+                                        <Stars className='w-4 h-4 mr-2' />
+                                        New Reading
+                                    </Button>
+                                </div>
+                            )}
 
                             {/* Follow-up question - only show when not error */}
                             {!error && (
