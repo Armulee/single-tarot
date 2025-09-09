@@ -3,6 +3,8 @@
 import type React from "react"
 
 import { useState } from "react"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,6 +12,8 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import Link from "next/link"
 import { AuthLayout } from "@/components/auth-layout"
+import { GoogleSignInButton } from "@/components/auth/google-signin-button"
+import { AuthDivider } from "@/components/auth/auth-divider"
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -20,29 +24,64 @@ export default function SignUpPage() {
     agreeToTerms: false,
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError("")
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords don't match")
+      setError("Passwords don't match")
       return
     }
 
     if (!formData.agreeToTerms) {
-      alert("Please agree to the terms and conditions")
+      setError("Please agree to the terms and conditions")
       return
     }
 
     setIsLoading(true)
 
-    // Simulate account creation
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      // Register user
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
+      })
 
-    // TODO: Implement actual sign up logic
-    console.log("Sign up attempt:", formData)
+      const data = await response.json()
 
-    setIsLoading(false)
+      if (!response.ok) {
+        setError(data.error || "Failed to create account")
+        return
+      }
+
+      // Sign in the user after successful registration
+      const result = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        setError("Account created but failed to sign in. Please try signing in manually.")
+      } else {
+        router.push("/")
+        router.refresh()
+      }
+    } catch {
+      setError("An error occurred. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const updateFormData = (field: string, value: string | boolean) => {
@@ -63,8 +102,18 @@ export default function SignUpPage() {
           </div>
         </div>
 
+        {/* Google Sign Up */}
+        <GoogleSignInButton>Sign up with Google</GoogleSignInButton>
+
+        <AuthDivider />
+
         {/* Sign Up Form */}
         <Card className="p-8 bg-card/10 backdrop-blur-sm border-border/20 card-glow">
+          {error && (
+            <div className="mb-4 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
