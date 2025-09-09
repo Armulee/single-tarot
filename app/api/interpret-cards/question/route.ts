@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
         // Wait for the provider's full response (contains usage)
         const usage = await result.usage
-        const cost = costPerUsage(usage.inputTokens, usage.outputTokens)
+        const cost = costPerUsage(usage.inputTokens, usage.outputTokens, "openai/gpt-5-nano")
         console.log({
             input: usage.inputTokens,
             output: usage.outputTokens,
