@@ -448,8 +448,8 @@ If the interpretation is too generic, add more details to make it more specific.
                                 </div>
                             )}
 
-                            {/* Action buttons - show when error or finished (not while loading) */}
-                            {(error || finish) && (
+                            {/* Action buttons - show when error, finished, or has interpretation (not while loading) */}
+                            {(error || finish || interpretation) && (
                                 <div className='flex flex-wrap items-center justify-center gap-3'>
                                     <Button
                                         type='button'
