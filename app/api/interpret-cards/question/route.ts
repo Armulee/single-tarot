@@ -1,5 +1,7 @@
 import { streamText } from "ai"
 
+const MODEL = "openai/gpt-4.1-mini"
+
 export async function POST(req: Request) {
     try {
         const { prompt } = await req.json()
@@ -13,7 +15,7 @@ export async function POST(req: Request) {
         // const interpretationDepth = isPremium ? "premium" : "basic"
 
         const result = streamText({
-            model: "openai/gpt-5-nano",
+            model: MODEL,
             // maxOutputTokens: 200,
             system: `You are an expert tarot reader. Provide clear, concise, and mystical interpretations that directly address the user's question. Use the card's meaning as your guide, but do not explain the symbolism or card details. Focus only on delivering an insightful answer that feels intuitive and to the point.`,
             prompt,
@@ -21,7 +23,7 @@ export async function POST(req: Request) {
 
         // Wait for the provider's full response (contains usage)
         const usage = await result.usage
-        const cost = costPerUsage(usage.inputTokens, usage.outputTokens, "openai/gpt-5-nano")
+        const cost = costPerUsage(usage.inputTokens, usage.outputTokens, MODEL)
         console.log({
             input: usage.inputTokens,
             output: usage.outputTokens,
@@ -41,9 +43,9 @@ export async function POST(req: Request) {
 function costPerUsage(
     input: number | undefined,
     output: number | undefined,
-    model: string = "openai/gpt-5-nano"
+    model: string = MODEL
 ) {
-    if (model === "openai/gpt-5-nano" && input && output) {
-        return input * (0.05 / 1000000) + output * (0.4 / 1000000)
+    if (model === "openai/gpt-4.1-mini" && input && output) {
+        return input * (0.4 / 1000000) + output * (1.6 / 1000000)
     }
 }
