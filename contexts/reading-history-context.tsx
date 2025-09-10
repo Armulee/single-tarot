@@ -104,7 +104,7 @@ export function ReadingHistoryProvider({ children }: { children: ReactNode }) {
         }
     }
 
-    const saveReading = async (reading: Omit<ReadingHistoryItem, 'id' | 'createdAt'>): Promise<string => {
+    const saveReading = async (reading: Omit<ReadingHistoryItem, 'id' | 'createdAt'>): Promise<string> => {
         if (!user) throw new Error('User not authenticated')
 
         try {
