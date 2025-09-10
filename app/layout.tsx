@@ -65,7 +65,9 @@ export default function RootLayout({
                                 <div className='min-h-screen flex flex-col'>
                                     <Navbar />
                                     <main className='pt-16 min-[calc(100dvh-65px)] relative overflow-hidden home-gradient'>
-                                        <Suspense fallback={null}>{children}</Suspense>
+                                        <Suspense fallback={null}>
+                                            {children}
+                                        </Suspense>
                                     </main>
                                     <Footer />
                                 </div>

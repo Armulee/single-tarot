@@ -43,7 +43,7 @@ export default function SignInPage() {
     }
 
     return (
-        <div className='w-full max-w-md space-y-8 p-6'>
+        <div className='w-full mx-auto max-w-md space-y-8 p-6'>
             {/* Header */}
             <div className='text-center space-y-4'>
                 <div className='w-16 h-16 mx-auto rounded-full bg-primary/20 flex items-center justify-center float-animation'>
@@ -62,7 +62,7 @@ export default function SignInPage() {
             </div>
 
             {/* Google Sign In */}
-            <GoogleSignInButton />
+            <GoogleSignInButton className='py-5' />
 
             <AuthDivider />
 

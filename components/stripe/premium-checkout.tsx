@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Check, Loader2, CreditCard, Crown } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 import { usePremium } from "@/hooks/use-premium"
@@ -13,12 +12,16 @@ interface PremiumCheckoutProps {
     onCheckout?: () => void
     className?: string
     variant?: "button" | "card"
+    label?: string
+    gradientClassName?: string
 }
 
-export function PremiumCheckout({ 
-    onCheckout, 
+export function PremiumCheckout({
+    onCheckout,
     className = "",
-    variant = "button"
+    variant = "button",
+    label,
+    gradientClassName,
 }: PremiumCheckoutProps) {
     const { user } = useAuth()
     const { isPremium, loading } = usePremium(user)
@@ -76,7 +79,7 @@ export function PremiumCheckout({
     if (loading) {
         return (
             <div className={`flex items-center justify-center ${className}`}>
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                <Loader2 className='w-4 h-4 animate-spin mr-2' />
                 <span>Loading...</span>
             </div>
         )
@@ -85,65 +88,89 @@ export function PremiumCheckout({
     if (isPremium) {
         return (
             <div className={`flex items-center gap-2 ${className}`}>
-                <Badge className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold">
-                    <Crown className="w-3 h-3 mr-1" />
-                    Premium
-                </Badge>
                 <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => window.location.href = "/billing"}
+                    variant='outline'
+                    size='sm'
+                    disabled
+                    className='bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 text-black font-semibold border-0 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 cursor-not-allowed opacity-90'
                 >
-                    Manage Billing
+                    <Crown className='w-4 h-4 mr-2' />
+                    Premium Active
+                </Button>
+                <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={() => (window.location.href = "/billing")}
+                    className='text-white hover:bg-white/10 border border-white/20'
+                >
+                    Manage
                 </Button>
             </div>
         )
     }
 
+    const gradientClasses =
+        gradientClassName ??
+        "bg-gradient-to-r from-indigo-500 via-sky-500 to-cyan-400 hover:from-indigo-400 hover:via-sky-400 hover:to-cyan-300"
+
     if (variant === "card") {
         return (
-            <Card className={`p-6 bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20 ${className}`}>
-                <div className="text-center space-y-4">
-                    <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                        <Crown className="w-8 h-8 text-white" />
+            <Card
+                className={`p-6 bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20 ${className}`}
+            >
+                <div className='text-center space-y-4'>
+                    <div className='w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center'>
+                        <Crown className='w-8 h-8 text-white' />
                     </div>
                     <div>
-                        <h3 className="font-serif font-bold text-2xl mb-2">Go Premium</h3>
-                        <p className="text-muted-foreground mb-4">
+                        <h3 className='font-serif font-bold text-2xl mb-2'>
+                            Go Premium
+                        </h3>
+                        <p className='text-muted-foreground mb-4'>
                             Unlock unlimited readings and premium features
                         </p>
                     </div>
-                    <div className="space-y-3">
-                        <div className="text-3xl font-bold">
-                            $2.99<span className="text-lg text-muted-foreground">/month</span>
+                    <div className='space-y-3'>
+                        <div className='text-3xl font-bold'>
+                            $2.99
+                            <span className='text-lg text-muted-foreground'>
+                                /month
+                            </span>
                         </div>
-                        <ul className="space-y-2 text-sm">
+                        <ul className='space-y-2 text-sm'>
                             {[
                                 "Unlimited tarot readings",
                                 "Advanced AI interpretations",
                                 "Reading history & insights",
                                 "Priority support",
                                 "No advertisements",
-                                "Exclusive cosmic themes"
+                                "Exclusive cosmic themes",
                             ].map((feature, index) => (
-                                <li key={index} className="flex items-center gap-2">
-                                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                                <li
+                                    key={index}
+                                    className='flex items-center gap-2'
+                                >
+                                    <Check className='w-4 h-4 text-green-500 flex-shrink-0' />
                                     <span>{feature}</span>
                                 </li>
                             ))}
                         </ul>
                     </div>
                     {!user ? (
-                        <div className="space-y-2">
-                            <p className="text-sm text-muted-foreground">
+                        <div className='space-y-2'>
+                            <p className='text-sm text-muted-foreground'>
                                 Sign in to start your premium journey
                             </p>
-                            <div className="flex gap-2">
-                                <Button asChild className="flex-1">
-                                    <Link href="/signin">Sign In</Link>
+                            <div className='flex gap-2'>
+                                <Button asChild className='flex-1'>
+                                    <Link href='/signin'>Sign In</Link>
                                 </Button>
-                                <Button variant="outline" asChild className="flex-1">
-                                    <Link href="/signup">Sign Up</Link>
+                                <Button
+                                    variant='outline'
+                                    asChild
+                                    className='flex-1'
+                                >
+                                    <Link href='/signup'>Sign Up</Link>
                                 </Button>
                             </div>
                         </div>
@@ -151,15 +178,20 @@ export function PremiumCheckout({
                         <Button
                             onClick={handleCheckout}
                             disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white"
-                            size="lg"
+                            className={`w-full relative overflow-hidden ${gradientClasses} text-white font-semibold shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all duration-300 transform hover:scale-105 active:scale-95`}
+                            size='lg'
                         >
-                            {isLoading ? (
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            ) : (
-                                <CreditCard className="w-4 h-4 mr-2" />
-                            )}
-                            {isLoading ? "Processing..." : "Start Premium"}
+                            <div className='absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300' />
+                            <div className='relative flex items-center'>
+                                {isLoading ? (
+                                    <Loader2 className='w-4 h-4 mr-2 animate-spin' />
+                                ) : (
+                                    <CreditCard className='w-4 h-4 mr-2' />
+                                )}
+                                {isLoading
+                                    ? "Processing..."
+                                    : label ?? "Start Premium"}
+                            </div>
                         </Button>
                     )}
                 </div>
@@ -171,14 +203,17 @@ export function PremiumCheckout({
         <Button
             onClick={handleCheckout}
             disabled={isLoading}
-            className={`bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white ${className}`}
+            className={`relative overflow-hidden ${gradientClasses} text-white font-semibold shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all duration-300 transform hover:scale-105 active:scale-95 ${className}`}
         >
-            {isLoading ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-                <Crown className="w-4 h-4 mr-2" />
-            )}
-            {isLoading ? "Processing..." : "Go Premium"}
+            <div className='absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300' />
+            <div className='relative flex items-center'>
+                {isLoading ? (
+                    <Loader2 className='w-4 h-4 mr-2 animate-spin' />
+                ) : (
+                    <Crown className='w-4 h-4 mr-2' />
+                )}
+                {isLoading ? "Processing..." : label ?? "Go Premium"}
+            </div>
         </Button>
     )
 }

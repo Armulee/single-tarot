@@ -249,10 +249,7 @@ export default function PricingPage() {
 
                                     {/* CTA Button */}
                                     {plan.name === "Cosmic Premium" ? (
-                                        <PremiumCheckout
-                                            variant="card"
-                                            className="w-full"
-                                        />
+                                        <PremiumCheckout className='w-full' />
                                     ) : (
                                         <Button
                                             onClick={() =>

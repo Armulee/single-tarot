@@ -10,9 +10,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import Link from "next/link"
-import { GoogleSignInButton } from "@/components/auth/google-signin-button"
-import { AuthDivider } from "@/components/auth/auth-divider"
 import { useAuth } from "@/hooks/use-auth"
+import { Sparkles } from "lucide-react"
 
 export default function SignUpPage() {
     const [formData, setFormData] = useState({
@@ -71,12 +70,12 @@ export default function SignUpPage() {
     }
 
     return (
-        <div className='w-full max-w-md space-y-8 p-6'>
+        <div className='w-full mx-auto max-w-md space-y-8 p-6'>
             {/* Header */}
             <div className='text-center space-y-4'>
                 <div className='w-16 h-16 mx-auto rounded-full bg-secondary/20 flex items-center justify-center float-animation'>
                     <span className='text-secondary font-serif font-bold text-2xl'>
-                        ✨
+                        <Sparkles />
                     </span>
                 </div>
                 <div className='space-y-2'>
@@ -88,12 +87,6 @@ export default function SignUpPage() {
                     </p>
                 </div>
             </div>
-
-            {/* Google Sign Up */}
-            <GoogleSignInButton>Sign up with Google</GoogleSignInButton>
-
-            <AuthDivider />
-
             {/* Sign Up Form */}
             <Card className='p-8 bg-card/10 backdrop-blur-sm border-border/20 card-glow'>
                 {error && (
@@ -214,7 +207,7 @@ export default function SignUpPage() {
                                     checked as boolean
                                 )
                             }
-                            className='border-border/30 data-[state=checked]:bg-secondary data-[state=checked]:border-secondary mt-0.5 flex-shrink-0'
+                            className='border-border/70 data-[state=checked]:bg-secondary data-[state=checked]:border-secondary mt-0.5 flex-shrink-0'
                         />
                         <Label
                             htmlFor='terms'
