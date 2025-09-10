@@ -6,9 +6,6 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Check, Star, Zap, Shield } from "lucide-react"
 import { PremiumCheckout } from "@/components/stripe/premium-checkout"
-import { useAuth } from "@/hooks/use-auth"
-import { usePremium } from "@/hooks/use-premium"
-import Link from "next/link"
 
 const PRICING_PLANS = [
     {
@@ -58,8 +55,6 @@ const PRICING_PLANS = [
 
 export default function PricingPage() {
     const [isAnnual, setIsAnnual] = useState(false)
-    const { user } = useAuth()
-    const { isPremium, loading: premiumLoading } = usePremium(user)
 
     const handleSubscribe = async (planName: string) => {
         if (planName === "Free") {
