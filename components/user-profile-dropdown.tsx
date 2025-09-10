@@ -11,7 +11,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/hooks/use-auth"
-import { Settings, LogOut, History, CreditCard } from "lucide-react"
+import { Settings, LogOut, History, CreditCard, Receipt } from "lucide-react"
 
 interface UserProfileDropdownProps {
     children: React.ReactNode
@@ -53,6 +53,11 @@ export function UserProfileDropdown({
 
     const handleBillingClick = () => {
         router.push("/billing")
+        if (onClose) onClose()
+    }
+
+    const handlePaymentHistoryClick = () => {
+        router.push("/payment-history")
         if (onClose) onClose()
     }
 
@@ -108,6 +113,10 @@ export function UserProfileDropdown({
                 <DropdownMenuItem onClick={handleBillingClick}>
                     <CreditCard className='w-4 h-4 mr-2' />
                     Billing
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handlePaymentHistoryClick}>
+                    <Receipt className='w-4 h-4 mr-2' />
+                    Payment History
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

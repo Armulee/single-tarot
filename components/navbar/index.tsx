@@ -14,6 +14,7 @@ import {
 import { useAuth } from "@/hooks/use-auth"
 import { UserProfile } from "@/components/user-profile"
 import { SidebarSheet } from "./sidebar-sheet"
+import { PremiumCheckout } from "@/components/stripe/premium-checkout"
 
 export function Navbar() {
     const [open, setOpen] = useState(false)
@@ -88,12 +89,7 @@ export function Navbar() {
                     {/* Auth / CTA */}
                     <div className='flex items-center space-x-4'>
                         {!loading && user ? (
-                            <Button
-                                onClick={() => setPremiumOpen(true)}
-                                className='inline-flex bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:opacity-90 text-white rounded-full px-5 py-2 shadow-[0_10px_20px_-10px_rgba(56,189,248,0.55)] ring-1 ring-white/10 card-glow'
-                            >
-                                Go Premium
-                            </Button>
+                            <PremiumCheckout />
                         ) : (
                             <Link href='/signin'>
                                 <Button

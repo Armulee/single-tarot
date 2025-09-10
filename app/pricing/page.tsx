@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Check, Star, Zap, Shield } from "lucide-react"
+import { PremiumCheckout } from "@/components/stripe/premium-checkout"
+import { useAuth } from "@/hooks/use-auth"
+import { usePremium } from "@/hooks/use-premium"
+import Link from "next/link"
 
 const PRICING_PLANS = [
     {
@@ -54,6 +58,8 @@ const PRICING_PLANS = [
 
 export default function PricingPage() {
     const [isAnnual, setIsAnnual] = useState(false)
+    const { user } = useAuth()
+    const { isPremium, loading: premiumLoading } = usePremium(user)
 
     const handleSubscribe = async (planName: string) => {
         if (planName === "Free") {
@@ -62,11 +68,8 @@ export default function PricingPage() {
             return
         }
 
-        // TODO: Implement Stripe checkout
-        console.log(`Subscribing to ${planName}`)
-
-        // Simulate checkout process
-        alert("Redirecting to secure checkout...")
+        // For premium plan, the PremiumCheckout component will handle the Stripe checkout
+        // This function is kept for consistency but won't be called
     }
 
     return (
@@ -250,20 +253,27 @@ export default function PricingPage() {
                                     </div>
 
                                     {/* CTA Button */}
-                                    <Button
-                                        onClick={() =>
-                                            handleSubscribe(plan.name)
-                                        }
-                                        variant={plan.buttonVariant}
-                                        size='lg'
-                                        className={`w-full py-6 text-lg ${
-                                            plan.popular
-                                                ? "bg-primary hover:bg-primary/90 text-primary-foreground card-glow"
-                                                : "border-border/30 hover:bg-card/20 bg-transparent"
-                                        }`}
-                                    >
-                                        {plan.buttonText}
-                                    </Button>
+                                    {plan.name === "Cosmic Premium" ? (
+                                        <PremiumCheckout
+                                            variant="card"
+                                            className="w-full"
+                                        />
+                                    ) : (
+                                        <Button
+                                            onClick={() =>
+                                                handleSubscribe(plan.name)
+                                            }
+                                            variant={plan.buttonVariant}
+                                            size='lg'
+                                            className={`w-full py-6 text-lg ${
+                                                plan.popular
+                                                    ? "bg-primary hover:bg-primary/90 text-primary-foreground card-glow"
+                                                    : "border-border/30 hover:bg-card/20 bg-transparent"
+                                            }`}
+                                        >
+                                            {plan.buttonText}
+                                        </Button>
+                                    )}
                                 </div>
                             </Card>
                         )
