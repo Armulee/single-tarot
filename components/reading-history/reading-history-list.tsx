@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronRight, Calendar, Trash2, Eye } from "lucide-react"
-import { ReadingHistoryItem, FollowUpReading } from "@/contexts/reading-history-context"
+import { ReadingHistoryItem } from "@/contexts/reading-history-context"
 import { CardImage } from "@/components/card-image"
 import { formatDistanceToNow } from "date-fns"
 

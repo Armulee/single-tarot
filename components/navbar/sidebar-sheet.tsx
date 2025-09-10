@@ -21,11 +21,11 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
     const { user, loading } = useAuth()
 
     const sidebarLinks = [
-        { href: "/", label: "Home", Icon: Home },
-        { href: "/reading", label: "Reading", Icon: BookOpen },
+        { href: "/", label: "Home", Icon: Home, requireAuth: false },
+        { href: "/reading", label: "Reading", Icon: BookOpen, requireAuth: false },
         { href: "/history", label: "History", Icon: History, requireAuth: true },
-        { href: "/about", label: "About", Icon: Info },
-        { href: "/pricing", label: "Pricing", Icon: CreditCard },
+        { href: "/about", label: "About", Icon: Info, requireAuth: false },
+        { href: "/pricing", label: "Pricing", Icon: CreditCard, requireAuth: false },
     ] as const
 
     const getUserInitials = () => {

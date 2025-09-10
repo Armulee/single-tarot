@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -18,7 +17,6 @@ interface ReadingHistoryProps {
 export function ReadingHistory({ onViewReading }: ReadingHistoryProps) {
     const { user } = useAuth()
     const { readings, loading, error, deleteReading, refreshReadings } = useReadingHistory()
-    const [deletingId, setDeletingId] = useState<string | null>(null)
 
     const handleViewReading = (reading: ReadingHistoryItem) => {
         if (onViewReading) {
@@ -27,13 +25,10 @@ export function ReadingHistory({ onViewReading }: ReadingHistoryProps) {
     }
 
     const handleDeleteReading = async (readingId: string) => {
-        setDeletingId(readingId)
         try {
             await deleteReading(readingId)
         } catch (error) {
             console.error("Failed to delete reading:", error)
-        } finally {
-            setDeletingId(null)
         }
     }
 
