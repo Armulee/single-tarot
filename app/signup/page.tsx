@@ -204,7 +204,7 @@ export default function SignUpPage() {
                         </div>
                     </div>
 
-                    <div className='flex items-center space-x-2'>
+                    <div className='flex items-start space-x-2'>
                         <Checkbox
                             id='terms'
                             checked={formData.agreeToTerms}
@@ -214,11 +214,11 @@ export default function SignUpPage() {
                                     checked as boolean
                                 )
                             }
-                            className='border-border/30 data-[state=checked]:bg-secondary data-[state=checked]:border-secondary'
+                            className='border-border/30 data-[state=checked]:bg-secondary data-[state=checked]:border-secondary mt-0.5 flex-shrink-0'
                         />
                         <Label
                             htmlFor='terms'
-                            className='text-sm text-muted-foreground'
+                            className='text-sm text-muted-foreground leading-relaxed'
                         >
                             I agree to the{" "}
                             <Link
