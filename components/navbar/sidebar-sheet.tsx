@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Home, BookOpen, Info, CreditCard, LogIn, History } from "lucide-react"
+import { Home, BookOpen, Info, CreditCard, LogIn } from "lucide-react"
 import {
     Sheet,
     SheetContent,
@@ -23,7 +23,6 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
     const sidebarLinks = [
         { href: "/", label: "Home", Icon: Home, requireAuth: false },
         { href: "/reading", label: "Reading", Icon: BookOpen, requireAuth: false },
-        { href: "/history", label: "History", Icon: History, requireAuth: true },
         { href: "/about", label: "About", Icon: Info, requireAuth: false },
         { href: "/pricing", label: "Pricing", Icon: CreditCard, requireAuth: false },
     ] as const

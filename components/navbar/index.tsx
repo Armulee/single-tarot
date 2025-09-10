@@ -69,14 +69,6 @@ export function Navbar() {
                         >
                             Reading
                         </Link>
-                        {user && (
-                            <Link
-                                href='/history'
-                                className='text-cosmic-light hover:text-white transition-colors'
-                            >
-                                History
-                            </Link>
-                        )}
                         <Link
                             href='/about'
                             className='text-cosmic-light hover:text-white transition-colors'

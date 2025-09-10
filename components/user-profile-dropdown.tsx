@@ -47,7 +47,7 @@ export function UserProfileDropdown({
     }
 
     const handleHistoryClick = () => {
-        router.push("/reading-history")
+        router.push("/history")
         if (onClose) onClose()
     }
 
