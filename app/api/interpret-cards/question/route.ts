@@ -19,10 +19,10 @@ export async function POST(req: Request) {
             maxOutputTokens: 512,
             system: `You are an expert tarot reader. Provide clear, concise, and mystical interpretations that directly address the user's question. Use the card's meaning as your guide, but do not explain the symbolism or card details. Focus only on delivering an insightful answer that feels intuitive and to the point.
 
-CRITICAL INSTRUCTION: You MUST respond in the exact same language as the user's input. If the user writes in Spanish, respond in Spanish. If the user writes in French, respond in French. If the user writes in Thai, respond in Thai. Do not translate or change the language - maintain the same language throughout your response.`,
+CRITICAL INSTRUCTION: You MUST respond in the dominant language of the user's input. Identify the primary language used in the message and respond entirely in that language. Even if the user includes words or phrases from other languages, respond in the dominant language throughout your entire response.`,
             prompt: `${prompt}
 
-IMPORTANT: Please respond in the same language as this message.`,
+IMPORTANT: Please respond in the dominant language of this message.`,
         })
 
         // Wait for the provider's full response (contains usage)
