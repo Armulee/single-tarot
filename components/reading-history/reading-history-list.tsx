@@ -131,7 +131,7 @@ export function ReadingHistoryList({
                                     <div key={index} className="flex items-center gap-2">
                                         <CardImage
                                             card={card}
-                                            size="xs"
+                                            size="sm"
                                             showAura={false}
                                             showLabel={false}
                                             className="w-8 h-12"
@@ -187,7 +187,7 @@ export function ReadingHistoryList({
                                                     <div key={cardIndex} className="flex items-center gap-1">
                                                         <CardImage
                                                             card={card}
-                                                            size="xs"
+                                                            size="sm"
                                                             showAura={false}
                                                             showLabel={false}
                                                             className="w-6 h-9"
