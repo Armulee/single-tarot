@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Home, BookOpen, Info, CreditCard, LogIn } from "lucide-react"
+import { Home, BookOpen, Info, CreditCard, LogIn, History } from "lucide-react"
 import {
     Sheet,
     SheetContent,
@@ -23,6 +23,7 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
     const sidebarLinks = [
         { href: "/", label: "Home", Icon: Home },
         { href: "/reading", label: "Reading", Icon: BookOpen },
+        { href: "/history", label: "History", Icon: History, requireAuth: true },
         { href: "/about", label: "About", Icon: Info },
         { href: "/pricing", label: "Pricing", Icon: CreditCard },
     ] as const
@@ -70,18 +71,23 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                 </SheetHeader>
                 <nav>
                     <ul className='flex flex-col space-y-1 p-1'>
-                        {sidebarLinks.map(({ href, label, Icon }) => (
-                            <li key={href}>
-                                <Link
-                                    href={href}
-                                    className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors'
-                                    onClick={() => onOpenChange(false)}
-                                >
-                                    <Icon className='w-4 h-4' />
-                                    <span>{label}</span>
-                                </Link>
-                            </li>
-                        ))}
+                        {sidebarLinks.map(({ href, label, Icon, requireAuth }) => {
+                            // Hide auth-required links for non-authenticated users
+                            if (requireAuth && !user) return null
+                            
+                            return (
+                                <li key={href}>
+                                    <Link
+                                        href={href}
+                                        className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors'
+                                        onClick={() => onOpenChange(false)}
+                                    >
+                                        <Icon className='w-4 h-4' />
+                                        <span>{label}</span>
+                                    </Link>
+                                </li>
+                            )
+                        })}
                         <li className='pt-2'>
                             {!loading && user ? (
                                 <UserProfileDropdown

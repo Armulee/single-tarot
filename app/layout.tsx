@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { TarotProvider } from "@/contexts/tarot-context"
 import { AuthProvider } from "@/contexts/auth-context"
+import { ReadingHistoryProvider } from "@/contexts/reading-history-context"
 import { Navbar } from "@/components/navbar"
 import "./globals.css"
 import Footer from "@/components/footer"
@@ -57,15 +58,17 @@ export default function RootLayout({
                 <CosmicStars />
 
                 <AuthProvider>
-                    <TarotProvider>
-                        <div className='min-h-screen flex flex-col'>
-                            <Navbar />
-                            <main className='pt-16 min-[calc(100dvh-65px)] relative overflow-hidden home-gradient'>
-                                <Suspense fallback={null}>{children}</Suspense>
-                            </main>
-                            <Footer />
-                        </div>
-                    </TarotProvider>
+                    <ReadingHistoryProvider>
+                        <TarotProvider>
+                            <div className='min-h-screen flex flex-col'>
+                                <Navbar />
+                                <main className='pt-16 min-[calc(100dvh-65px)] relative overflow-hidden home-gradient'>
+                                    <Suspense fallback={null}>{children}</Suspense>
+                                </main>
+                                <Footer />
+                            </div>
+                        </TarotProvider>
+                    </ReadingHistoryProvider>
                 </AuthProvider>
                 <Analytics />
             </body>

@@ -9,8 +9,12 @@ import { useEffect, useRef, useState, useCallback } from "react"
 import { useCompletion } from "@ai-sdk/react"
 import { TarotCard, useTarot } from "@/contexts/tarot-context"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import QuestionInput from "../question-input"
 import { CardImage } from "../card-image"
+import { useReadingHistory } from "@/contexts/reading-history-context"
+import { useAnonymousReading } from "@/hooks/use-anonymous-reading"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function Interpretation() {
     const router = useRouter()
@@ -28,13 +32,64 @@ export default function Interpretation() {
         selectedCards,
         interpretation,
         setInterpretation,
+        readingType,
     } = useTarot()
+    const { user } = useAuth()
+    const { saveReading, saveFollowUpReading } = useReadingHistory()
+    const { saveAnonymousReading } = useAnonymousReading()
     const { completion, isLoading, error, complete } = useCompletion({
         // api: "/api/interpret-cards/mockup",
         api: "/api/interpret-cards/question",
-        onFinish: (_, completion) => {
+        onFinish: async (_, completion) => {
             setFinish(true)
             setInterpretation(completion)
+            
+            // Save reading to history
+            if (readingType && selectedCards.length > 0) {
+                const readingData = {
+                    question: question.replace(/^\[Follow up question\]:\s*/, ''),
+                    selectedCards,
+                    interpretation: completion,
+                    readingType,
+                }
+
+                if (user) {
+                    // Save to user's account
+                    if (question.startsWith("[Follow up question]:")) {
+                        // This is a follow-up question, save as follow-up
+                        const STORAGE_KEY = "reading-state-v1"
+                        try {
+                            const raw = localStorage.getItem(STORAGE_KEY + "-backup")
+                            if (raw) {
+                                const data = JSON.parse(raw)
+                                if (data.readingId) {
+                                    await saveFollowUpReading(data.readingId, readingData)
+                                }
+                            }
+                        } catch (e) {
+                            console.error("Failed to save follow-up reading:", e)
+                        }
+                    } else {
+                        // Regular reading, save as main reading
+                        const readingId = await saveReading(readingData)
+                        // Store the reading ID for potential follow-ups
+                        const STORAGE_KEY = "reading-state-v1"
+                        try {
+                            const raw = localStorage.getItem(STORAGE_KEY)
+                            if (raw) {
+                                const data = JSON.parse(raw)
+                                data.readingId = readingId
+                                localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+                            }
+                        } catch (e) {
+                            console.error("Failed to store reading ID:", e)
+                        }
+                    }
+                } else {
+                    // Save to anonymous storage
+                    saveAnonymousReading(readingData)
+                }
+            }
         },
     })
 
@@ -485,6 +540,28 @@ If the interpretation is too generic, add more details to make it more specific.
                                 </div>
                             )}
                         </>
+                    )}
+
+                    {/* Anonymous User Message */}
+                    {!user && (
+                        <Card className='p-4 bg-primary/10 backdrop-blur-sm border-primary/20'>
+                            <div className='text-center space-y-2'>
+                                <p className='text-sm text-primary font-medium'>
+                                    💫 Sign in to save this reading to your history
+                                </p>
+                                <p className='text-xs text-muted-foreground'>
+                                    Your interpretation will be automatically saved when you create an account
+                                </p>
+                                <div className='flex gap-2 justify-center pt-2'>
+                                    <Button asChild size="sm">
+                                        <Link href="/signin">Sign In</Link>
+                                    </Button>
+                                    <Button variant="outline" asChild size="sm">
+                                        <Link href="/signup">Sign Up</Link>
+                                    </Button>
+                                </div>
+                            </div>
+                        </Card>
                     )}
 
                     {/* Disclaimer */}
