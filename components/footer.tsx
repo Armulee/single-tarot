@@ -32,16 +32,16 @@ export default function Footer() {
                             Support
                         </Link>
                         <Link
-                            href='/privacy'
+                            href='/privacy-policy'
                             className='hover:text-foreground transition-colors'
                         >
-                            Privacy
+                            Privacy Policy
                         </Link>
                         <Link
-                            href='/terms'
+                            href='/terms-of-service'
                             className='hover:text-foreground transition-colors'
                         >
-                            Terms
+                            Terms of Service
                         </Link>
                         <Link
                             href='/contact'

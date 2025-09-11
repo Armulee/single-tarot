@@ -341,6 +341,9 @@ export default function PrivacyPage() {
                                     <p className='text-muted-foreground'>
                                         <strong>Contact Form:</strong> <Link href='/contact' className='text-primary hover:text-primary/80'>Visit our contact page</Link>
                                     </p>
+                                    <p className='text-muted-foreground'>
+                                        <strong>Terms of Service:</strong> <Link href='/terms-of-service' className='text-primary hover:text-primary/80'>View our terms</Link>
+                                    </p>
                                 </div>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     We will respond to your inquiry within 30 days of receipt.
