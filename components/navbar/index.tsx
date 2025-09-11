@@ -81,6 +81,12 @@ export function Navbar() {
                         >
                             Pricing
                         </Link>
+                        <Link
+                            href='/support'
+                            className='text-cosmic-light hover:text-white transition-colors'
+                        >
+                            Support
+                        </Link>
                         {/* User Profile for Desktop */}
                         {!loading && user && <UserProfile variant='desktop' />}
                     </div>

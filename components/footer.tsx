@@ -26,6 +26,12 @@ export default function Footer() {
                     </button>
                     <div className='flex space-x-6 text-sm text-muted-foreground'>
                         <Link
+                            href='/support'
+                            className='hover:text-foreground transition-colors'
+                        >
+                            Support
+                        </Link>
+                        <Link
                             href='/privacy'
                             className='hover:text-foreground transition-colors'
                         >
