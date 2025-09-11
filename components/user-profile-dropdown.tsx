@@ -11,14 +11,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/hooks/use-auth"
-import { Settings, LogOut, History, CreditCard } from "lucide-react"
+import { Settings, LogOut, History, CreditCard, Receipt } from "lucide-react"
 
 interface UserProfileDropdownProps {
     children: React.ReactNode
     onClose?: () => void
+    showUserDetail?: boolean
 }
 
 export function UserProfileDropdown({
+    showUserDetail = true,
     children,
     onClose,
 }: UserProfileDropdownProps) {
@@ -47,12 +49,17 @@ export function UserProfileDropdown({
     }
 
     const handleHistoryClick = () => {
-        router.push("/reading-history")
+        router.push("/history")
         if (onClose) onClose()
     }
 
     const handleBillingClick = () => {
         router.push("/billing")
+        if (onClose) onClose()
+    }
+
+    const handlePaymentHistoryClick = () => {
+        router.push("/payment-history")
         if (onClose) onClose()
     }
 
@@ -77,26 +84,31 @@ export function UserProfileDropdown({
                 align='end'
                 className='w-56 bg-card/95 backdrop-blur-md border-border/30'
             >
-                <div className='flex items-center gap-2 p-2'>
-                    <Avatar className='w-8 h-8'>
-                        <AvatarImage
-                            src={getUserAvatar()}
-                            alt={getUserName()}
-                        />
-                        <AvatarFallback className='bg-primary/20 text-primary font-semibold'>
-                            {getUserInitials()}
-                        </AvatarFallback>
-                    </Avatar>
-                    <div className='flex-1 min-w-0'>
-                        <p className='text-sm font-medium truncate'>
-                            {getUserName()}
-                        </p>
-                        <p className='text-xs text-muted-foreground truncate'>
-                            {user.email}
-                        </p>
-                    </div>
-                </div>
-                <DropdownMenuSeparator />
+                {showUserDetail && (
+                    <>
+                        <div className='flex items-center gap-2 p-2'>
+                            <Avatar className='w-8 h-8'>
+                                <AvatarImage
+                                    src={getUserAvatar()}
+                                    alt={getUserName()}
+                                />
+                                <AvatarFallback className='bg-primary text-white font-semibold'>
+                                    {getUserInitials()}
+                                </AvatarFallback>
+                            </Avatar>
+                            <div className='flex-1 min-w-0'>
+                                <p className='text-sm font-medium truncate'>
+                                    {getUserName()}
+                                </p>
+                                <p className='text-xs text-muted-foreground truncate'>
+                                    {user.email}
+                                </p>
+                            </div>
+                        </div>
+
+                        <DropdownMenuSeparator />
+                    </>
+                )}
                 <DropdownMenuItem onClick={handleSettingsClick}>
                     <Settings className='w-4 h-4 mr-2' />
                     Settings
@@ -109,11 +121,15 @@ export function UserProfileDropdown({
                     <CreditCard className='w-4 h-4 mr-2' />
                     Billing
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={handlePaymentHistoryClick}>
+                    <Receipt className='w-4 h-4 mr-2' />
+                    Payment History
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={handleSignOut}
                     disabled={isLoading}
-                    className='text-white bg-red-500/10 hover:bg-red-500/20 focus:bg-red-500/20 focus:text-white border border-red-500/20 hover:border-red-500/30'
+                    className='text-white bg-red-500/30 hover:bg-red-500/20 focus:bg-red-500/20 focus:text-white border border-red-500/20 hover:border-red-500/30'
                 >
                     <LogOut className='w-4 h-4 mr-2' />
                     {isLoading ? "Signing out..." : "Sign out"}
