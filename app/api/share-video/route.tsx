@@ -2,35 +2,46 @@ import { ImageResponse } from "next/og"
 
 export const runtime = "edge"
 
-// Generate star raining curve points
-const generateStarCurve = (width: number, height: number) => {
+// Generate star raining curve points for video animation
+const generateStarCurve = (width: number, height: number, frame: number, totalFrames: number) => {
     const points = []
     const startX = width * 0.1
     const endX = width * 0.9
     const startY = height * 0.1
     const endY = height * 0.8
     
-    // Create a curved path with multiple control points
+    // Create animated curve that moves over time
+    const progress = frame / totalFrames
+    const waveOffset = Math.sin(progress * Math.PI * 2) * 0.3 // Wave animation
+    
     for (let i = 0; i <= 20; i++) {
         const t = i / 20
         const x = startX + (endX - startX) * t
-        // Create a sine wave curve
-        const curveOffset = Math.sin(t * Math.PI) * (width * 0.15)
+        // Create a sine wave curve with animation
+        const curveOffset = Math.sin(t * Math.PI + waveOffset) * (width * 0.15)
         const y = startY + (endY - startY) * t + curveOffset
-        points.push({ x, y })
+        
+        // Add some randomness for more natural movement
+        const randomOffset = Math.sin(frame * 0.1 + i * 0.5) * 5
+        points.push({ 
+            x: x + randomOffset, 
+            y: y + randomOffset,
+            opacity: Math.max(0, 1 - Math.abs(t - progress) * 2) // Fade in/out based on progress
+        })
     }
     return points
 }
 
-// Generate background stars
-const generateBackgroundStars = (width: number, height: number, count: number = 100) => {
+// Generate background stars with twinkling effect
+const generateBackgroundStars = (width: number, height: number, frame: number, count: number = 100) => {
     const stars = []
     for (let i = 0; i < count; i++) {
+        const twinkle = Math.sin(frame * 0.05 + i * 0.1) * 0.3 + 0.7
         stars.push({
             x: Math.random() * width,
             y: Math.random() * height,
             size: Math.random() * 3 + 1,
-            opacity: Math.random() * 0.8 + 0.2,
+            opacity: (Math.random() * 0.8 + 0.2) * twinkle,
         })
     }
     return stars
@@ -44,7 +55,8 @@ export async function POST(req: Request) {
             interpretation = "",
             width = 1920,
             height = 1080,
-            // type = "image", // "image" or "video" - unused for now
+            frame = 0,
+            totalFrames = 450, // 15 seconds at 30fps
         } = await req.json()
 
         const title = "dooduang.ai"
@@ -52,9 +64,9 @@ export async function POST(req: Request) {
         const safeQuestion = String(question)
         const safeInterpretation = String(interpretation)
         
-        // Generate star curve and background stars
-        const starCurve = generateStarCurve(width, height)
-        const backgroundStars = generateBackgroundStars(width, height, 150)
+        // Generate animated star curve and background stars
+        const starCurve = generateStarCurve(width, height, frame, totalFrames)
+        const backgroundStars = generateBackgroundStars(width, height, frame, 150)
 
         return new ImageResponse(
             (
@@ -74,7 +86,7 @@ export async function POST(req: Request) {
                         position: "relative",
                     }}
                 >
-                    {/* Background Stars */}
+                    {/* Background Stars with Twinkling */}
                     {backgroundStars.map((star, index) => (
                         <div
                             key={`bg-star-${index}`}
@@ -87,25 +99,25 @@ export async function POST(req: Request) {
                                 backgroundColor: "#ffffff",
                                 borderRadius: "50%",
                                 opacity: star.opacity,
-                                boxShadow: "0 0 6px rgba(255, 255, 255, 0.8)",
+                                boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, ${star.opacity * 0.8})`,
                             }}
                         />
                     ))}
 
-                    {/* Star Raining Curve */}
+                    {/* Animated Star Raining Curve */}
                     {starCurve.map((point, index) => (
                         <div
                             key={`curve-star-${index}`}
                             style={{
                                 position: "absolute",
-                                left: point.x - 2,
-                                top: point.y - 2,
-                                width: 4,
-                                height: 4,
+                                left: point.x - 3,
+                                top: point.y - 3,
+                                width: 6,
+                                height: 6,
                                 backgroundColor: "#8b5cf6",
                                 borderRadius: "50%",
-                                boxShadow: "0 0 12px rgba(139, 92, 246, 0.8), 0 0 24px rgba(139, 92, 246, 0.4)",
-                                opacity: 0.9,
+                                boxShadow: `0 0 15px rgba(139, 92, 246, ${point.opacity * 0.8}), 0 0 30px rgba(139, 92, 246, ${point.opacity * 0.4})`,
+                                opacity: point.opacity,
                             }}
                         />
                     ))}
@@ -167,6 +179,10 @@ export async function POST(req: Request) {
                                     fontWeight: 700,
                                     lineHeight: 1.3,
                                     textShadow: "0 8px 32px rgba(56,189,248,0.3)",
+                                    background: "linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)",
+                                    backgroundClip: "text",
+                                    WebkitBackgroundClip: "text",
+                                    WebkitTextFillColor: "transparent",
                                 }}
                             >
                                 {`"${safeQuestion}"`}
@@ -198,6 +214,7 @@ export async function POST(req: Request) {
                                 boxShadow:
                                     "0 20px 40px -10px rgba(56,189,248,0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
                                 border: "1px solid rgba(255,255,255,0.15)",
+                                backdropFilter: "blur(10px)",
                             }}
                         >
                             <div
@@ -266,7 +283,7 @@ export async function POST(req: Request) {
             }
         )
     } catch (error) {
-        console.error("Image generation error:", error)
-        return new Response("Failed to generate image", { status: 500 })
+        console.error("Video frame generation error:", error)
+        return new Response("Failed to generate video frame", { status: 500 })
     }
 }

@@ -4,18 +4,20 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Sparkles, RefreshCcw, Loader2, Stars } from "lucide-react"
-import { FaShareNodes, FaCopy, FaDownload, FaCheck } from "react-icons/fa6"
+import { FaShareNodes, FaCopy, FaDownload, FaCheck, FaVideo } from "react-icons/fa6"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { useCompletion } from "@ai-sdk/react"
 import { TarotCard, useTarot } from "@/contexts/tarot-context"
 import { useRouter } from "next/navigation"
 import QuestionInput from "../question-input"
 import { CardImage } from "../card-image"
+// import { generateReadingVideo } from "@/lib/video-generator" // Not used in current implementation
 
 export default function Interpretation() {
     const router = useRouter()
     const [finish, setFinish] = useState(false)
     const [copied, setCopied] = useState(false)
+    const [isGeneratingVideo, setIsGeneratingVideo] = useState(false)
     const [followUpData, setFollowUpData] = useState<{
         lastQuestion: string
         lastCards: TarotCard[]
@@ -92,6 +94,7 @@ If the interpretation is too generic, add more details to make it more specific.
 
     const shareImage = async () => {
         try {
+            console.log("Generating share image...")
             const res = await fetch("/api/share-image", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -99,32 +102,121 @@ If the interpretation is too generic, add more details to make it more specific.
                     question,
                     cards: selectedCards.map((c) => c.meaning),
                     interpretation: interpretation ?? completion,
-                    width: 1080,
-                    height: 1350,
+                    width: 1920,
+                    height: 1080,
                 }),
             })
-            const blob = await res.blob()
-            const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
-            const filename = `reading-${timestamp}.png`
-            const file = new File([blob], filename, { type: "image/png" })
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    files: [file],
-                    title: "ดูดวง.ai Reading",
-                })
-                return
+            
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`)
             }
-            // Fallback to download if files can't be shared
+            
+            const blob = await res.blob()
+            console.log("Image generated, blob size:", blob.size)
+            
+            const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
+            const filename = `dooduang-reading-${timestamp}.png`
+            const file = new File([blob], filename, { type: "image/png" })
+            
+            // Try native sharing first
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: "ดูดวง.ai Reading",
+                        text: "Check out my tarot reading from dooduang.ai!"
+                    })
+                    console.log("Shared via native share")
+                    return
+                } catch (shareError) {
+                    console.log("Native share failed, falling back to download:", shareError)
+                }
+            }
+            
+            // Fallback to download
             const url = URL.createObjectURL(blob)
             const a = document.createElement("a")
             a.href = url
             a.download = filename
+            a.style.display = "none"
             document.body.appendChild(a)
             a.click()
-            a.remove()
+            document.body.removeChild(a)
             URL.revokeObjectURL(url)
+            console.log("Image downloaded:", filename)
+            
         } catch (e) {
-            console.error(e)
+            console.error("Share image error:", e)
+            alert("Failed to generate share image. Please try again.")
+        }
+    }
+
+    const shareVideo = async () => {
+        if (isGeneratingVideo) return
+        
+        setIsGeneratingVideo(true)
+        try {
+            console.log("Generating share video...")
+            
+            // For now, we'll generate a single animated frame as a GIF-like image
+            // This is much faster than generating a full video
+            const res = await fetch("/api/share-video", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    question,
+                    cards: selectedCards.map((c) => c.meaning),
+                    interpretation: interpretation ?? completion,
+                    width: 1920,
+                    height: 1080,
+                    frame: 225, // Middle frame for a good representation
+                    totalFrames: 450,
+                }),
+            })
+            
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`)
+            }
+            
+            const blob = await res.blob()
+            console.log("Video frame generated, blob size:", blob.size)
+            
+            const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
+            const filename = `dooduang-reading-video-${timestamp}.png`
+            const file = new File([blob], filename, { type: "image/png" })
+            
+            // Try native sharing first
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: "ดูดวง.ai Reading Video",
+                        text: "Check out my animated tarot reading from dooduang.ai!"
+                    })
+                    console.log("Video shared via native share")
+                    return
+                } catch (shareError) {
+                    console.log("Native share failed, falling back to download:", shareError)
+                }
+            }
+            
+            // Fallback to download
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement("a")
+            a.href = url
+            a.download = filename
+            a.style.display = "none"
+            document.body.appendChild(a)
+            a.click()
+            document.body.removeChild(a)
+            URL.revokeObjectURL(url)
+            console.log("Video frame downloaded:", filename)
+            
+        } catch (e) {
+            console.error("Video generation error:", e)
+            alert("Failed to generate share video. Please try again.")
+        } finally {
+            setIsGeneratingVideo(false)
         }
     }
 
@@ -137,6 +229,7 @@ If the interpretation is too generic, add more details to make it more specific.
 
     const handleDownload = async () => {
         try {
+            console.log("Generating download image...")
             const res = await fetch("/api/share-image", {
                 method: "POST",
                 headers: {
@@ -146,23 +239,34 @@ If the interpretation is too generic, add more details to make it more specific.
                     question,
                     cards: selectedCards.map((c) => c.meaning),
                     interpretation: interpretation ?? completion,
-                    width: 1080,
-                    height: 1350,
+                    width: 1920,
+                    height: 1080,
                 }),
             })
+            
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`)
+            }
+            
             const blob = await res.blob()
+            console.log("Download image generated, blob size:", blob.size)
+            
             const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
-            const filename = `reading-${timestamp}.png`
+            const filename = `dooduang-reading-${timestamp}.png`
             const url = URL.createObjectURL(blob)
             const a = document.createElement("a")
             a.href = url
             a.download = filename
+            a.style.display = "none"
             document.body.appendChild(a)
             a.click()
-            a.remove()
+            document.body.removeChild(a)
             URL.revokeObjectURL(url)
+            console.log("Image downloaded:", filename)
+            
         } catch (e) {
-            console.error(e)
+            console.error("Download error:", e)
+            alert("Failed to download image. Please try again.")
         }
     }
 
@@ -177,15 +281,24 @@ If the interpretation is too generic, add more details to make it more specific.
         {
             id: "share",
             Icon: FaShareNodes,
-            label: "Share",
+            label: "Share Image",
             className:
                 "border-white/20 text-white bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-cyan-500/20 hover:from-indigo-500/30 hover:via-purple-500/30 hover:to-cyan-500/30",
             onClick: shareImage,
         },
         {
+            id: "video",
+            Icon: FaVideo,
+            label: isGeneratingVideo ? "Generating..." : "Share Video",
+            className:
+                "border-purple-400/30 text-white bg-purple-400/15 hover:bg-purple-400/25",
+            onClick: shareVideo,
+            disabled: isGeneratingVideo,
+        },
+        {
             id: "copy",
             Icon: copied ? FaCheck : FaCopy,
-            label: copied ? "Copied" : "Copy",
+            label: copied ? "Copied!" : "Copy Text",
             className:
                 "border-white/20 text-white bg-white/10 hover:bg-white/20",
             onClick: handleCopy,
@@ -193,7 +306,7 @@ If the interpretation is too generic, add more details to make it more specific.
         {
             id: "download",
             Icon: FaDownload,
-            label: "Download",
+            label: "Download Image",
             className:
                 "border-cyan-400/30 text-white bg-cyan-400/15 hover:bg-cyan-400/25",
             onClick: handleDownload,
@@ -428,11 +541,13 @@ If the interpretation is too generic, add more details to make it more specific.
                                             className,
                                             onClick,
                                             label,
+                                            disabled,
                                         }) => (
                                             <Button
                                                 key={id}
                                                 type='button'
                                                 onClick={onClick}
+                                                disabled={disabled}
                                                 className={`relative group h-11 px-4 rounded-full border backdrop-blur-md shadow-[0_10px_20px_-10px_rgba(56,189,248,0.35)] transition-all ${className}`}
                                             >
                                                 <span className='pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-white/10 blur-[1.5px] transition-opacity'></span>
