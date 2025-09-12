@@ -45,13 +45,13 @@ export default function TermsPage() {
                                     1. Acceptance of Terms
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    These Terms of Service ("Terms") constitute a legally binding agreement between you and ดูดวง.ai ("Company," "we," "our," or "us") regarding your use of our AI-powered tarot reading service, including our website, mobile applications, and related services (collectively, the "Service").
+                                    These Terms of Service (&quot;Terms&quot;) constitute a legally binding agreement between you and ดูดวง.ai (&quot;Company,&quot; &quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) regarding your use of our AI-powered tarot reading service, including our website, mobile applications, and related services (collectively, the &quot;Service&quot;).
                                 </p>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     By accessing, browsing, or using our Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, you may not access or use our Service.
                                 </p>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    We reserve the right to modify these Terms at any time. We will notify you of any material changes by posting the updated Terms on our website and updating the "Last updated" date. Your continued use of the Service after such modifications constitutes acceptance of the updated Terms.
+                                    We reserve the right to modify these Terms at any time. We will notify you of any material changes by posting the updated Terms on our website and updating the &quot;Last updated&quot; date. Your continued use of the Service after such modifications constitutes acceptance of the updated Terms.
                                 </p>
                             </section>
 
@@ -141,7 +141,7 @@ export default function TermsPage() {
                                 </p>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
                                     <li>• Is illegal, harmful, threatening, abusive, or defamatory</li>
-                                    <li>• Violates any third party's rights, including privacy and publicity rights</li>
+                                    <li>• Violates any third party&apos;s rights, including privacy and publicity rights</li>
                                     <li>• Contains hate speech or promotes discrimination</li>
                                     <li>• Is sexually explicit or contains adult content</li>
                                     <li>• Contains personal information of others without consent</li>
@@ -177,7 +177,7 @@ export default function TermsPage() {
                                     Premium subscriptions are billed monthly at $2.99 USD. Payment is due in advance and will be automatically charged to your chosen payment method. You authorize us to charge your payment method for all applicable fees.
                                 </p>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    All fees are non-refundable except as required by law or as otherwise specified in these Terms. We reserve the right to change our pricing at any time with 30 days' notice to existing subscribers.
+                                    All fees are non-refundable except as required by law or as otherwise specified in these Terms. We reserve the right to change our pricing at any time with 30 days&apos; notice to existing subscribers.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
@@ -207,7 +207,7 @@ export default function TermsPage() {
                                     6.2 User Content
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    You retain ownership of any content you submit, post, or display on or through the Service ("User Content"). By submitting User Content, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, and distribute such content in connection with the Service.
+                                    You retain ownership of any content you submit, post, or display on or through the Service (&quot;User Content&quot;). By submitting User Content, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, and distribute such content in connection with the Service.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
@@ -227,7 +227,7 @@ export default function TermsPage() {
                                     7.1 Service Disclaimers
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    Our Service is provided "as is" and "as available" without warranties of any kind, either express or implied. We disclaim all warranties, including but not limited to:
+                                    Our Service is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind, either express or implied. We disclaim all warranties, including but not limited to:
                                 </p>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
                                     <li>• Warranties of merchantability, fitness for a particular purpose, and non-infringement</li>
@@ -280,7 +280,7 @@ export default function TermsPage() {
                                     9. Indemnification
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    You agree to defend, indemnify, and hold harmless ดูดวง.ai and its officers, directors, employees, and agents from and against any claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney's fees) arising from:
+                                    You agree to defend, indemnify, and hold harmless ดูดวง.ai and its officers, directors, employees, and agents from and against any claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney&apos;s fees) arising from:
                                 </p>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
                                     <li>• Your use of the Service</li>

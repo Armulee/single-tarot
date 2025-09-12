@@ -7,10 +7,7 @@ import {
     MessageCircle, 
     Phone, 
     Clock, 
-    CheckCircle,
-    Star,
     Users,
-    Shield,
     Zap,
     BookOpen
 } from "lucide-react"
@@ -54,7 +51,7 @@ export default function SupportPage() {
                             Customer Support
                         </h1>
                         <p className='text-xl text-muted-foreground max-w-2xl mx-auto'>
-                            We're here to help you on your mystical journey. Find answers, get assistance, and connect with our support team.
+                            We&apos;re here to help you on your mystical journey. Find answers, get assistance, and connect with our support team.
                         </p>
                     </div>
 
@@ -133,7 +130,7 @@ export default function SupportPage() {
                             </Card>
 
                             <Card className='p-6 bg-card/10 backdrop-blur-sm border-border/20'>
-                                <h3 className='font-serif font-semibold text-lg mb-3'>What's included in the premium subscription?</h3>
+                                <h3 className='font-serif font-semibold text-lg mb-3'>What&apos;s included in the premium subscription?</h3>
                                 <p className='text-muted-foreground text-sm leading-relaxed'>
                                     Premium includes 5,000 monthly readings, advanced AI interpretations, premium card decks, no advertisements, priority support, reading history, and exclusive cosmic themes.
                                 </p>
@@ -163,7 +160,7 @@ export default function SupportPage() {
                             <Card className='p-6 bg-card/10 backdrop-blur-sm border-border/20'>
                                 <h3 className='font-serif font-semibold text-lg mb-3'>Do you offer refunds?</h3>
                                 <p className='text-muted-foreground text-sm leading-relaxed'>
-                                    We offer a 30-day money-back guarantee for new subscribers. If you're not satisfied, contact our support team within 30 days of your first payment.
+                                    We offer a 30-day money-back guarantee for new subscribers. If you&apos;re not satisfied, contact our support team within 30 days of your first payment.
                                 </p>
                             </Card>
                         </div>
