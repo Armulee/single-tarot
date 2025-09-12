@@ -76,7 +76,7 @@ export function AdBanner({ onAdViewed, onUpgrade }: AdBannerProps) {
                             </div>
                         </div>
                         <p className='text-xs text-muted-foreground'>
-                            This ad helps keep AskingFate free for everyone
+                            This ad helps keep Asking Fate free for everyone
                         </p>
                     </div>
 

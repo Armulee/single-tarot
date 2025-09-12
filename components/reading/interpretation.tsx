@@ -110,7 +110,7 @@ If the interpretation is too generic, add more details to make it more specific.
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
                     files: [file],
-                    title: "AskingFate Reading",
+                    title: "Asking Fate Reading",
                 })
                 return
             }

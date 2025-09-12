@@ -21,7 +21,7 @@ export default function Footer() {
                             </span>
                         </div>
                         <span className='font-serif font-semibold group-hover:text-primary transition-colors'>
-                            AskingFate
+                            Asking Fate
                         </span>
                     </button>
                     <div className='flex space-x-6 text-sm text-muted-foreground'>

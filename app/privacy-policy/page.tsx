@@ -13,7 +13,7 @@ export default function PrivacyPage() {
                         </span>
                     </div>
                     <h1 className='font-serif font-bold text-xl text-foreground'>
-                        AskingFate
+                        Asking Fate
                     </h1>
                 </Link>
 
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
                                     1. Introduction
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    AskingFate (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered tarot reading service, including our website, mobile applications, and related services (collectively, the &quot;Service&quot;).
+                                    Asking Fate (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered tarot reading service, including our website, mobile applications, and related services (collectively, the &quot;Service&quot;).
                                 </p>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     By using our Service, you agree to the collection and use of information in accordance with this Privacy Policy. If you do not agree with the terms of this Privacy Policy, please do not access or use the Service.

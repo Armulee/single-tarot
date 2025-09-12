@@ -56,7 +56,7 @@ export function Navbar() {
                                 </span>
                             </div>
                             <span className='font-playfair text-xl font-bold text-white group-hover:text-cosmic-purple transition-colors'>
-                                AskingFate
+                                Asking Fate
                             </span>
                         </Link>
                     </div>

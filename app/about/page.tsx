@@ -86,7 +86,7 @@ export default function AboutPage() {
                                     Our Spiritual Journey
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    AskingFate was born from a deep reverence for
+                                    Asking Fate was born from a deep reverence for
                                     the mystical arts and a vision to make
                                     ancient wisdom accessible to everyone. We
                                     believe that the universe speaks to us
