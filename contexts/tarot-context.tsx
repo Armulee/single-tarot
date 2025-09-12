@@ -52,9 +52,6 @@ export interface TarotContextType {
     interpretation: string | null
     setInterpretation: (interpretation: string | null) => void
 
-    // User state
-    isPremium: boolean
-    setIsPremium: (premium: boolean) => void
 
     // Reset function
     resetReading: () => void
@@ -77,7 +74,6 @@ export function TarotProvider({ children }: { children: ReactNode }) {
         | "interpretation"
     >("question")
     const [interpretation, setInterpretation] = useState<string | null>(null)
-    const [isPremium, setIsPremium] = useState(false)
     const [isClearing, setIsClearing] = useState(false)
     const pathname = usePathname()
 
@@ -176,8 +172,6 @@ export function TarotProvider({ children }: { children: ReactNode }) {
                 setCurrentStep,
                 interpretation,
                 setInterpretation,
-                isPremium,
-                setIsPremium,
                 resetReading,
                 clearReadingStorage,
             }}

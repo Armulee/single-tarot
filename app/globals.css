@@ -151,25 +151,6 @@
   transform: rotateY(180deg);
 }
 
-/* Added floating input effects for space-like authentication forms */
-.floating-input {
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.floating-input:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px oklch(0.35 0.15 264 / 0.15);
-}
-
-.floating-input:hover {
-  transform: translateY(-1px);
-}
-
-/* Enhanced glow effects for auth forms */
-.auth-glow {
-  box-shadow: 0 0 30px oklch(0.45 0.12 280 / 0.2);
-}
 
 @keyframes twinkle {
   0%,

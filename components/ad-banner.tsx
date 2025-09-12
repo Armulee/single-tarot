@@ -7,10 +7,9 @@ import { X, Clock, Zap } from "lucide-react"
 
 interface AdBannerProps {
     onAdViewed: () => void
-    onUpgrade: () => void
 }
 
-export function AdBanner({ onAdViewed, onUpgrade }: AdBannerProps) {
+export function AdBanner({ onAdViewed }: AdBannerProps) {
     const [timeLeft, setTimeLeft] = useState(5)
     const [canClose, setCanClose] = useState(false)
 
@@ -80,21 +79,6 @@ export function AdBanner({ onAdViewed, onUpgrade }: AdBannerProps) {
                         </p>
                     </div>
 
-                    {/* Upgrade CTA */}
-                    <div className='border-t border-border/20 pt-4'>
-                        <div className='text-center space-y-3'>
-                            <p className='text-sm text-muted-foreground'>
-                                Tired of ads?
-                            </p>
-                            <Button
-                                onClick={onUpgrade}
-                                size='sm'
-                                className='bg-secondary hover:bg-secondary/90 text-secondary-foreground'
-                            >
-                                Upgrade to Premium - $2.99/month
-                            </Button>
-                        </div>
-                    </div>
 
                     {/* Continue Button */}
                     {canClose && (
