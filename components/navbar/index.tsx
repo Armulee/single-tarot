@@ -3,14 +3,11 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { Menu, LogIn } from "lucide-react"
-import { useAuth } from "@/hooks/use-auth"
-import { UserProfile } from "@/components/user-profile"
+import { Menu } from "lucide-react"
 import { SidebarSheet } from "./sidebar-sheet"
 
 export function Navbar() {
     const [open, setOpen] = useState(false)
-    const { user, loading } = useAuth()
 
     return (
         <nav className='fixed top-0 left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-b border-border/20'>
@@ -18,24 +15,16 @@ export function Navbar() {
                 <div className='flex justify-between items-center h-16'>
                     {/* Left: Mobile menu button / Desktop brand */}
                     <div className='flex items-center'>
-                        {/* Mobile: menu button or user profile */}
-                        {!loading && user ? (
-                            <UserProfile
-                                variant='sidebar-trigger'
-                                onClose={() => setOpen(true)}
-                                className='md:hidden'
-                            />
-                        ) : (
-                            <Button
-                                variant='ghost'
-                                size='icon'
-                                className='md:hidden text-white hover:bg-white/10'
-                                onClick={() => setOpen(true)}
-                                aria-label='Open menu'
-                            >
-                                <Menu className='h-6 w-6' />
-                            </Button>
-                        )}
+                        {/* Mobile: menu button */}
+                        <Button
+                            variant='ghost'
+                            size='icon'
+                            className='md:hidden text-white hover:bg-white/10'
+                            onClick={() => setOpen(true)}
+                            aria-label='Open menu'
+                        >
+                            <Menu className='h-6 w-6' />
+                        </Button>
 
                         {/* Desktop: brand */}
                         <Link
@@ -73,24 +62,8 @@ export function Navbar() {
                         >
                             Support
                         </Link>
-                        {/* User Profile for Desktop */}
-                        {!loading && user && <UserProfile variant='desktop' />}
                     </div>
 
-                    {/* Auth / CTA */}
-                    <div className='flex items-center space-x-4'>
-                        {!loading && !user && (
-                            <Link href='/signin'>
-                                <Button
-                                    variant='ghost'
-                                    className='text-white hover:bg-white/10'
-                                >
-                                    <LogIn className='w-4 h-4 mr-2' />
-                                    Sign In
-                                </Button>
-                            </Link>
-                        )}
-                    </div>
                 </div>
             </div>
 
