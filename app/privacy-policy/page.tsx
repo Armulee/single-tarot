@@ -112,7 +112,6 @@ export default function PrivacyPage() {
                                 </h3>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
                                     <li>• Provide and maintain our tarot reading service</li>
-                                    <li>• Process transactions and manage subscriptions</li>
                                     <li>• Generate personalized AI interpretations</li>
                                     <li>• Save and retrieve your reading history</li>
                                     <li>• Provide customer support and technical assistance</li>
@@ -155,7 +154,6 @@ export default function PrivacyPage() {
                                     We may share your information with trusted third-party service providers who assist us in operating our Service, including:
                                 </p>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
-                                    <li>• Payment processors (Stripe, PayPal)</li>
                                     <li>• Cloud hosting providers (AWS, Google Cloud)</li>
                                     <li>• Analytics services (Google Analytics, Mixpanel)</li>
                                     <li>• Customer support platforms (Zendesk, Intercom)</li>

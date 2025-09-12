@@ -242,8 +242,7 @@ export default function ContactPage() {
                                         </h3>
                                         <p className='text-muted-foreground'>
                                             We typically respond to all
-                                            inquiries within 24 hours. Premium
-                                            subscribers receive priority
+                                            inquiries within 24 hours
                                             support.
                                         </p>
                                     </div>
@@ -269,15 +268,6 @@ export default function ContactPage() {
                                             </p>
                                         </div>
                                         <div>
-                                            <h4 className='font-medium text-sm'>
-                                                Can I cancel my subscription
-                                                anytime?
-                                            </h4>
-                                            <p className='text-muted-foreground text-sm'>
-                                                Yes, you can cancel your premium
-                                                subscription at any time from
-                                                your account settings.
-                                            </p>
                                         </div>
                                     </div>
                                 </div>

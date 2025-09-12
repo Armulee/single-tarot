@@ -3,21 +3,13 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { Menu, Check, LogIn } from "lucide-react"
-import { Card } from "@/components/ui/card"
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
+import { Menu, LogIn } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 import { UserProfile } from "@/components/user-profile"
 import { SidebarSheet } from "./sidebar-sheet"
 
 export function Navbar() {
     const [open, setOpen] = useState(false)
-    const [premiumOpen, setPremiumOpen] = useState(false)
     const { user, loading } = useAuth()
 
     return (
@@ -76,12 +68,6 @@ export function Navbar() {
                             About
                         </Link>
                         <Link
-                            href='/pricing'
-                            className='text-cosmic-light hover:text-white transition-colors'
-                        >
-                            Pricing
-                        </Link>
-                        <Link
                             href='/support'
                             className='text-cosmic-light hover:text-white transition-colors'
                         >
@@ -93,14 +79,7 @@ export function Navbar() {
 
                     {/* Auth / CTA */}
                     <div className='flex items-center space-x-4'>
-                        {!loading && user ? (
-                            <Button
-                                onClick={() => setPremiumOpen(true)}
-                                className='inline-flex bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:opacity-90 text-white rounded-full px-5 py-2 shadow-[0_10px_20px_-10px_rgba(56,189,248,0.55)] ring-1 ring-white/10 card-glow'
-                            >
-                                Go Premium
-                            </Button>
-                        ) : (
+                        {!loading && !user && (
                             <Link href='/signin'>
                                 <Button
                                     variant='ghost'
@@ -117,57 +96,6 @@ export function Navbar() {
 
             {/* Mobile sidebar */}
             <SidebarSheet open={open} onOpenChange={setOpen} />
-
-            {/* Premium dialog */}
-            <Dialog open={premiumOpen} onOpenChange={setPremiumOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className='text-center'>
-                            Unlock Premium
-                        </DialogTitle>
-                    </DialogHeader>
-                    <div className='space-y-4 mt-4'>
-                        <Card className='p-4 bg-card/20 border-primary/30 card-glow'>
-                            <div className='text-center mb-3'>
-                                <div className='text-2xl font-serif font-bold'>
-                                    $2.99
-                                </div>
-                                <div className='text-xs text-muted-foreground'>
-                                    per month
-                                </div>
-                            </div>
-                            <ul className='space-y-2'>
-                                {[
-                                    "5,000 monthly readings",
-                                    "Advanced AI interpretations",
-                                    "Premium card decks",
-                                    "No advertisements",
-                                    "Priority support",
-                                    "Reading history & insights",
-                                    "Personalized guidance",
-                                    "Exclusive cosmic themes",
-                                ].map((f, i) => (
-                                    <li
-                                        key={`pro-${i}`}
-                                        className='flex items-start gap-2 text-sm'
-                                    >
-                                        <Check className='w-4 h-4 text-green-400 mt-0.5 flex-shrink-0' />
-                                        <span>{f}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </Card>
-
-                        {/* Checkout CTA */}
-                        <Button
-                            onClick={() => setPremiumOpen(false)}
-                            className='w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:opacity-90 text-white rounded-full px-5 py-3 text-base shadow-[0_10px_20px_-10px_rgba(56,189,248,0.55)] ring-1 ring-white/10 card-glow'
-                        >
-                            Go Premium
-                        </Button>
-                    </div>
-                </DialogContent>
-            </Dialog>
         </nav>
     )
 }
