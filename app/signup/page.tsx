@@ -222,14 +222,14 @@ export default function SignUpPage() {
                         >
                             I agree to the{" "}
                             <Link
-                                href='/terms'
+                                href='/terms-of-service'
                                 className='text-secondary hover:text-secondary/80 transition-colors'
                             >
                                 Terms of Service
                             </Link>{" "}
                             and{" "}
                             <Link
-                                href='/privacy'
+                                href='/privacy-policy'
                                 className='text-secondary hover:text-secondary/80 transition-colors'
                             >
                                 Privacy Policy

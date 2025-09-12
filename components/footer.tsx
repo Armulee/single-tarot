@@ -26,16 +26,22 @@ export default function Footer() {
                     </button>
                     <div className='flex space-x-6 text-sm text-muted-foreground'>
                         <Link
-                            href='/privacy'
+                            href='/support'
                             className='hover:text-foreground transition-colors'
                         >
-                            Privacy
+                            Support
                         </Link>
                         <Link
-                            href='/terms'
+                            href='/privacy-policy'
                             className='hover:text-foreground transition-colors'
                         >
-                            Terms
+                            Privacy Policy
+                        </Link>
+                        <Link
+                            href='/terms-of-service'
+                            className='hover:text-foreground transition-colors'
+                        >
+                            Terms of Service
                         </Link>
                         <Link
                             href='/contact'
