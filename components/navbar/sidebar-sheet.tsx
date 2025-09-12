@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Home, BookOpen, Info, LogIn, HelpCircle } from "lucide-react"
+import { Home, BookOpen, Info, LogIn, HelpCircle, FileText, Shield, Mail } from "lucide-react"
 import {
     Sheet,
     SheetContent,
@@ -25,6 +25,13 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
         { href: "/reading", label: "Reading", Icon: BookOpen },
         { href: "/about", label: "About", Icon: Info },
         { href: "/support", label: "Support", Icon: HelpCircle },
+    ] as const
+
+    const footerLinks = [
+        { href: "/support", label: "Support", Icon: HelpCircle },
+        { href: "/privacy-policy", label: "Privacy Policy", Icon: Shield },
+        { href: "/terms-of-service", label: "Terms of Service", Icon: FileText },
+        { href: "/contact", label: "Contact", Icon: Mail },
     ] as const
 
     const getUserInitials = () => {
@@ -82,6 +89,28 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                                 </Link>
                             </li>
                         ))}
+                        
+                        {/* Footer Links Section */}
+                        <li className='pt-4 border-t border-white/10 mt-4'>
+                            <div className='px-3 py-2'>
+                                <h3 className='text-xs font-semibold text-white/60 uppercase tracking-wider mb-2'>
+                                    Legal & Support
+                                </h3>
+                            </div>
+                        </li>
+                        {footerLinks.map(({ href, label, Icon }) => (
+                            <li key={href}>
+                                <Link
+                                    href={href}
+                                    className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors'
+                                    onClick={() => onOpenChange(false)}
+                                >
+                                    <Icon className='w-4 h-4' />
+                                    <span>{label}</span>
+                                </Link>
+                            </li>
+                        ))}
+                        
                         <li className='pt-2'>
                             {!loading && user ? (
                                 <UserProfileDropdown
