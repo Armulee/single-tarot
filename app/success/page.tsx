@@ -15,7 +15,7 @@ export default function SuccessPage() {
                         </span>
                     </div>
                     <h1 className='font-serif font-bold text-xl text-foreground'>
-                        ดูดวง.ai
+                        AskingFate
                     </h1>
                 </Link>
             </nav>

@@ -142,7 +142,7 @@ export default function SignInPage() {
             {/* Sign Up Link */}
             <div className='text-center'>
                 <p className='text-muted-foreground'>
-                    New to ดูดวง.ai?{" "}
+                    New to AskingFate?{" "}
                     <Link
                         href='/signup'
                         className='text-primary hover:text-primary/80 transition-colors font-medium'

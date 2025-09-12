@@ -76,7 +76,7 @@ export function AdBanner({ onAdViewed, onUpgrade }: AdBannerProps) {
                             </div>
                         </div>
                         <p className='text-xs text-muted-foreground'>
-                            This ad helps keep ดูดวง.ai free for everyone
+                            This ad helps keep AskingFate free for everyone
                         </p>
                     </div>
 

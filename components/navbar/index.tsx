@@ -56,7 +56,7 @@ export function Navbar() {
                                 </span>
                             </div>
                             <span className='font-playfair text-xl font-bold text-white group-hover:text-cosmic-purple transition-colors'>
-                                ดูดวง.ai
+                                AskingFate
                             </span>
                         </Link>
                     </div>
