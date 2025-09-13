@@ -107,7 +107,7 @@ export function Navbar() {
                                         <div key={label}>
                                             {available ? (
                                                 <Link
-                                                    href={href}
+                                                    href={label === 'Tarot' ? '/' : href}
                                                     className='flex items-center space-x-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors group'
                                                     onClick={() => setMysticalOpen(false)}
                                                 >

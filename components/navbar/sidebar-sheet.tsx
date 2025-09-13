@@ -90,7 +90,7 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                                         <li key={label}>
                                             {available ? (
                                                 <Link
-                                                    href={href}
+                                                    href={label === 'Tarot' ? '/' : href}
                                                     className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors'
                                                     onClick={() => onOpenChange(false)}
                                                 >
