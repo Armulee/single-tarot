@@ -9,7 +9,7 @@ export default function Footer() {
     return (
         <footer className='w-full z-10'>
             <div className='max-w-6xl mx-auto px-6 pt-4 pb-12 md:pb-6'>
-                <div className='flex flex-row justify-between items-center'>
+                <div className='flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0'>
                     <button
                         type='button'
                         onClick={handleBrandClick}
@@ -24,7 +24,7 @@ export default function Footer() {
                             Asking Fate
                         </span>
                     </button>
-                    <div className='flex flex-row items-center space-x-6'>
+                    <div className='flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6'>
                         <div className='flex space-x-6 text-sm text-muted-foreground'>
                             <Link
                                 href='/privacy-policy'
@@ -39,7 +39,7 @@ export default function Footer() {
                                 Terms of Service
                             </Link>
                         </div>
-                        <div className='text-xs text-muted-foreground'>
+                        <div className='text-xs text-muted-foreground text-center md:text-right'>
                             © 2025 Asking Fate. All rights reserved.
                         </div>
                     </div>
