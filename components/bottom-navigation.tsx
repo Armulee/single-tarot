@@ -60,13 +60,17 @@ export function BottomNavigation() {
                         <Link
                             key={href}
                             href={href}
-                            className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-all duration-300 ${
+                            className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors ${
                                 isActive(href)
-                                    ? "text-primary bg-primary/10 shadow-[0_0_20px_rgba(59,130,246,0.3)] ring-1 ring-primary/20"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-card/20"
+                                    ? "text-primary"
+                                    : "text-muted-foreground hover:text-foreground"
                             }`}
                         >
-                            <Icon className="w-5 h-5 mb-1" />
+                            <Icon className={`w-5 h-5 mb-1 transition-all duration-300 ${
+                                isActive(href)
+                                    ? "drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]"
+                                    : ""
+                            }`} />
                             <span className="text-xs font-medium">{label}</span>
                         </Link>
                     )
