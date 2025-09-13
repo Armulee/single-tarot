@@ -62,7 +62,7 @@ export function BottomNavigation() {
                             href={href}
                             className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors ${
                                 isActive(href)
-                                    ? "text-primary/80"
+                                    ? "text-primary/50"
                                     : "text-muted-foreground hover:text-foreground"
                             }`}
                         >
