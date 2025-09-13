@@ -56,7 +56,7 @@ export default function RootLayout({
                 <CosmicStars />
 
                 <TarotProvider>
-                    <div className='min-h-screen relative'>
+                    <div className='min-h-[100dvh] relative'>
                         <Navbar />
                         <main className='pt-16 min-h-[calc(100dvh-65px)] relative overflow-hidden home-gradient pb-20'>
                             <Suspense fallback={null}>{children}</Suspense>
