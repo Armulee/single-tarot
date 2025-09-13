@@ -37,7 +37,7 @@ export function BottomNavigation() {
     }
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border/20 md:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-t border-border/20 md:hidden">
             <div className="flex items-center justify-around px-2 py-1">
                 {/* Main Navigation Items */}
                 {mainNavItems.map(({ href, label, Icon }) => {
@@ -62,7 +62,7 @@ export function BottomNavigation() {
                             href={href}
                             className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors ${
                                 isActive(href)
-                                    ? "text-primary"
+                                    ? "text-primary/80"
                                     : "text-muted-foreground hover:text-foreground"
                             }`}
                         >
