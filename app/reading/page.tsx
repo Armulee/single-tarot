@@ -33,7 +33,7 @@ const readingConfig: ReadingConfig = {
 
 export default function ReadingPage() {
     return (
-        <div className='min-h-screen relative overflow-hidden relative z-10 max-w-4xl mx-auto px-6'>
+        <div className='relative overflow-hidden relative z-10 max-w-4xl mx-auto px-6'>
             <QuestionStep />
             <ReadingType readingConfig={readingConfig} />
             <CardSelection readingConfig={readingConfig} />
