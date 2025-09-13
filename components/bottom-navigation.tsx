@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Home, BookOpen, Info, MoreHorizontal, HelpCircle, FileText, Shield, Mail } from "lucide-react"
+import { Home, BookOpen, Info, MoreHorizontal, HelpCircle, FileText, Shield, Mail, ChevronUp, ChevronDown } from "lucide-react"
 import {
     Popover,
     PopoverContent,
@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation"
 import { useTarot } from "@/contexts/tarot-context"
 
 export function BottomNavigation() {
+    const [isExpanded, setIsExpanded] = useState(false)
     const [moreOpen, setMoreOpen] = useState(false)
     const pathname = usePathname()
     const { question } = useTarot()
@@ -36,80 +37,148 @@ export function BottomNavigation() {
         return pathname.startsWith(href)
     }
 
-    return (
-        <nav className="fixed bottom-[0dvh] left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-t border-border/20 md:hidden">
-            <div className="flex items-center justify-around px-2 py-1">
-                {/* Main Navigation Items */}
-                {mainNavItems.map(({ href, label, Icon }) => {
-                    const isReadingDisabled = href === "/reading" && !question.trim()
-                    
-                    if (isReadingDisabled) {
-                        return (
-                            <div
-                                key={href}
-                                className="flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors text-muted-foreground/25 cursor-not-allowed"
-                                title="Please ask a question first"
-                            >
-                                <Icon className="w-5 h-5 mb-1" />
-                                <span className="text-xs font-medium">{label}</span>
-                            </div>
-                        )
-                    }
-                    
-                    return (
-                        <Link
-                            key={href}
-                            href={href}
-                            className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors ${
-                                isActive(href)
-                                    ? "text-cyan-300"
-                                    : "text-muted-foreground hover:text-foreground"
-                            }`}
-                        >
-                            <Icon className={`w-5 h-5 mb-1 transition-all duration-300 ${
-                                isActive(href)
-                                    ? "drop-shadow-[0_0_8px_rgba(103,232,249,0.6)]"
-                                    : ""
-                            }`} />
-                            <span className="text-xs font-medium">{label}</span>
-                        </Link>
-                    )
-                })}
+    // Find the currently active item
+    const activeItem = mainNavItems.find(item => isActive(item.href)) || mainNavItems[0]
 
-                {/* More Button with Popover */}
-                <Popover open={moreOpen} onOpenChange={setMoreOpen}>
-                    <PopoverTrigger asChild>
+    const handleToggle = () => {
+        setIsExpanded(!isExpanded)
+    }
+
+    return (
+        <nav className="fixed bottom-2 left-2 z-50 md:hidden">
+            <div className="relative">
+                {/* Collapsed state - perfect circle */}
+                {!isExpanded && (
+                    <div className="bg-card/5 backdrop-blur-sm border border-border/20 rounded-full w-18 h-18 flex items-center justify-center">
                         <button
-                            className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors ${
-                                moreOpen
-                                    ? "text-primary"
-                                    : "text-muted-foreground hover:text-foreground"
-                            }`}
+                            onClick={handleToggle}
+                            className="flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 hover:bg-card/10 hover:scale-110"
+                            title={`${activeItem.label} - Click to expand navigation`}
                         >
-                            <MoreHorizontal className="w-5 h-5 mb-1" />
-                            <span className="text-xs font-medium">More</span>
+                            <activeItem.Icon className="w-6 h-6 text-cyan-300 drop-shadow-[0_0_8px_rgba(103,232,249,0.6)]" />
                         </button>
-                    </PopoverTrigger>
-                    <PopoverContent 
-                        side="top" 
-                        align="center"
-                        className="w-56 p-2 bg-card/95 backdrop-blur-md border-border/30"
-                    >
-                        <div className="space-y-1">
-                            {moreItems.map(({ href, label, Icon }) => (
+                    </div>
+                )}
+
+                {/* Expanded state - horizontal expansion */}
+                {isExpanded && (
+                    <div className="bg-card/5 backdrop-blur-sm border border-border/20 rounded-full p-2 flex items-center gap-2">
+                        {/* Main navigation items */}
+                        {mainNavItems.map(({ href, label, Icon }, index) => {
+                            const isReadingDisabled = href === "/reading" && !question.trim()
+                            
+                            if (isReadingDisabled) {
+                                return (
+                                    <div
+                                        key={href}
+                                        className={`flex flex-col items-center justify-center py-2 px-3 rounded-full transition-all duration-300 text-muted-foreground/25 cursor-not-allowed ${
+                                            isExpanded 
+                                                ? 'opacity-100 translate-y-0' 
+                                                : 'opacity-0 translate-y-2'
+                                        }`}
+                                        style={{
+                                            transitionDelay: isExpanded ? `${index * 100}ms` : '0ms'
+                                        }}
+                                        title="Please ask a question first"
+                                    >
+                                        <Icon className="w-5 h-5 mb-1" />
+                                        <span className="text-xs font-medium">{label}</span>
+                                    </div>
+                                )
+                            }
+                            
+                            return (
                                 <Link
                                     key={href}
                                     href={href}
-                                    onClick={() => setMoreOpen(false)}
-                                    className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-card/50 transition-colors"
+                                    onClick={() => setIsExpanded(false)}
+                                    className={`flex flex-col items-center justify-center py-2 px-3 rounded-full transition-all duration-300 hover:scale-105 ${
+                                        isActive(href)
+                                            ? "text-cyan-300 bg-card/20"
+                                            : "text-muted-foreground hover:text-foreground hover:bg-card/10"
+                                    } ${
+                                        isExpanded 
+                                            ? 'opacity-100 translate-y-0' 
+                                            : 'opacity-0 translate-y-2'
+                                    }`}
+                                    style={{
+                                        transitionDelay: isExpanded ? `${index * 100}ms` : '0ms'
+                                    }}
                                 >
-                                    <Icon className="w-4 h-4" />
-                                    <span>{label}</span>
+                                    <Icon className={`w-5 h-5 mb-1 transition-all duration-300 ${
+                                        isActive(href)
+                                            ? "drop-shadow-[0_0_8px_rgba(103,232,249,0.6)]"
+                                            : ""
+                                    }`} />
+                                    <span className="text-xs font-medium">{label}</span>
                                 </Link>
-                            ))}
-                        </div>
-                    </PopoverContent>
-                </Popover>
+                            )
+                        })}
+
+                        {/* More button with popover */}
+                        <Popover open={moreOpen} onOpenChange={setMoreOpen}>
+                            <PopoverTrigger asChild>
+                                <button
+                                    className={`flex flex-col items-center justify-center py-2 px-3 rounded-full transition-all duration-300 hover:scale-105 ${
+                                        moreOpen
+                                            ? "text-primary bg-card/20"
+                                            : "text-muted-foreground hover:text-foreground hover:bg-card/10"
+                                    } ${
+                                        isExpanded 
+                                            ? 'opacity-100 translate-y-0' 
+                                            : 'opacity-0 translate-y-2'
+                                    }`}
+                                    style={{
+                                        transitionDelay: isExpanded ? `${mainNavItems.length * 100}ms` : '0ms'
+                                    }}
+                                >
+                                    <MoreHorizontal className="w-5 h-5 mb-1" />
+                                    <span className="text-xs font-medium">More</span>
+                                </button>
+                            </PopoverTrigger>
+                            <PopoverContent 
+                                side="top" 
+                                align="center"
+                                className="w-56 p-2 bg-card/95 backdrop-blur-md border-border/30"
+                            >
+                                <div className="space-y-1">
+                                    {moreItems.map(({ href, label, Icon }) => (
+                                        <Link
+                                            key={href}
+                                            href={href}
+                                            onClick={() => {
+                                                setMoreOpen(false)
+                                                setIsExpanded(false)
+                                            }}
+                                            className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-card/50 transition-colors"
+                                        >
+                                            <Icon className="w-4 h-4" />
+                                            <span>{label}</span>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+
+                        {/* Collapse button */}
+                        <button
+                            onClick={handleToggle}
+                            className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 hover:bg-card/10 hover:scale-110 ml-2 ${
+                                isExpanded 
+                                    ? 'opacity-100 translate-y-0' 
+                                    : 'opacity-0 translate-y-2'
+                            }`}
+                            style={{
+                                transitionDelay: isExpanded ? `${(mainNavItems.length + 1) * 100}ms` : '0ms'
+                            }}
+                            title="Collapse navigation"
+                        >
+                            <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-300 ${
+                                isExpanded ? 'rotate-90' : 'rotate-0'
+                            }`} />
+                        </button>
+                    </div>
+                )}
             </div>
         </nav>
     )
