@@ -7,7 +7,7 @@ export default function Footer() {
     const router = useRouter()
     const handleBrandClick = () => router.push("/")
     return (
-        <footer className='w-full'>
+        <footer className='absolute bottom-0 left-0 right-0 w-full z-10'>
             <div className='max-w-6xl mx-auto px-6 pt-4 pb-12'>
                 <div className='flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0'>
                     <button
