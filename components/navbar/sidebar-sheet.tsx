@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { Home, BookOpen, Info, HelpCircle } from "lucide-react"
+import { Home, BookOpen, Info, HelpCircle, ChevronDown, ChevronUp, Sparkles, Star, Hash, Palette } from "lucide-react"
+import { useState } from "react"
 import {
     Sheet,
     SheetContent,
@@ -15,11 +16,19 @@ interface SidebarSheetProps {
 }
 
 export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
+    const [mysticalOpen, setMysticalOpen] = useState(false)
+    
     const sidebarLinks = [
         { href: "/", label: "Home", Icon: Home },
-        { href: "/reading", label: "Reading", Icon: BookOpen },
         { href: "/about", label: "About", Icon: Info },
         { href: "/support", label: "Support", Icon: HelpCircle },
+    ] as const
+
+    const mysticalServices = [
+        { href: "/reading", label: "Tarot", Icon: BookOpen },
+        { href: "/horoscope", label: "Horoscope", Icon: Star },
+        { href: "/numerology", label: "Numerology", Icon: Hash },
+        { href: "/lucky-colors", label: "Lucky Colors", Icon: Palette },
     ] as const
 
     return (
@@ -60,6 +69,38 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                                 </Link>
                             </li>
                         ))}
+                        
+                        {/* Mystical Services Dropdown */}
+                        <li>
+                            <button
+                                onClick={() => setMysticalOpen(!mysticalOpen)}
+                                className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors w-full'
+                            >
+                                <Sparkles className='w-4 h-4' />
+                                <span>Mystical Services</span>
+                                {mysticalOpen ? (
+                                    <ChevronUp className='w-4 h-4 ml-auto' />
+                                ) : (
+                                    <ChevronDown className='w-4 h-4 ml-auto' />
+                                )}
+                            </button>
+                            {mysticalOpen && (
+                                <ul className='ml-4 mt-1 space-y-1'>
+                                    {mysticalServices.map(({ href, label, Icon }) => (
+                                        <li key={href}>
+                                            <Link
+                                                href={href}
+                                                className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors'
+                                                onClick={() => onOpenChange(false)}
+                                            >
+                                                <Icon className='w-4 h-4' />
+                                                <span>{label}</span>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </li>
                     </ul>
                 </nav>
             </SheetContent>

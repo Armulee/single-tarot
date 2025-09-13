@@ -3,11 +3,18 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { Menu } from "lucide-react"
+import { Menu, ChevronDown, ChevronUp } from "lucide-react"
 import { SidebarSheet } from "./sidebar-sheet"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function Navbar() {
     const [open, setOpen] = useState(false)
+    const [dropdownOpen, setDropdownOpen] = useState(false)
 
     return (
         <nav className='fixed top-0 left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-b border-border/20'>
@@ -64,16 +71,64 @@ export function Navbar() {
                         </Link>
                     </div>
 
-                    {/* CTA */}
+                    {/* CTA Dropdown */}
                     <div className='flex items-center space-x-4'>
-                        <Button
-                            asChild
-                            className='inline-flex bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:opacity-90 text-white rounded-full px-5 py-2 shadow-[0_10px_20px_-10px_rgba(56,189,248,0.55)] ring-1 ring-white/10 card-glow'
-                        >
-                            <Link href='/reading'>
-                                Start Reading
-                            </Link>
-                        </Button>
+                        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant='ghost'
+                                    className='inline-flex items-center space-x-2 text-white hover:bg-white/10 px-4 py-2 rounded-md transition-colors'
+                                >
+                                    <span>Tarot</span>
+                                    {dropdownOpen ? (
+                                        <ChevronUp className='h-4 w-4' />
+                                    ) : (
+                                        <ChevronDown className='h-4 w-4' />
+                                    )}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                                align='end'
+                                className='w-48 bg-card/95 backdrop-blur-md border-border/30'
+                            >
+                                <DropdownMenuItem asChild>
+                                    <Link
+                                        href='/reading'
+                                        className='flex items-center px-3 py-2 text-sm cursor-pointer'
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Tarot
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link
+                                        href='/horoscope'
+                                        className='flex items-center px-3 py-2 text-sm cursor-pointer'
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Horoscope
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link
+                                        href='/numerology'
+                                        className='flex items-center px-3 py-2 text-sm cursor-pointer'
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Numerology
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link
+                                        href='/lucky-colors'
+                                        className='flex items-center px-3 py-2 text-sm cursor-pointer'
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Lucky Colors
+                                    </Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
             </div>
