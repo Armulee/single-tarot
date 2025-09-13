@@ -9,10 +9,12 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { usePathname } from "next/navigation"
+import { useTarot } from "@/contexts/tarot-context"
 
 export function BottomNavigation() {
     const [moreOpen, setMoreOpen] = useState(false)
     const pathname = usePathname()
+    const { question } = useTarot()
 
     const mainNavItems = [
         { href: "/", label: "Home", Icon: Home },
@@ -38,20 +40,37 @@ export function BottomNavigation() {
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border/20 md:hidden">
             <div className="flex items-center justify-around px-2 py-1">
                 {/* Main Navigation Items */}
-                {mainNavItems.map(({ href, label, Icon }) => (
-                    <Link
-                        key={href}
-                        href={href}
-                        className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors ${
-                            isActive(href)
-                                ? "text-primary"
-                                : "text-muted-foreground hover:text-foreground"
-                        }`}
-                    >
-                        <Icon className="w-5 h-5 mb-1" />
-                        <span className="text-xs font-medium">{label}</span>
-                    </Link>
-                ))}
+                {mainNavItems.map(({ href, label, Icon }) => {
+                    const isReadingDisabled = href === "/reading" && !question.trim()
+                    
+                    if (isReadingDisabled) {
+                        return (
+                            <div
+                                key={href}
+                                className="flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors text-muted-foreground/50 cursor-not-allowed"
+                                title="Please ask a question first"
+                            >
+                                <Icon className="w-5 h-5 mb-1" />
+                                <span className="text-xs font-medium">{label}</span>
+                            </div>
+                        )
+                    }
+                    
+                    return (
+                        <Link
+                            key={href}
+                            href={href}
+                            className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors ${
+                                isActive(href)
+                                    ? "text-primary"
+                                    : "text-muted-foreground hover:text-foreground"
+                            }`}
+                        >
+                            <Icon className="w-5 h-5 mb-1" />
+                            <span className="text-xs font-medium">{label}</span>
+                        </Link>
+                    )
+                })}
 
                 {/* More Button with Popover */}
                 <Popover open={moreOpen} onOpenChange={setMoreOpen}>
