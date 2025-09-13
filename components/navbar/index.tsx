@@ -58,13 +58,13 @@ export function Navbar() {
                     <div className='flex items-center space-x-6'>
                         <Link
                             href='/'
-                            className='text-cosmic-light hover:text-white transition-colors'
+                            className='hidden md:block text-cosmic-light hover:text-white transition-colors'
                         >
                             Home
                         </Link>
                         <Link
                             href='/about'
-                            className='text-cosmic-light hover:text-white transition-colors'
+                            className='hidden md:block text-cosmic-light hover:text-white transition-colors'
                         >
                             About
                         </Link>
@@ -75,7 +75,7 @@ export function Navbar() {
                             <SheetTrigger asChild>
                                 <Button
                                     variant='ghost'
-                                    className='inline-flex items-center space-x-2 text-white hover:bg-white/10 px-4 py-2 rounded-md transition-colors'
+                                    className='inline-flex items-center space-x-2 text-white hover:bg-white/10 px-4 py-2 rounded-md transition-colors !mr-0'
                                 >
                                     <Sparkles className='h-4 w-4' />
                                     <span>Tarot</span>
