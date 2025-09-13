@@ -12,7 +12,6 @@ export async function POST(req: Request) {
             })
         }
 
-        // const interpretationDepth = isPremium ? "premium" : "basic"
 
         const result = streamText({
             model: MODEL,

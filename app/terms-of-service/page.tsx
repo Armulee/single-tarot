@@ -66,8 +66,6 @@ export default function TermsPage() {
                                     <li>• AI-generated tarot card interpretations and readings</li>
                                     <li>• Multiple reading types and card spreads</li>
                                     <li>• Personalized spiritual guidance and insights</li>
-                                    <li>• Reading history and progress tracking</li>
-                                    <li>• Premium features and enhanced interpretations</li>
                                     <li>• Community features and sharing capabilities</li>
                                 </ul>
                                 <p className='text-muted-foreground leading-relaxed'>
@@ -149,69 +147,28 @@ export default function TermsPage() {
                                 </ul>
                             </section>
 
-                            <section className='space-y-4'>
-                                <h2 className='font-serif font-semibold text-2xl text-foreground'>
-                                    5. Subscription and Payment Terms
-                                </h2>
-                                
-                                <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    5.1 Subscription Plans
-                                </h3>
-                                <p className='text-muted-foreground leading-relaxed'>
-                                    We offer both free and premium subscription plans. Premium subscriptions provide access to additional features, including:
-                                </p>
-                                <ul className='space-y-2 text-muted-foreground ml-4'>
-                                    <li>• Unlimited monthly readings (up to 5,000 per month)</li>
-                                    <li>• Advanced AI interpretations and insights</li>
-                                    <li>• Premium card decks and themes</li>
-                                    <li>• Ad-free experience</li>
-                                    <li>• Priority customer support</li>
-                                    <li>• Reading history and analytics</li>
-                                    <li>• Personalized guidance and recommendations</li>
-                                </ul>
-
-                                <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    5.2 Billing and Payment
-                                </h3>
-                                <p className='text-muted-foreground leading-relaxed'>
-                                    Premium subscriptions are billed monthly at $2.99 USD. Payment is due in advance and will be automatically charged to your chosen payment method. You authorize us to charge your payment method for all applicable fees.
-                                </p>
-                                <p className='text-muted-foreground leading-relaxed'>
-                                    All fees are non-refundable except as required by law or as otherwise specified in these Terms. We reserve the right to change our pricing at any time with 30 days&apos; notice to existing subscribers.
-                                </p>
-
-                                <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    5.3 Cancellation and Refunds
-                                </h3>
-                                <p className='text-muted-foreground leading-relaxed'>
-                                    You may cancel your subscription at any time through your account settings or by contacting our support team. Cancellation will take effect at the end of your current billing period.
-                                </p>
-                                <p className='text-muted-foreground leading-relaxed'>
-                                    We offer a 30-day money-back guarantee for new subscribers. If you are not satisfied with our Service within the first 30 days of your subscription, you may request a full refund by contacting our support team.
-                                </p>
-                            </section>
 
                             <section className='space-y-4'>
                                 <h2 className='font-serif font-semibold text-2xl text-foreground'>
-                                    6. Intellectual Property Rights
+                                    5. Intellectual Property Rights
                                 </h2>
                                 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    6.1 Our Content
+                                    5.1 Our Content
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     The Service and its original content, features, and functionality are and will remain the exclusive property of Asking Fate and its licensors. The Service is protected by copyright, trademark, and other laws. Our trademarks and trade dress may not be used in connection with any product or service without our prior written consent.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    6.2 User Content
+                                    5.2 User Content
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     You retain ownership of any content you submit, post, or display on or through the Service (&quot;User Content&quot;). By submitting User Content, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, and distribute such content in connection with the Service.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    6.3 Third-Party Content
+                                    5.3 Third-Party Content
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     Our Service may contain content from third parties, including but not limited to tarot card imagery, interpretations, and spiritual guidance. Such content is protected by copyright and other intellectual property laws and is used with permission or under appropriate licenses.
@@ -220,11 +177,11 @@ export default function TermsPage() {
 
                             <section className='space-y-4'>
                                 <h2 className='font-serif font-semibold text-2xl text-foreground'>
-                                    7. Disclaimers and Limitations of Liability
+                                    6. Disclaimers and Limitations of Liability
                                 </h2>
                                 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    7.1 Service Disclaimers
+                                    6.1 Service Disclaimers
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     Our Service is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind, either express or implied. We disclaim all warranties, including but not limited to:
@@ -237,7 +194,7 @@ export default function TermsPage() {
                                 </ul>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    7.2 Tarot Reading Disclaimers
+                                    6.2 Tarot Reading Disclaimers
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     Tarot readings provided through our Service are for entertainment and spiritual guidance purposes only. They should not be used as a substitute for professional advice in any field, including:
@@ -253,7 +210,7 @@ export default function TermsPage() {
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    7.3 Limitation of Liability
+                                    6.3 Limitation of Liability
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     To the maximum extent permitted by law, Asking Fate shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the Service.
@@ -265,7 +222,7 @@ export default function TermsPage() {
 
                             <section className='space-y-4'>
                                 <h2 className='font-serif font-semibold text-2xl text-foreground'>
-                                    8. Privacy and Data Protection
+                                    7. Privacy and Data Protection
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     Your privacy is important to us. Our collection and use of personal information in connection with the Service is described in our Privacy Policy, which is incorporated into these Terms by reference.
@@ -277,7 +234,7 @@ export default function TermsPage() {
 
                             <section className='space-y-4'>
                                 <h2 className='font-serif font-semibold text-2xl text-foreground'>
-                                    9. Indemnification
+                                    8. Indemnification
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     You agree to defend, indemnify, and hold harmless Asking Fate and its officers, directors, employees, and agents from and against any claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney&apos;s fees) arising from:
@@ -292,7 +249,7 @@ export default function TermsPage() {
 
                             <section className='space-y-4'>
                                 <h2 className='font-serif font-semibold text-2xl text-foreground'>
-                                    10. Termination
+                                    9. Termination
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     We may terminate or suspend your account and access to the Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach these Terms.
@@ -307,18 +264,18 @@ export default function TermsPage() {
 
                             <section className='space-y-4'>
                                 <h2 className='font-serif font-semibold text-2xl text-foreground'>
-                                    11. Governing Law and Dispute Resolution
+                                    10. Governing Law and Dispute Resolution
                                 </h2>
                                 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    11.1 Governing Law
+                                    10.1 Governing Law
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     These Terms shall be interpreted and governed by the laws of Thailand, without regard to its conflict of law provisions. Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    11.2 Dispute Resolution
+                                    10.2 Dispute Resolution
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     Any disputes arising out of or relating to these Terms or the Service shall be resolved through binding arbitration in accordance with the rules of the Thai Arbitration Institute. The arbitration shall be conducted in Bangkok, Thailand, in the English language.
@@ -327,32 +284,32 @@ export default function TermsPage() {
 
                             <section className='space-y-4'>
                                 <h2 className='font-serif font-semibold text-2xl text-foreground'>
-                                    12. General Provisions
+                                    11. General Provisions
                                 </h2>
                                 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    12.1 Entire Agreement
+                                    11.1 Entire Agreement
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     These Terms, together with our Privacy Policy, constitute the entire agreement between you and Asking Fate regarding the use of the Service and supersede all prior and contemporaneous understandings, agreements, representations, and warranties.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    12.2 Severability
+                                    11.2 Severability
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     If any provision of these Terms is held to be invalid or unenforceable, the remaining provisions will remain in full force and effect.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    12.3 Assignment
+                                    11.3 Assignment
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     We may assign or transfer these Terms, in whole or in part, without restriction. You may not assign or transfer these Terms without our prior written consent.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
-                                    12.4 Force Majeure
+                                    11.4 Force Majeure
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     We shall not be liable for any failure or delay in performance under these Terms which is due to fire, flood, earthquake, elements of nature, or acts of God, acts of war, terrorism, strikes, labor disputes, or any other cause which is beyond our reasonable control.
@@ -361,7 +318,7 @@ export default function TermsPage() {
 
                             <section className='space-y-4'>
                                 <h2 className='font-serif font-semibold text-2xl text-foreground'>
-                                    13. Contact Information
+                                    12. Contact Information
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     If you have any questions about these Terms of Service, please contact us:

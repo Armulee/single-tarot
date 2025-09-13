@@ -260,7 +260,7 @@ export default function AboutPage() {
                                     size='lg'
                                     className='border-border/30 hover:bg-card/20 bg-transparent px-8'
                                 >
-                                    <Link href='/pricing'>Explore Premium</Link>
+                                    <Link href='/reading'>Start Reading</Link>
                                 </Button>
                             </div>
                         </div>

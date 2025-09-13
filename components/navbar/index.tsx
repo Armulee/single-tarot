@@ -3,22 +3,26 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { Menu, Check, LogIn } from "lucide-react"
-import { Card } from "@/components/ui/card"
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
-import { useAuth } from "@/hooks/use-auth"
-import { UserProfile } from "@/components/user-profile"
+import { Menu, ChevronDown, BookOpen, Star, Hash, Palette } from "lucide-react"
 import { SidebarSheet } from "./sidebar-sheet"
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 
 export function Navbar() {
     const [open, setOpen] = useState(false)
-    const [premiumOpen, setPremiumOpen] = useState(false)
-    const { user, loading } = useAuth()
+    const [mysticalOpen, setMysticalOpen] = useState(false)
+
+    const mysticalServices = [
+        { href: "/reading", label: "Tarot", Icon: BookOpen, available: true },
+        { href: "#", label: "Horoscope", Icon: Star, available: false },
+        { href: "#", label: "Numerology", Icon: Hash, available: false },
+        { href: "#", label: "Lucky Colors", Icon: Palette, available: false },
+    ] as const
 
     return (
         <nav className='fixed top-0 left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-b border-border/20'>
@@ -26,24 +30,16 @@ export function Navbar() {
                 <div className='flex justify-between items-center h-16'>
                     {/* Left: Mobile menu button / Desktop brand */}
                     <div className='flex items-center'>
-                        {/* Mobile: menu button or user profile */}
-                        {!loading && user ? (
-                            <UserProfile
-                                variant='sidebar-trigger'
-                                onClose={() => setOpen(true)}
-                                className='md:hidden'
-                            />
-                        ) : (
-                            <Button
-                                variant='ghost'
-                                size='icon'
-                                className='md:hidden text-white hover:bg-white/10'
-                                onClick={() => setOpen(true)}
-                                aria-label='Open menu'
-                            >
-                                <Menu className='h-6 w-6' />
-                            </Button>
-                        )}
+                        {/* Mobile: menu button */}
+                        <Button
+                            variant='ghost'
+                            size='icon'
+                            className='md:hidden text-white hover:bg-white/10'
+                            onClick={() => setOpen(true)}
+                            aria-label='Open menu'
+                        >
+                            <Menu className='h-6 w-6' />
+                        </Button>
 
                         {/* Desktop: brand */}
                         <Link
@@ -76,98 +72,68 @@ export function Navbar() {
                             About
                         </Link>
                         <Link
-                            href='/pricing'
-                            className='text-cosmic-light hover:text-white transition-colors'
-                        >
-                            Pricing
-                        </Link>
-                        <Link
                             href='/support'
                             className='text-cosmic-light hover:text-white transition-colors'
                         >
                             Support
                         </Link>
-                        {/* User Profile for Desktop */}
-                        {!loading && user && <UserProfile variant='desktop' />}
                     </div>
 
-                    {/* Auth / CTA */}
+                    {/* Active Service Sheet */}
                     <div className='flex items-center space-x-4'>
-                        {!loading && user ? (
-                            <Button
-                                onClick={() => setPremiumOpen(true)}
-                                className='inline-flex bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:opacity-90 text-white rounded-full px-5 py-2 shadow-[0_10px_20px_-10px_rgba(56,189,248,0.55)] ring-1 ring-white/10 card-glow'
-                            >
-                                Go Premium
-                            </Button>
-                        ) : (
-                            <Link href='/signin'>
+                        <Sheet open={mysticalOpen} onOpenChange={setMysticalOpen}>
+                            <SheetTrigger asChild>
                                 <Button
                                     variant='ghost'
-                                    className='text-white hover:bg-white/10'
+                                    className='inline-flex items-center space-x-2 text-white hover:bg-white/10 px-4 py-2 rounded-md transition-colors'
                                 >
-                                    <LogIn className='w-4 h-4 mr-2' />
-                                    Sign In
+                                    <BookOpen className='h-4 w-4' />
+                                    <span>Tarot</span>
+                                    <ChevronDown className='h-4 w-4' />
                                 </Button>
-                            </Link>
-                        )}
+                            </SheetTrigger>
+                            <SheetContent
+                                side='right'
+                                className='w-80 bg-card/95 backdrop-blur-md border-border/30'
+                            >
+                                <SheetHeader>
+                                    <SheetTitle className='flex items-center space-x-2 text-white'>
+                                        <BookOpen className='h-5 w-5' />
+                                        <span>Tarot</span>
+                                    </SheetTitle>
+                                </SheetHeader>
+                                <div className='mt-8 space-y-2'>
+                                    {mysticalServices.map(({ href, label, Icon, available }) => (
+                                        <div key={label}>
+                                            {available ? (
+                                                <Link
+                                                    href={label === 'Tarot' ? '/' : href}
+                                                    className='flex items-center space-x-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors group'
+                                                    onClick={() => setMysticalOpen(false)}
+                                                >
+                                                    <Icon className='h-5 w-5 text-primary' />
+                                                    <span className='font-medium'>{label}</span>
+                                                </Link>
+                                            ) : (
+                                                <div className='flex items-center space-x-3 px-4 py-3 rounded-lg text-white/50 cursor-not-allowed opacity-60'>
+                                                    <Icon className='h-5 w-5' />
+                                                    <span className='font-medium'>{label}</span>
+                                                    <span className='ml-auto text-xs bg-white/10 px-2 py-1 rounded-full'>
+                                                        Coming Soon
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </SheetContent>
+                        </Sheet>
                     </div>
                 </div>
             </div>
 
             {/* Mobile sidebar */}
             <SidebarSheet open={open} onOpenChange={setOpen} />
-
-            {/* Premium dialog */}
-            <Dialog open={premiumOpen} onOpenChange={setPremiumOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className='text-center'>
-                            Unlock Premium
-                        </DialogTitle>
-                    </DialogHeader>
-                    <div className='space-y-4 mt-4'>
-                        <Card className='p-4 bg-card/20 border-primary/30 card-glow'>
-                            <div className='text-center mb-3'>
-                                <div className='text-2xl font-serif font-bold'>
-                                    $2.99
-                                </div>
-                                <div className='text-xs text-muted-foreground'>
-                                    per month
-                                </div>
-                            </div>
-                            <ul className='space-y-2'>
-                                {[
-                                    "5,000 monthly readings",
-                                    "Advanced AI interpretations",
-                                    "Premium card decks",
-                                    "No advertisements",
-                                    "Priority support",
-                                    "Reading history & insights",
-                                    "Personalized guidance",
-                                    "Exclusive cosmic themes",
-                                ].map((f, i) => (
-                                    <li
-                                        key={`pro-${i}`}
-                                        className='flex items-start gap-2 text-sm'
-                                    >
-                                        <Check className='w-4 h-4 text-green-400 mt-0.5 flex-shrink-0' />
-                                        <span>{f}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </Card>
-
-                        {/* Checkout CTA */}
-                        <Button
-                            onClick={() => setPremiumOpen(false)}
-                            className='w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 hover:opacity-90 text-white rounded-full px-5 py-3 text-base shadow-[0_10px_20px_-10px_rgba(56,189,248,0.55)] ring-1 ring-white/10 card-glow'
-                        >
-                            Go Premium
-                        </Button>
-                    </div>
-                </DialogContent>
-            </Dialog>
         </nav>
     )
 }
