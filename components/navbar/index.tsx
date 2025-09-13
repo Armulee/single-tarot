@@ -58,13 +58,13 @@ export function Navbar() {
                     <div className='flex items-center space-x-6'>
                         <Link
                             href='/'
-                            className='text-cosmic-light hover:text-white transition-colors'
+                            className='hidden md:block text-cosmic-light hover:text-white transition-colors'
                         >
                             Home
                         </Link>
                         <Link
                             href='/about'
-                            className='text-cosmic-light hover:text-white transition-colors'
+                            className='hidden md:block text-cosmic-light hover:text-white transition-colors'
                         >
                             About
                         </Link>
