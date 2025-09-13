@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Home, BookOpen, Info, HelpCircle, ChevronDown, ChevronUp, Sparkles, Star, Hash, Palette } from "lucide-react"
+import { Home, BookOpen, Info, HelpCircle, ChevronDown, ChevronUp, Star, Hash, Palette } from "lucide-react"
 import { useState } from "react"
 import {
     Sheet,
@@ -70,14 +70,14 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                             </li>
                         ))}
                         
-                        {/* Mystical Services Dropdown */}
+                        {/* Active Service Dropdown */}
                         <li>
                             <button
                                 onClick={() => setMysticalOpen(!mysticalOpen)}
                                 className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors w-full'
                             >
-                                <Sparkles className='w-4 h-4' />
-                                <span>Mystical Services</span>
+                                <BookOpen className='w-4 h-4' />
+                                <span>Tarot</span>
                                 {mysticalOpen ? (
                                     <ChevronUp className='w-4 h-4 ml-auto' />
                                 ) : (

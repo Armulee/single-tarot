@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { Menu, Sparkles, BookOpen, Star, Hash, Palette } from "lucide-react"
+import { Menu, ChevronDown, BookOpen, Star, Hash, Palette } from "lucide-react"
 import { SidebarSheet } from "./sidebar-sheet"
 import {
     Sheet,
@@ -79,7 +79,7 @@ export function Navbar() {
                         </Link>
                     </div>
 
-                    {/* Mystical Services Sheet */}
+                    {/* Active Service Sheet */}
                     <div className='flex items-center space-x-4'>
                         <Sheet open={mysticalOpen} onOpenChange={setMysticalOpen}>
                             <SheetTrigger asChild>
@@ -87,8 +87,9 @@ export function Navbar() {
                                     variant='ghost'
                                     className='inline-flex items-center space-x-2 text-white hover:bg-white/10 px-4 py-2 rounded-md transition-colors'
                                 >
-                                    <Sparkles className='h-4 w-4' />
-                                    <span>Mystical Services</span>
+                                    <BookOpen className='h-4 w-4' />
+                                    <span>Tarot</span>
+                                    <ChevronDown className='h-4 w-4' />
                                 </Button>
                             </SheetTrigger>
                             <SheetContent
@@ -97,8 +98,8 @@ export function Navbar() {
                             >
                                 <SheetHeader>
                                     <SheetTitle className='flex items-center space-x-2 text-white'>
-                                        <Sparkles className='h-5 w-5' />
-                                        <span>Mystical Services</span>
+                                        <BookOpen className='h-5 w-5' />
+                                        <span>Tarot</span>
                                     </SheetTitle>
                                 </SheetHeader>
                                 <div className='mt-8 space-y-2'>
