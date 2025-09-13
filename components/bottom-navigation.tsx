@@ -47,7 +47,7 @@ export function BottomNavigation() {
                         return (
                             <div
                                 key={href}
-                                className="flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors text-muted-foreground/50 cursor-not-allowed"
+                                className="flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors text-muted-foreground/25 cursor-not-allowed"
                                 title="Please ask a question first"
                             >
                                 <Icon className="w-5 h-5 mb-1" />
@@ -60,10 +60,10 @@ export function BottomNavigation() {
                         <Link
                             key={href}
                             href={href}
-                            className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors ${
+                            className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-all duration-300 ${
                                 isActive(href)
-                                    ? "text-primary"
-                                    : "text-muted-foreground hover:text-foreground"
+                                    ? "text-primary bg-primary/10 shadow-[0_0_20px_rgba(59,130,246,0.3)] ring-1 ring-primary/20"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-card/20"
                             }`}
                         >
                             <Icon className="w-5 h-5 mb-1" />
