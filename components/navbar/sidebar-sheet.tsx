@@ -25,10 +25,10 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
     ] as const
 
     const mysticalServices = [
-        { href: "/reading", label: "Tarot", Icon: BookOpen },
-        { href: "/horoscope", label: "Horoscope", Icon: Star },
-        { href: "/numerology", label: "Numerology", Icon: Hash },
-        { href: "/lucky-colors", label: "Lucky Colors", Icon: Palette },
+        { href: "/reading", label: "Tarot", Icon: BookOpen, available: true },
+        { href: "#", label: "Horoscope", Icon: Star, available: false },
+        { href: "#", label: "Numerology", Icon: Hash, available: false },
+        { href: "#", label: "Lucky Colors", Icon: Palette, available: false },
     ] as const
 
     return (
@@ -86,16 +86,26 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                             </button>
                             {mysticalOpen && (
                                 <ul className='ml-4 mt-1 space-y-1'>
-                                    {mysticalServices.map(({ href, label, Icon }) => (
-                                        <li key={href}>
-                                            <Link
-                                                href={href}
-                                                className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors'
-                                                onClick={() => onOpenChange(false)}
-                                            >
-                                                <Icon className='w-4 h-4' />
-                                                <span>{label}</span>
-                                            </Link>
+                                    {mysticalServices.map(({ href, label, Icon, available }) => (
+                                        <li key={label}>
+                                            {available ? (
+                                                <Link
+                                                    href={href}
+                                                    className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors'
+                                                    onClick={() => onOpenChange(false)}
+                                                >
+                                                    <Icon className='w-4 h-4' />
+                                                    <span>{label}</span>
+                                                </Link>
+                                            ) : (
+                                                <div className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light/50 cursor-not-allowed opacity-60'>
+                                                    <Icon className='w-4 h-4' />
+                                                    <span>{label}</span>
+                                                    <span className='ml-auto text-xs bg-white/10 px-2 py-1 rounded-full'>
+                                                        Coming Soon
+                                                    </span>
+                                                </div>
+                                            )}
                                         </li>
                                     ))}
                                 </ul>

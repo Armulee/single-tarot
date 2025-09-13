@@ -3,18 +3,26 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { Menu, ChevronDown, ChevronUp } from "lucide-react"
+import { Menu, Sparkles, BookOpen, Star, Hash, Palette } from "lucide-react"
 import { SidebarSheet } from "./sidebar-sheet"
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 
 export function Navbar() {
     const [open, setOpen] = useState(false)
-    const [dropdownOpen, setDropdownOpen] = useState(false)
+    const [mysticalOpen, setMysticalOpen] = useState(false)
+
+    const mysticalServices = [
+        { href: "/reading", label: "Tarot", Icon: BookOpen, available: true },
+        { href: "#", label: "Horoscope", Icon: Star, available: false },
+        { href: "#", label: "Numerology", Icon: Hash, available: false },
+        { href: "#", label: "Lucky Colors", Icon: Palette, available: false },
+    ] as const
 
     return (
         <nav className='fixed top-0 left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-b border-border/20'>
@@ -71,64 +79,54 @@ export function Navbar() {
                         </Link>
                     </div>
 
-                    {/* CTA Dropdown */}
+                    {/* Mystical Services Sheet */}
                     <div className='flex items-center space-x-4'>
-                        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-                            <DropdownMenuTrigger asChild>
+                        <Sheet open={mysticalOpen} onOpenChange={setMysticalOpen}>
+                            <SheetTrigger asChild>
                                 <Button
                                     variant='ghost'
                                     className='inline-flex items-center space-x-2 text-white hover:bg-white/10 px-4 py-2 rounded-md transition-colors'
                                 >
-                                    <span>Tarot</span>
-                                    {dropdownOpen ? (
-                                        <ChevronUp className='h-4 w-4' />
-                                    ) : (
-                                        <ChevronDown className='h-4 w-4' />
-                                    )}
+                                    <Sparkles className='h-4 w-4' />
+                                    <span>Mystical Services</span>
                                 </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                align='end'
-                                className='w-48 bg-card/95 backdrop-blur-md border-border/30'
+                            </SheetTrigger>
+                            <SheetContent
+                                side='right'
+                                className='w-80 bg-card/95 backdrop-blur-md border-border/30'
                             >
-                                <DropdownMenuItem asChild>
-                                    <Link
-                                        href='/reading'
-                                        className='flex items-center px-3 py-2 text-sm cursor-pointer'
-                                        onClick={() => setDropdownOpen(false)}
-                                    >
-                                        Tarot
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                    <Link
-                                        href='/horoscope'
-                                        className='flex items-center px-3 py-2 text-sm cursor-pointer'
-                                        onClick={() => setDropdownOpen(false)}
-                                    >
-                                        Horoscope
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                    <Link
-                                        href='/numerology'
-                                        className='flex items-center px-3 py-2 text-sm cursor-pointer'
-                                        onClick={() => setDropdownOpen(false)}
-                                    >
-                                        Numerology
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                    <Link
-                                        href='/lucky-colors'
-                                        className='flex items-center px-3 py-2 text-sm cursor-pointer'
-                                        onClick={() => setDropdownOpen(false)}
-                                    >
-                                        Lucky Colors
-                                    </Link>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                                <SheetHeader>
+                                    <SheetTitle className='flex items-center space-x-2 text-white'>
+                                        <Sparkles className='h-5 w-5' />
+                                        <span>Mystical Services</span>
+                                    </SheetTitle>
+                                </SheetHeader>
+                                <div className='mt-8 space-y-2'>
+                                    {mysticalServices.map(({ href, label, Icon, available }) => (
+                                        <div key={label}>
+                                            {available ? (
+                                                <Link
+                                                    href={href}
+                                                    className='flex items-center space-x-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors group'
+                                                    onClick={() => setMysticalOpen(false)}
+                                                >
+                                                    <Icon className='h-5 w-5 text-primary' />
+                                                    <span className='font-medium'>{label}</span>
+                                                </Link>
+                                            ) : (
+                                                <div className='flex items-center space-x-3 px-4 py-3 rounded-lg text-white/50 cursor-not-allowed opacity-60'>
+                                                    <Icon className='h-5 w-5' />
+                                                    <span className='font-medium'>{label}</span>
+                                                    <span className='ml-auto text-xs bg-white/10 px-2 py-1 rounded-full'>
+                                                        Coming Soon
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </SheetContent>
+                        </Sheet>
                     </div>
                 </div>
             </div>
