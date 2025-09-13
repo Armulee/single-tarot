@@ -45,7 +45,7 @@ export function BottomNavigation() {
     }
 
     return (
-        <nav className="fixed bottom-0 left-0 z-50 md:hidden">
+        <nav className="fixed bottom-2 left-2 z-50 md:hidden">
             <div className="relative">
                 {/* Collapsed state - perfect circle */}
                 {!isExpanded && (
