@@ -3,8 +3,10 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { Menu, ChevronDown, BookOpen, Star, Hash, Palette } from "lucide-react"
+import { Menu, ChevronDown, BookOpen, LogIn, Sparkles } from "lucide-react"
 import { SidebarSheet } from "./sidebar-sheet"
+import { UserProfile } from "@/components/user-profile"
+import { useAuth } from "@/hooks/use-auth"
 import {
     Sheet,
     SheetContent,
@@ -12,17 +14,12 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import mysticalServices from "./mystical-services"
 
 export function Navbar() {
     const [open, setOpen] = useState(false)
     const [mysticalOpen, setMysticalOpen] = useState(false)
-
-    const mysticalServices = [
-        { href: "/reading", label: "Tarot", Icon: BookOpen, available: true },
-        { href: "#", label: "Horoscope", Icon: Star, available: false },
-        { href: "#", label: "Numerology", Icon: Hash, available: false },
-        { href: "#", label: "Lucky Colors", Icon: Palette, available: false },
-    ] as const
+    const { user, loading } = useAuth()
 
     return (
         <nav className='fixed top-0 left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-b border-border/20'>
@@ -57,13 +54,13 @@ export function Navbar() {
                         </Link>
                     </div>
 
-                    {/* Navigation Links */}
-                    <div className='hidden md:flex items-center space-x-8'>
+                    {/* Right side: User Profile / Sign In button and Active Service Sheet */}
+                    <div className='flex items-center space-x-6'>
                         <Link
-                            href='/reading'
+                            href='/'
                             className='text-cosmic-light hover:text-white transition-colors'
                         >
-                            Reading
+                            Home
                         </Link>
                         <Link
                             href='/about'
@@ -71,23 +68,16 @@ export function Navbar() {
                         >
                             About
                         </Link>
-                        <Link
-                            href='/support'
-                            className='text-cosmic-light hover:text-white transition-colors'
+                        <Sheet
+                            open={mysticalOpen}
+                            onOpenChange={setMysticalOpen}
                         >
-                            Support
-                        </Link>
-                    </div>
-
-                    {/* Active Service Sheet */}
-                    <div className='flex items-center space-x-4'>
-                        <Sheet open={mysticalOpen} onOpenChange={setMysticalOpen}>
                             <SheetTrigger asChild>
                                 <Button
                                     variant='ghost'
                                     className='inline-flex items-center space-x-2 text-white hover:bg-white/10 px-4 py-2 rounded-md transition-colors'
                                 >
-                                    <BookOpen className='h-4 w-4' />
+                                    <Sparkles className='h-4 w-4' />
                                     <span>Tarot</span>
                                     <ChevronDown className='h-4 w-4' />
                                 </Button>
@@ -103,31 +93,62 @@ export function Navbar() {
                                     </SheetTitle>
                                 </SheetHeader>
                                 <div className='mt-8 space-y-2'>
-                                    {mysticalServices.map(({ href, label, Icon, available }) => (
-                                        <div key={label}>
-                                            {available ? (
-                                                <Link
-                                                    href={label === 'Tarot' ? '/' : href}
-                                                    className='flex items-center space-x-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors group'
-                                                    onClick={() => setMysticalOpen(false)}
-                                                >
-                                                    <Icon className='h-5 w-5 text-primary' />
-                                                    <span className='font-medium'>{label}</span>
-                                                </Link>
-                                            ) : (
-                                                <div className='flex items-center space-x-3 px-4 py-3 rounded-lg text-white/50 cursor-not-allowed opacity-60'>
-                                                    <Icon className='h-5 w-5' />
-                                                    <span className='font-medium'>{label}</span>
-                                                    <span className='ml-auto text-xs bg-white/10 px-2 py-1 rounded-full'>
-                                                        Coming Soon
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
+                                    {mysticalServices.map(
+                                        ({ href, label, Icon, available }) => (
+                                            <div key={label}>
+                                                {available ? (
+                                                    <Link
+                                                        href={
+                                                            label === "Tarot"
+                                                                ? "/"
+                                                                : href
+                                                        }
+                                                        className='flex items-center space-x-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors group'
+                                                        onClick={() =>
+                                                            setMysticalOpen(
+                                                                false
+                                                            )
+                                                        }
+                                                    >
+                                                        <Icon className='h-5 w-5 text-primary' />
+                                                        <span className='font-medium'>
+                                                            {label}
+                                                        </span>
+                                                    </Link>
+                                                ) : (
+                                                    <div className='flex items-center space-x-3 px-4 py-3 rounded-lg text-white/50 cursor-not-allowed opacity-60'>
+                                                        <Icon className='h-5 w-5' />
+                                                        <span className='font-medium'>
+                                                            {label}
+                                                        </span>
+                                                        <span className='ml-auto text-xs bg-white/10 px-2 py-1 rounded-full'>
+                                                            Coming Soon
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )
+                                    )}
                                 </div>
                             </SheetContent>
                         </Sheet>
+
+                        {/* Desktop only: User Profile / Sign In button */}
+                        <div className='hidden md:block'>
+                            {!loading && user ? (
+                                <UserProfile variant='desktop' />
+                            ) : (
+                                <Link href='/signin'>
+                                    <Button
+                                        variant='outline'
+                                        className='flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-white/10 text-white/90 border border-white/10 hover:bg-white/15 transition'
+                                    >
+                                        <LogIn className='w-4 h-4' />
+                                        Sign In
+                                    </Button>
+                                </Link>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

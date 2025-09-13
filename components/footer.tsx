@@ -7,8 +7,8 @@ export default function Footer() {
     const router = useRouter()
     const handleBrandClick = () => router.push("/")
     return (
-        <footer className='absolute bottom-0 left-0 right-0 w-full z-10'>
-            <div className='max-w-6xl mx-auto px-6 pt-4 pb-12'>
+        <footer className='w-full z-10'>
+            <div className='max-w-6xl mx-auto px-6 pt-4 pb-12 md:pb-6'>
                 <div className='flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0'>
                     <button
                         type='button'
@@ -24,31 +24,24 @@ export default function Footer() {
                             Asking Fate
                         </span>
                     </button>
-                    <div className='flex space-x-6 text-sm text-muted-foreground'>
-                        <Link
-                            href='/support'
-                            className='hover:text-foreground transition-colors'
-                        >
-                            Support
-                        </Link>
-                        <Link
-                            href='/privacy-policy'
-                            className='hover:text-foreground transition-colors'
-                        >
-                            Privacy Policy
-                        </Link>
-                        <Link
-                            href='/terms-of-service'
-                            className='hover:text-foreground transition-colors'
-                        >
-                            Terms of Service
-                        </Link>
-                        <Link
-                            href='/contact'
-                            className='hover:text-foreground transition-colors'
-                        >
-                            Contact
-                        </Link>
+                    <div className='flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6'>
+                        <div className='grid grid-cols-2 md:flex md:space-x-6 gap-4 md:gap-0 text-sm text-muted-foreground text-center md:text-left'>
+                            <Link
+                                href='/privacy-policy'
+                                className='hover:text-foreground transition-colors'
+                            >
+                                Privacy Policy
+                            </Link>
+                            <Link
+                                href='/terms-of-service'
+                                className='hover:text-foreground transition-colors'
+                            >
+                                Terms of Service
+                            </Link>
+                        </div>
+                        <div className='text-xs text-muted-foreground text-center md:text-right'>
+                            © 2025 Asking Fate. All rights reserved.
+                        </div>
                     </div>
                 </div>
             </div>
