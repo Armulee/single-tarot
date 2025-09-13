@@ -92,11 +92,6 @@ export function BottomNavigation() {
                         className="w-56 p-2 bg-card/95 backdrop-blur-md border-border/30"
                     >
                         <div className="space-y-1">
-                            <div className="px-3 py-2">
-                                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                                    Legal & Support
-                                </h3>
-                            </div>
                             {moreItems.map(({ href, label, Icon }) => (
                                 <Link
                                     key={href}
