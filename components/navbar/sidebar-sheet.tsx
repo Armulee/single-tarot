@@ -48,6 +48,9 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
     const sidebarLinks = [
         { href: "/", label: "Home", Icon: Home },
         { href: "/about", label: "About", Icon: Info },
+    ] as const
+
+    const legalLinks = [
         { href: "/privacy-policy", label: "Privacy Policy", Icon: Shield },
         { href: "/terms-of-service", label: "Terms of Service", Icon: FileText },
     ] as const
@@ -169,6 +172,20 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                                 </ul>
                             )}
                         </li>
+
+                        {/* Legal Links */}
+                        {legalLinks.map(({ href, label, Icon }) => (
+                            <li key={href}>
+                                <Link
+                                    href={href}
+                                    className='flex items-center gap-2 px-3 py-2 rounded-md text-cosmic-light hover:text-white hover:bg-white/10 transition-colors'
+                                    onClick={() => onOpenChange(false)}
+                                >
+                                    <Icon className='w-4 h-4' />
+                                    <span>{label}</span>
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
                 </nav>
             </SheetContent>
