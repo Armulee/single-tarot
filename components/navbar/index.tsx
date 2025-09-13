@@ -1,35 +1,17 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
-import { Menu } from "lucide-react"
-import { SidebarSheet } from "./sidebar-sheet"
 
 export function Navbar() {
-    const [open, setOpen] = useState(false)
-
     return (
         <nav className='fixed top-0 left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-b border-border/20'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex justify-between items-center h-16'>
-                    {/* Left: Mobile menu button / Desktop brand */}
+                    {/* Brand */}
                     <div className='flex items-center'>
-                        {/* Mobile: menu button */}
-                        <Button
-                            variant='ghost'
-                            size='icon'
-                            className='md:hidden text-white hover:bg-white/10'
-                            onClick={() => setOpen(true)}
-                            aria-label='Open menu'
-                        >
-                            <Menu className='h-6 w-6' />
-                        </Button>
-
-                        {/* Desktop: brand */}
                         <Link
                             href='/'
-                            className='hidden md:flex items-center space-x-2 group px-2 py-1 rounded-md hover:bg-white/5'
+                            className='flex items-center space-x-2 group px-2 py-1 rounded-md hover:bg-white/5'
                         >
                             <div className='w-8 h-8 bg-gradient-to-br from-cosmic-purple to-cosmic-blue rounded-full flex items-center justify-center group-hover:scale-110 transition-transform'>
                                 <span className='text-white font-bold text-sm'>
@@ -42,7 +24,7 @@ export function Navbar() {
                         </Link>
                     </div>
 
-                    {/* Navigation Links */}
+                    {/* Navigation Links - Desktop Only */}
                     <div className='hidden md:flex items-center space-x-8'>
                         <Link
                             href='/reading'
@@ -63,12 +45,8 @@ export function Navbar() {
                             Support
                         </Link>
                     </div>
-
                 </div>
             </div>
-
-            {/* Mobile sidebar */}
-            <SidebarSheet open={open} onOpenChange={setOpen} />
         </nav>
     )
 }
