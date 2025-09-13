@@ -58,13 +58,13 @@ export function Navbar() {
                     <div className='flex items-center space-x-6'>
                         <Link
                             href='/'
-                            className='text-cosmic-light hover:text-white transition-colors'
+                            className='hidden md:block text-cosmic-light hover:text-white transition-colors'
                         >
                             Home
                         </Link>
                         <Link
                             href='/about'
-                            className='text-cosmic-light hover:text-white transition-colors'
+                            className='hidden md:block text-cosmic-light hover:text-white transition-colors'
                         >
                             About
                         </Link>
@@ -132,6 +132,24 @@ export function Navbar() {
                                 </div>
                             </SheetContent>
                         </Sheet>
+
+                        {/* Mobile: Sign In button */}
+                        <div className='md:hidden'>
+                            {!loading && user ? (
+                                <UserProfile variant='mobile' />
+                            ) : (
+                                <Link href='/signin'>
+                                    <Button
+                                        variant='outline'
+                                        size='sm'
+                                        className='flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/90 border border-white/10 hover:bg-white/15 transition'
+                                    >
+                                        <LogIn className='w-4 h-4' />
+                                        Sign In
+                                    </Button>
+                                </Link>
+                            )}
+                        </div>
 
                         {/* Desktop only: User Profile / Sign In button */}
                         <div className='hidden md:block'>
