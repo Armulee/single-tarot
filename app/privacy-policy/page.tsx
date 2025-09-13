@@ -13,7 +13,7 @@ export default function PrivacyPage() {
                         </span>
                     </div>
                     <h1 className='font-serif font-bold text-xl text-foreground'>
-                        ดูดวง.ai
+                        Asking Fate
                     </h1>
                 </Link>
 
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
                                     1. Introduction
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    ดูดวง.ai (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered tarot reading service, including our website, mobile applications, and related services (collectively, the &quot;Service&quot;).
+                                    Asking Fate (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered tarot reading service, including our website, mobile applications, and related services (collectively, the &quot;Service&quot;).
                                 </p>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     By using our Service, you agree to the collection and use of information in accordance with this Privacy Policy. If you do not agree with the terms of this Privacy Policy, please do not access or use the Service.
@@ -333,10 +333,10 @@ export default function PrivacyPage() {
                                 </p>
                                 <div className='bg-card/20 p-4 rounded-lg space-y-2'>
                                     <p className='text-muted-foreground'>
-                                        <strong>Email:</strong> privacy@ดูดวง.ai
+                                        <strong>Email:</strong> privacy@askingfate.com
                                     </p>
                                     <p className='text-muted-foreground'>
-                                        <strong>Support:</strong> <Link href='/support' className='text-primary hover:text-primary/80'>support@ดูดวง.ai</Link>
+                                        <strong>Support:</strong> <Link href='/support' className='text-primary hover:text-primary/80'>support@askingfate.com</Link>
                                     </p>
                                     <p className='text-muted-foreground'>
                                         <strong>Contact Form:</strong> <Link href='/contact' className='text-primary hover:text-primary/80'>Visit our contact page</Link>

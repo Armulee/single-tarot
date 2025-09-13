@@ -24,7 +24,7 @@ export default function SupportPage() {
                         </span>
                     </div>
                     <h1 className='font-serif font-bold text-xl text-foreground'>
-                        ดูดวง.ai
+                        Asking Fate
                     </h1>
                 </Link>
 
@@ -179,7 +179,7 @@ export default function SupportPage() {
                                 <div className='space-y-2'>
                                     <Mail className='w-6 h-6 text-primary mx-auto' />
                                     <h3 className='font-semibold'>Email Us</h3>
-                                    <p className='text-sm text-muted-foreground'>support@ดูดวง.ai</p>
+                                    <p className='text-sm text-muted-foreground'>support@askingfate.com</p>
                                 </div>
                                 <div className='space-y-2'>
                                     <Phone className='w-6 h-6 text-primary mx-auto' />

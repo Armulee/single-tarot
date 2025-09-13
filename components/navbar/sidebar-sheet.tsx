@@ -64,7 +64,7 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                                 </span>
                             </div>
                             <span className='font-playfair text-lg font-bold text-white group-hover:text-cosmic-purple transition-colors'>
-                                ดูดวง.ai
+                                Asking Fate
                             </span>
                         </Link>
                     </SheetTitle>

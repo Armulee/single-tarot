@@ -26,14 +26,14 @@ const sourceSans = Source_Sans_3({
 })
 
 export const metadata: Metadata = {
-    title: "ดูดวง.ai - AI-Powered Mystical Guidance",
+    title: "Asking Fate - AI-Powered Mystical Guidance",
     description:
         "Discover your destiny with AI-powered tarot card interpretations in a stunning cosmic experience",
     generator: "v0.app",
     other: {
         "apple-mobile-web-app-capable": "yes",
         "apple-mobile-web-app-status-bar-style": "black-translucent",
-        "apple-mobile-web-app-title": "ดูดวง.ai",
+        "apple-mobile-web-app-title": "Asking Fate",
     },
 }
 

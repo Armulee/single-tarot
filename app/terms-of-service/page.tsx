@@ -13,7 +13,7 @@ export default function TermsPage() {
                         </span>
                     </div>
                     <h1 className='font-serif font-bold text-xl text-foreground'>
-                        ดูดวง.ai
+                        Asking Fate
                     </h1>
                 </Link>
 
@@ -45,7 +45,7 @@ export default function TermsPage() {
                                     1. Acceptance of Terms
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    These Terms of Service (&quot;Terms&quot;) constitute a legally binding agreement between you and ดูดวง.ai (&quot;Company,&quot; &quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) regarding your use of our AI-powered tarot reading service, including our website, mobile applications, and related services (collectively, the &quot;Service&quot;).
+                                    These Terms of Service (&quot;Terms&quot;) constitute a legally binding agreement between you and Asking Fate (&quot;Company,&quot; &quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) regarding your use of our AI-powered tarot reading service, including our website, mobile applications, and related services (collectively, the &quot;Service&quot;).
                                 </p>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     By accessing, browsing, or using our Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, you may not access or use our Service.
@@ -60,7 +60,7 @@ export default function TermsPage() {
                                     2. Service Description
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    ดูดวง.ai provides an AI-powered tarot card reading service that combines traditional tarot symbolism with modern artificial intelligence technology. Our Service includes:
+                                    Asking Fate provides an AI-powered tarot card reading service that combines traditional tarot symbolism with modern artificial intelligence technology. Our Service includes:
                                 </p>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
                                     <li>• AI-generated tarot card interpretations and readings</li>
@@ -200,7 +200,7 @@ export default function TermsPage() {
                                     6.1 Our Content
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    The Service and its original content, features, and functionality are and will remain the exclusive property of ดูดวง.ai and its licensors. The Service is protected by copyright, trademark, and other laws. Our trademarks and trade dress may not be used in connection with any product or service without our prior written consent.
+                                    The Service and its original content, features, and functionality are and will remain the exclusive property of Asking Fate and its licensors. The Service is protected by copyright, trademark, and other laws. Our trademarks and trade dress may not be used in connection with any product or service without our prior written consent.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
@@ -256,7 +256,7 @@ export default function TermsPage() {
                                     7.3 Limitation of Liability
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    To the maximum extent permitted by law, ดูดวง.ai shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the Service.
+                                    To the maximum extent permitted by law, Asking Fate shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the Service.
                                 </p>
                                 <p className='text-muted-foreground leading-relaxed'>
                                     Our total liability to you for any damages arising from or related to these Terms or the Service shall not exceed the amount you paid us for the Service in the 12 months preceding the claim.
@@ -280,7 +280,7 @@ export default function TermsPage() {
                                     9. Indemnification
                                 </h2>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    You agree to defend, indemnify, and hold harmless ดูดวง.ai and its officers, directors, employees, and agents from and against any claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney&apos;s fees) arising from:
+                                    You agree to defend, indemnify, and hold harmless Asking Fate and its officers, directors, employees, and agents from and against any claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including attorney&apos;s fees) arising from:
                                 </p>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
                                     <li>• Your use of the Service</li>
@@ -334,7 +334,7 @@ export default function TermsPage() {
                                     12.1 Entire Agreement
                                 </h3>
                                 <p className='text-muted-foreground leading-relaxed'>
-                                    These Terms, together with our Privacy Policy, constitute the entire agreement between you and ดูดวง.ai regarding the use of the Service and supersede all prior and contemporaneous understandings, agreements, representations, and warranties.
+                                    These Terms, together with our Privacy Policy, constitute the entire agreement between you and Asking Fate regarding the use of the Service and supersede all prior and contemporaneous understandings, agreements, representations, and warranties.
                                 </p>
 
                                 <h3 className='font-serif font-semibold text-xl text-foreground'>
@@ -368,10 +368,10 @@ export default function TermsPage() {
                                 </p>
                                 <div className='bg-card/20 p-4 rounded-lg space-y-2'>
                                     <p className='text-muted-foreground'>
-                                        <strong>Email:</strong> legal@ดูดวง.ai
+                                        <strong>Email:</strong> legal@askingfate.com
                                     </p>
                                     <p className='text-muted-foreground'>
-                                        <strong>Support:</strong> <Link href='/support' className='text-primary hover:text-primary/80'>support@ดูดวง.ai</Link>
+                                        <strong>Support:</strong> <Link href='/support' className='text-primary hover:text-primary/80'>support@askingfate.com</Link>
                                     </p>
                                     <p className='text-muted-foreground'>
                                         <strong>Contact Form:</strong> <Link href='/contact' className='text-primary hover:text-primary/80'>Visit our contact page</Link>
