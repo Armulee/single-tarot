@@ -129,12 +129,6 @@ export default function SupportPage() {
                                 </p>
                             </Card>
 
-                            <Card className='p-6 bg-card/10 backdrop-blur-sm border-border/20'>
-                                <h3 className='font-serif font-semibold text-lg mb-3'>What&apos;s included in the premium subscription?</h3>
-                                <p className='text-muted-foreground text-sm leading-relaxed'>
-                                    Premium includes 5,000 monthly readings, advanced AI interpretations, premium card decks, no advertisements, priority support, reading history, and exclusive cosmic themes.
-                                </p>
-                            </Card>
 
                             <Card className='p-6 bg-card/10 backdrop-blur-sm border-border/20'>
                                 <h3 className='font-serif font-semibold text-lg mb-3'>How accurate are the AI readings?</h3>
