@@ -49,7 +49,7 @@ export function BottomNavigation() {
             <div className="relative">
                 {/* Collapsed state - perfect circle */}
                 {!isExpanded && (
-                    <div className="bg-card/5 backdrop-blur-sm border border-border/20 rounded-full p-3">
+                    <div className="bg-card/5 backdrop-blur-sm border border-border/20 rounded-full w-18 h-18 flex items-center justify-center">
                         <button
                             onClick={handleToggle}
                             className="flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 hover:bg-card/10 hover:scale-110"
