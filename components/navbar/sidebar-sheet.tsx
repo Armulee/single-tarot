@@ -7,7 +7,8 @@ import {
     ChevronDown,
     ChevronUp,
     Sparkles,
-    LogIn,
+    Shield,
+    FileText,
 } from "lucide-react"
 import { useState } from "react"
 import {
@@ -47,6 +48,8 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
     const sidebarLinks = [
         { href: "/", label: "Home", Icon: Home },
         { href: "/about", label: "About", Icon: Info },
+        { href: "/privacy-policy", label: "Privacy Policy", Icon: Shield },
+        { href: "/terms-of-service", label: "Terms of Service", Icon: FileText },
     ] as const
 
     return (
@@ -75,9 +78,9 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                 </SheetHeader>
                 <nav>
                     <ul className='flex flex-col space-y-1 p-1'>
-                        {/* Sign In / User Profile at the top */}
-                        <li className='pb-2 border-b border-white/10 mb-2'>
-                            {!loading && user ? (
+                        {/* User Profile at the top (only if logged in) */}
+                        {!loading && user && (
+                            <li className='pb-2 border-b border-white/10 mb-2'>
                                 <UserProfileDropdown
                                     onClose={() => onOpenChange(false)}
                                 >
@@ -101,17 +104,8 @@ export function SidebarSheet({ open, onOpenChange }: SidebarSheetProps) {
                                         </div>
                                     </div>
                                 </UserProfileDropdown>
-                            ) : (
-                                <Link
-                                    href='/signin'
-                                    className='flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-white/10 text-white/90 border border-white/10 hover:bg-white/15 transition'
-                                    onClick={() => onOpenChange(false)}
-                                >
-                                    <LogIn className='w-4 h-4' />
-                                    <span>Sign In</span>
-                                </Link>
-                            )}
-                        </li>
+                            </li>
+                        )}
 
                         {sidebarLinks.map(({ href, label, Icon }) => (
                             <li key={href}>
