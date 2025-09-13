@@ -66,8 +66,6 @@ export default function TermsPage() {
                                     <li>• AI-generated tarot card interpretations and readings</li>
                                     <li>• Multiple reading types and card spreads</li>
                                     <li>• Personalized spiritual guidance and insights</li>
-                                    <li>• Reading history and progress tracking</li>
-                                    <li>• Premium features and enhanced interpretations</li>
                                     <li>• Community features and sharing capabilities</li>
                                 </ul>
                                 <p className='text-muted-foreground leading-relaxed'>

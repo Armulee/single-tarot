@@ -270,13 +270,11 @@ export default function ContactPage() {
                                         </div>
                                         <div>
                                             <h4 className='font-medium text-sm'>
-                                                Can I cancel my subscription
-                                                anytime?
+                                                Is the service free to use?
                                             </h4>
                                             <p className='text-muted-foreground text-sm'>
-                                                Yes, you can cancel your premium
-                                                subscription at any time from
-                                                your account settings.
+                                                Our service is completely free to use. 
+                                                No subscriptions or payments required.
                                             </p>
                                         </div>
                                     </div>

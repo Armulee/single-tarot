@@ -65,8 +65,7 @@ export default function PrivacyPage() {
                                 </p>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
                                     <li>• Account information (name, email address, password)</li>
-                                    <li>• Profile information (preferences, reading history, spiritual interests)</li>
-                                    <li>• Payment information (billing address, payment method details)</li>
+                                    <li>• Profile information (preferences, spiritual interests)</li>
                                     <li>• Communication data (messages, support requests, feedback)</li>
                                     <li>• Tarot reading data (questions asked, cards selected, interpretations received)</li>
                                 </ul>
@@ -112,9 +111,7 @@ export default function PrivacyPage() {
                                 </h3>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
                                     <li>• Provide and maintain our tarot reading service</li>
-                                    <li>• Process transactions and manage subscriptions</li>
                                     <li>• Generate personalized AI interpretations</li>
-                                    <li>• Save and retrieve your reading history</li>
                                     <li>• Provide customer support and technical assistance</li>
                                 </ul>
 
@@ -211,8 +208,6 @@ export default function PrivacyPage() {
                                 </p>
                                 <ul className='space-y-2 text-muted-foreground ml-4'>
                                     <li>• Account information: Until you delete your account</li>
-                                    <li>• Reading history: Until you delete your account or request deletion</li>
-                                    <li>• Payment information: As required by law and payment processor policies</li>
                                     <li>• Usage analytics: Aggregated and anonymized data may be retained indefinitely</li>
                                     <li>• Legal compliance: As required by applicable laws and regulations</li>
                                 </ul>

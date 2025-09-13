@@ -137,12 +137,6 @@ export default function SupportPage() {
                                 </p>
                             </Card>
 
-                            <Card className='p-6 bg-card/10 backdrop-blur-sm border-border/20'>
-                                <h3 className='font-serif font-semibold text-lg mb-3'>Can I cancel my subscription anytime?</h3>
-                                <p className='text-muted-foreground text-sm leading-relaxed'>
-                                    Yes! You can cancel your subscription at any time from your profile settings. Cancellation takes effect at the end of your current billing period.
-                                </p>
-                            </Card>
 
                             <Card className='p-6 bg-card/10 backdrop-blur-sm border-border/20'>
                                 <h3 className='font-serif font-semibold text-lg mb-3'>Is my personal information secure?</h3>
