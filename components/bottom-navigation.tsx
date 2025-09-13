@@ -37,7 +37,7 @@ export function BottomNavigation() {
     }
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-t border-border/20 md:hidden">
+        <nav className="fixed bottom-0dvh left-0 right-0 z-50 bg-card/5 backdrop-blur-sm border-t border-border/20 md:hidden">
             <div className="flex items-center justify-around px-2 py-1">
                 {/* Main Navigation Items */}
                 {mainNavItems.map(({ href, label, Icon }) => {
